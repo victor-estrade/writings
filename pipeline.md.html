@@ -6,7 +6,7 @@ Documentation of the pipeline of producing inference using pseudo code.
 Inference is two-fold : *point estimation* and *confidence interval estimation*.
 
 
-Genenal
+General
 ===============================================================================
 
 Describes general features shared by all methods.
@@ -17,10 +17,10 @@ Simulator
 The **simulator** is a program allowing to sample a virtually infinite amount of data points $x$ given some parameters $\mu$ and $\alpha$.
 
 The simulator produces:
-- the observables as a matrix `X`
-- the labels as an array `y`
-- the sample (importance) weights `w`
-Ususally those 3 elements will be gathered into one object (tuple) named `Data`.
+- the *observables* as a matrix `X`
+- the *labels* as an array `y`
+- the sample (importance) *weights* `w`
+Usually those 3 elements will be gathered into one object (tuple) named `Data`.
 
 Usage (usually the number of samples will be discarded) :
 ```python
@@ -49,16 +49,62 @@ Data_train_nominal <- simulator(mu_nominal, alpha_nominal)
 classifier <- SomeAlgo.fit(Data_train)
 ```
 
+
+The log likelihood
+-------------------------------------------------------------------------------
+
+The model used here is a Poisson count process in $K$ independent bins indexed by $i$.
+
+\begin{equation}
+L(n | \mu, \alpha) = \prod_i Poisson(n_i | \mu \times \gamma_i(\alpha) + \beta_i(\alpha))
+\end{equation}
+\begin{equation}
+L(n | \mu, \alpha) = \prod_i \frac{(\mu \times \gamma_i(\alpha) + \beta_i(\alpha))^{n_i}}{n_i!} e^{ - \mu \times \gamma_i(\alpha) - \beta_i(\alpha)}
+\end{equation}
+
+\begin{equation}
+\log L(n | \mu, \alpha) = \sum_i n_i \times \log (\mu \times \gamma_i(\alpha) + \beta_i(\alpha)) - \log (n_i!) - \mu \times \gamma_i(\alpha) - \beta_i(\alpha)
+\end{equation}
+
+In addition to the Poisson count process the calibration experiment updates our knowledge about the nuisance parameters $\alpha$.
+These other measurements `Calib` is taken into account in the likelihood.
+
+\begin{equation}
+L(n, Calib | \mu, \alpha) = \prod_i Poisson(n_i | \mu \times \gamma_i(\alpha) + \beta_i(\alpha)) \times L_{Calib}
+\end{equation}
+
+Very often $L_{Calib}$ takes the form of a gaussian.
+
+\begin{equation}
+L_{Calib} = Normal(\alpha_c, \sigma_c| \alpha) = \frac{1}{\sigma_c\sqrt{2 \pi}} e^{\frac{(\alpha - \alpha_c)^2}{2 \sigma_c^2}}
+\end{equation}
+
+Finally gathering it all :
+
+\begin{equation}
+\log L(n | \mu, \alpha) = \sum_i n_i \times \log (\mu \times \gamma_i(\alpha) + \beta_i(\alpha)) - \log (n_i!) - \mu \times \gamma_i(\alpha) - \beta_i(\alpha)
+    - log(\sigma_c) - log(\sqrt{2 \pi}) + \frac{(\alpha - \alpha_c)^2}{2 \sigma_c^2}
+\end{equation}
+
+
+The negative log likelihood is computed via the `formula` function :
+```python
+def formula(mu, alpha, gamma_i, beta_i, n_i):
+  global alpha_c, sigma_c
+  nll = poisson_nll( mu * gamma_i + beta_i, n_i ) + gaussian_nll(alpha, alpha_c, sigma_c)
+  return nll
+```
+
+
+
 Measuring the negative log likelihood on one point $(\mu, \alpha)$
 -------------------------------------------------------------------------------
+
 ```python
-global Data_test <- measurement on real experiment
-
-def formula(mu, alpha, gamma_i, beta_i, n_i):
-    nll = poisson_nll( mu * gamma_i + beta_i, n_i ) + constraints(alpha)
-    return nll
-
 def compute_nll(mu, alpha):
+    global classifer  # from previous training
+    global Data_test <- measurement on real experiment
+
     Data_valid  <- simulator(mu, alpha)
     signal_valid <- signal_only(Data_valid)
     background_valid <- background_only(Data_valid)
@@ -73,19 +119,31 @@ def compute_nll(mu, alpha):
 
     nll = formula(mu, alpha, gamma_i, beta_i, n_i)
     return nll
-  ```
+```
 
+Unfortunately to compute the NLL of a candidate value $(\mu, \alpha)$ one has to rerun the simulation.
+Of course the full simulation is not rerun.
+Many nuisance parameters influence starts at a late stage of the simulation process and only this last part is required to be rerun.
 
 
 Point estimation
 -------------------------------------------------------------------------------
 
+We want to get $(\hat \mu, \hat $\alpha$)$ the maximum likelihood estimator for $L$.
+If a analytical formulas cannot be derived from the likelihood a numerical approach is the way to go.
+
+Basically any minimizer can do the jobs.
+**Minuit** is the standard for negative log likelihood minimization in HEP.
+It assumes that the given function is smooth and allow only one minimum which is very often the case in physics settings.
+
 
 ```python
-
 # Point estimation
-Minuit.minimize(compute_nll)
+mu_mle, alpha_mle = Minuit.minimize(compute_nll)
+```
 
+Here is a sketch for a gradient descent algorithm.
+```python
 # exemple de minimisation
 start_mu = 1
 start_alpha = 1
@@ -100,12 +158,36 @@ while not convergence:
     next_mu = current_mu - step
     next_alpha = current_alpha - step
     convergence = is_convergence(...)
-
-
-# Confidence interval
-# TODO algo profile likelihood with ln + 1/2 method
-
 ```
+What I want to emphasize here is that `compute_nll` may be called many times before convergence.
+Moreover gradient descent methods requires to estimate local gradient (and hessian) with scales teribly with increasing the number of parameters.
+
+
+
+
+
+Confidence interval
+-------------------------------------------------------------------------------
+
+Confidence interval are computed by inverting a hypothesis test.
+
+$H_0(\mu = \hat \mu)$ and $H_1(\mu \neq \hat \mu)$.
+
+A likelihood ratio test is conduct and the acceptance region is taken as the confidence interval.
+
+TODO : find again why this is supposed to cover.
+
+
+
+
+Confidence interval estimation
+-------------------------------------------------------------------------------
+
+The previous methods work fine when analytical formulas are available.
+But in our case closed form formulas are not available.
+
+TODO : use the fact that in large sample limits it tends to a chi-squared distribution and derive the "ln + 1/2" method from it.
+
 
 
 Systematic aware classfiers
@@ -128,6 +210,34 @@ Differences with the Standard classifier pipeline
 Training
 -------------------------------------------------------------------------------
 
+
+
+Differences with my implementations
+===============================================================================
+
+
+Simulated Test set
+-------------------------------------------------------------------------------
+
+Since the test set is not available we use the simulator to produce the test set.
+The hidden values of the input parameters are noted $\mu^\star$ and $\alpha^\star$.
+
+```python
+mu_star = 1.1  # for example
+alpha_star = 1.03  # for example
+Data_test <- simulator(mu_star, alpha_star)
+```
+
+The objective is to measure how well the various models manage to find $\mu^\star$ and $\alpha^\star$.
+
+
+
+Hessian confidence interval
+-------------------------------------------------------------------------------
+
+Instead of the ln + 1/2 method with profile likelihood we use the Hessian as an approximation.
+This gives a symetric interval assuming that the negative log likelihood is parabolic/hyperbolic around the minimum (gaussian-like approximation).
+TODO : check if hyperbolic or parabolic ?
 
 
 
