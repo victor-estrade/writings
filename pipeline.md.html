@@ -160,6 +160,8 @@ while not convergence:
     convergence = is_convergence(...)
 ```
 What I want to emphasize here is that `compute_nll` may be called many times before convergence.
+Unfortunatelly memoizing is not possible because the candidate values of $(\mu, \alpha)$ are different for each call.
+
 Moreover gradient descent methods requires to estimate local gradient (and hessian) with scales teribly with increasing the number of parameters.
 
 
@@ -197,7 +199,9 @@ Here are the steps :
 1. Train a Classifier
 2. Choose good starting points for NLL minimization
 3. Use `Minuit.mingrad` to estimate the maximum likelihood
+  * numerous calls of the `classifier.decision` and `simulator`
 4. Use `Minuit.minos` to estimate the confidence interval
+  * even more calls of the `classifier.decision` and `simulator`
 
 Alternative to `Minuit.minos` is to use the hessian to estimate the confidence interval.
 Cheaper but symetric, less precise, assumes hyperbolic/parabolic NLL.
