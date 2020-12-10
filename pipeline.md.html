@@ -139,7 +139,7 @@ It assumes that the given function is smooth and allow only one minimum which is
 
 ```python
 # Point estimation
-mu_mle, alpha_mle = Minuit.minimize(compute_nll)
+mu_mle, alpha_mle = Minuit.mingrad(compute_nll)
 ```
 
 Here is a sketch for a gradient descent algorithm.
@@ -187,6 +187,21 @@ The previous methods work fine when analytical formulas are available.
 But in our case closed form formulas are not available.
 
 TODO : use the fact that in large sample limits it tends to a chi-squared distribution and derive the "ln + 1/2" method from it.
+
+
+
+Gathering it all
+-------------------------------------------------------------------------------
+
+Here are the steps :
+1. Train a Classifier
+2. Choose good starting points for NLL minimization
+3. Use `Minuit.mingrad` to estimate the maximum likelihood
+4. Use `Minuit.minos` to estimate the confidence interval
+
+Alternative to `Minuit.minos` is to use the hessian to estimate the confidence interval.
+Cheaper but symetric, less precise, assumes hyperbolic/parabolic NLL.
+
 
 
 
