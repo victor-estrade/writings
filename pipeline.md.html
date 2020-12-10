@@ -2,33 +2,56 @@
 
 **Pipeline description**
 
-Document the pipeline of producing inference.
+Documentation of the pipeline of producing inference using pseudo code.
 Inference is two-fold : *point estimation* and *confidence interval estimation*.
 
 
-
-
-
-Section
+Genenal
 ===============================================================================
 
+Describes general features shared by all methods.
 
-Subsection
+Simulator
 -------------------------------------------------------------------------------
 
-```python
-# The datasets
-Data_train  <- simulator(mu, alpha)
-Data_valid  <- simulator(mu, alpha)
-Data_test   <- measurement on real experiment
+The **simulator** is a program allowing to sample a virtually infinite amount of data points $x$ given some parameters $\mu$ and $\alpha$.
 
-# Training a classifier
+The simulator produces:
+- the observables as a matrix `X`
+- the labels as an array `y`
+- the sample (importance) weights `w`
+Ususally those 3 elements will be gathered into one object (tuple) named `Data`.
+
+Usage (usually the number of samples will be discarded) :
+```python
+mu = 1
+alpha = 1
+Data <- simulator(mu, alpha, n_samples=5000)
+#  OR
+X, y, w <- simulator(mu, alpha, n_samples=5000)
+```
+
+
+
+Standard Classifier method
+===============================================================================
+
+How to infer using a classifier.
+
+Training the classifier
+-------------------------------------------------------------------------------
+
+
+```python
 mu_nominal = 1
 alpha_nominal = 1
 Data_train_nominal <- simulator(mu_nominal, alpha_nominal)
-classifier <- Train(some_algo, Data_train)
+classifier <- SomeAlgo.fit(Data_train)
+```
 
-# Measuring the negative log likelihood
+Measuring the negative log likelihood on one point $(\mu, \alpha)$
+-------------------------------------------------------------------------------
+```python
 global Data_test <- measurement on real experiment
 
 def formula(mu, alpha, gamma_i, beta_i, n_i):
@@ -50,7 +73,15 @@ def compute_nll(mu, alpha):
 
     nll = formula(mu, alpha, gamma_i, beta_i, n_i)
     return nll
+  ```
 
+
+
+Point estimation
+-------------------------------------------------------------------------------
+
+
+```python
 
 # Point estimation
 Minuit.minimize(compute_nll)
@@ -75,6 +106,30 @@ while not convergence:
 # TODO algo profile likelihood with ln + 1/2 method
 
 ```
+
+
+Systematic aware classfiers
+===============================================================================
+
+Differences with the Standard classifier pipeline
+-------------------------------------------------------------------------------
+
+
+
+
+Inferno
+===============================================================================
+
+Differences with the Standard classifier pipeline
+-------------------------------------------------------------------------------
+
+
+
+Training
+-------------------------------------------------------------------------------
+
+
+
 
 
 <!-- <link rel="stylesheet" href="https://casual-effects.com/markdeep/latest/dark.css?"> -->
