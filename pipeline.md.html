@@ -1,0 +1,79 @@
+<meta charset="utf-8" emacsmode="-*- markdown -*-">
+
+**Some title**
+
+Welcome to Markdeep. It's the simple way to write plain text with
+_style_. From https://casual-effects.com/markdeep.
+
+
+Section
+===============================================================================
+
+
+Subsection
+-------------------------------------------------------------------------------
+
+```python
+# The datasets
+Data_train  <- simulator(mu, alpha)
+Data_valid  <- simulator(mu, alpha)
+Data_test   <- measurement on real experiment
+
+# Training a classifier
+mu_nominal = 1
+alpha_nominal = 1
+Data_train_nominal <- simulator(mu_nominal, alpha_nominal)
+classifier <- Train(some_algo, Data_train)
+
+# Measuring the negative log likelihood
+global Data_test <- measurement on real experiment
+
+def formula(mu, alpha, gamma_i, beta_i, n_i):
+    nll = poisson_nll( mu * gamma_i + beta_i, n_i ) + constraints(alpha)
+    return nll
+
+def compute_nll(mu, alpha):
+    Data_valid  <- simulator(mu, alpha)
+    signal_valid <- signal_only(Data_valid)
+    background_valid <- background_only(Data_valid)
+
+    decision_signal = classifier.predict_score(signal_valid)
+    decision_background = classifier.predict_score(background_valid)
+    decision_test = classifier.predict_score(Data_test)
+
+    gamma_i = bining(decision_signal)
+    beta_i  = bining(decision_background)
+    n_i     = bining(decision_test)
+
+    nll = formula(mu, alpha, gamma_i, beta_i, n_i)
+    return nll
+
+
+# Point estimation
+Minuit.minimize(compute_nll)
+
+# exemple de minimisation
+start_mu = 1
+start_alpha = 1
+
+current_mu = start_mu
+current_alpha = start_alpha
+while not convergence:
+    left_value = compute_nll(current_mu - epsilon, current_alpha - epsilon)
+    right_value = compute_nll(current_mu + epsilon, current_alpha + epsilon)
+    gradient = (right_value - left_value) / (2 * epsilon)
+    step = ...
+    next_mu = current_mu - step
+    next_alpha = current_alpha - step
+    convergence = is_convergence(...)
+
+
+# Confidence interval
+# TODO algo profile likelihood with ln + 1/2 method
+
+```
+
+
+<!-- <link rel="stylesheet" href="https://casual-effects.com/markdeep/latest/dark.css?"> -->
+<style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style>
+<!-- Markdeep: --><script src="markdeep.min.js"></script><script src="https://casual-effects.com/markdeep/latest/markdeep.min.js?"></script><script>window.alreadyProcessedMarkdeep||(document.body.style.visibility="visible")</script>
