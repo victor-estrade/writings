@@ -102,9 +102,13 @@ Measuring the negative log likelihood on one point $(\mu, \alpha)$
 
 TODO : expliquer gamma et beta
 ```python
+X_test <- measurement on real experiment
+decision_test = classifier.predict_score(X_test)
+n_array     = bining(decision_test)
+
 def compute_nll(mu, alpha):
     global classifer  # from previous training
-    global Data_test <- measurement on real experiment
+    global n_array
 
     Data_valid  <- simulator(mu, alpha)
     signal_valid <- signal_only(Data_valid)
@@ -112,13 +116,11 @@ def compute_nll(mu, alpha):
 
     decision_signal = classifier.predict_score(signal_valid)
     decision_background = classifier.predict_score(background_valid)
-    decision_test = classifier.predict_score(Data_test)
 
-    gamma_i = bining(decision_signal)
-    beta_i  = bining(decision_background)
-    n_i     = bining(decision_test)
+    gamma_array = bining(decision_signal)
+    beta_array  = bining(decision_background)
 
-    nll = formula(mu, alpha, gamma_i, beta_i, n_i)
+    nll = formula(mu, alpha, gamma_array, beta_array, n_array)
     return nll
 ```
 
