@@ -64,8 +64,13 @@ Standard Classifier method
 
 How to infer using a classifier.
 
+
+
 Training the classifier
 -------------------------------------------------------------------------------
+
+The classifier is trained on a simulated dataset generated with nominal values ie. with the expected or most probable values of $\mu$ and $\alpha$.
+Moreover the importance weights of signal and backgrounds are rebalanced (overrides the given value of $\mu$) to avoid issues with heavily imbalanced class.
 
 
 ```python
@@ -92,14 +97,26 @@ L(n | \mu, \alpha) = \prod_i \frac{(\mu \times \gamma_i(\alpha) + \beta_i(\alpha
 \log L(n | \mu, \alpha) = \sum_i n_i \times \log (\mu \times \gamma_i(\alpha) + \beta_i(\alpha)) - \log (n_i!) - \mu \times \gamma_i(\alpha) - \beta_i(\alpha)
 \end{equation}
 
+!!! note
+    As we can see : $\gamma_i$ and $\beta_i$ are required to compute the likelihood.
+    The details about computing $\gamma_i$ and $\beta_i$ is given in the next section.
+
 In addition to the Poisson count process the calibration experiment updates our knowledge about the nuisance parameters $\alpha$.
-These other measurements `Calib` is taken into account in the likelihood.
+These other measurements `Calib` are taken into account in the likelihood.
+The calibration is designed to be independent of the experiment and to depend only on the nuisance parameter $\alpha$.
+
+\begin{equation}
+L(n, Calib | \mu, \alpha) = L(n | \mu, \alpha) \times L(Calib | \alpha)
+\end{equation}
+
+Gives :
 
 \begin{equation}
 L(n, Calib | \mu, \alpha) = \prod_i Poisson(n_i | \mu \times \gamma_i(\alpha) + \beta_i(\alpha)) \times L_{Calib}
 \end{equation}
 
-Very often $L_{Calib}$ takes the form of a gaussian.
+Very often $L_{Calib}$ is reported as a gaussian.
+The parameter (mean $\alpha_c$ and std $\sigma_c$) of the gaussian are determined by the calibration measurements `Calib` (ommited here to ease reading).
 
 \begin{equation}
 L_{Calib} = Normal(\alpha_c, \sigma_c| \alpha) = \frac{1}{\sigma_c\sqrt{2 \pi}} e^{\frac{(\alpha - \alpha_c)^2}{2 \sigma_c^2}}
@@ -126,14 +143,20 @@ def formula(mu, alpha, gamma_i, beta_i, n_i):
     The calibration (how to find $\alpha_c$ and $\sigma_c$) is explained somewhere else.
 
 !!!
-    Calibration pour éviter les maxima locaux et les plateaux.
+    Since the measurements may not be very informative about $\alpha$,
+    the calibration is also very helpful to avoid plateau around the maximum likelihood or local maxima.
 
 
 
 Measuring the negative log likelihood on one point $(\mu, \alpha)$
 -------------------------------------------------------------------------------
 
-TODO : expliquer gamma et beta
+To perform a numerical minimization of the negative log likelihood the first step is to write a function computing it.
+
+As seen previously we need $\gamma_i$ and $\beta_i$ to compute the likelihood.
+$\gamma_i$ and $\beta_i$ are estimated using the Simulator.
+The simulator allows to separate the signals and the backgrounds since labels are available.
+
 ```python
 X_test <- measurement on real experiment
 decision_test = classifier.predict_score(X_test)
@@ -159,7 +182,7 @@ def compute_nll(mu, alpha):
 
 Unfortunately to compute the NLL of a candidate value $(\mu, \alpha)$ one has to rerun the simulation.
 Of course the full simulation is not rerun.
-Many nuisance parameters influence starts at a late stage of the simulation process and only this last part is required to be rerun.
+Many nuisance parameters influence starts at a late stage of the simulation process so only this last part requires to be recomputed.
 
 
 Point estimation
@@ -170,8 +193,10 @@ If a analytical formulas cannot be derived from the likelihood a numerical appro
 
 Basically any minimizer can do the jobs.
 **Minuit** is the standard for negative log likelihood minimization in HEP.
-It assumes that the given function is smooth and allow only one minimum which is very often the case in physics settings.
+It assumes that the given function is smooth [citation ?] and allow only one minimum which is very often the case in physics settings [citation ?].
 
+!!! Tip
+    I have not checked in details how Minuit works yet.
 
 ```python
 # Point estimation
@@ -213,7 +238,28 @@ $H_0(\mu = \hat \mu)$ and $H_1(\mu \neq \hat \mu)$.
 
 A likelihood ratio test is conduct and the acceptance region is taken as the confidence interval.
 
-TODO : find again why this is supposed to cover.
+A standard likelihood ratio lokks like :
+\begin{equation}
+\lambda =  \frac{L(Data | \mu \neq \hat \mu)}{L(Data | \mu = \hat \mu)}
+\end{equation}
+
+But to get rid of the nuisance parameter $\alpha$ there is 2 options :
+1. Marginalization
+2. Profiled likelihood
+
+The second is prefered in our case for yet-to-discovered reasons.
+
+!!! Tip
+    I could not find why marginalization is not even considered in the papers I read.
+
+A profiled likelihood test is conduct "and inverted" to compute the confidence interval of $\star \mu$.
+
+\begin{equation}
+\lambda(\mu, Data) =  \frac{\sup_{\alpha} L(Data | \mu \neq \hat \mu, \alpha)}{\sup_{\mu, \alpha} L(Data | \mu, \alpha)}
+\end{equation}
+\begin{equation}
+\lambda(\mu, Data) =  \frac{\sup_{\alpha} L(Data | \mu \neq \hat \mu, \alpha)}{L(Data | \hat \mu, \hat \alpha)}
+\end{equation}
 
 
 
@@ -221,10 +267,19 @@ TODO : find again why this is supposed to cover.
 Confidence interval estimation
 -------------------------------------------------------------------------------
 
-The previous methods work fine when analytical formulas are available.
+The previous method works fine when analytical formulas are available.
 But in our case closed form formulas are not available.
 
-TODO : use the fact that in large sample limits it tends to a chi-squared distribution and derive the "ln + 1/2" method from it.
+According to **Wilks theorem** :
+the distribution of $−2 \log [ \lambda (\mu, Data) ]$ is approximately a $\chi^2_p$ with $p$ degrees of freedom, $p$ being the dimension of $\mu$.
+
+
+!!! WARNING
+    TODO : Explain from here the ln + 1/2 method to estimate the confidence interval
+
+!!! WARNING
+    TODO : find again why this is supposed to cover.
+
 
 
 
@@ -251,7 +306,7 @@ Differences with my implementations
 Simulated Test set
 -------------------------------------------------------------------------------
 
-Since the test set is not available we use the simulator to produce the test set.
+Since the test set from real experiment is not available we use the simulator to produce the test set.
 The hidden values of the input parameters are noted $\mu^\star$ and $\alpha^\star$.
 
 ```python
@@ -269,7 +324,9 @@ Hessian confidence interval
 
 Instead of the ln + 1/2 method with profile likelihood we use the Hessian as an approximation.
 This gives a symetric interval assuming that the negative log likelihood is parabolic/hyperbolic around the minimum (gaussian-like approximation).
-TODO : check if hyperbolic or parabolic ?
+
+!!! WARNING
+    TODO : check if hyperbolic or parabolic ? And double check on the gaussian approx
 
 
 
@@ -287,13 +344,21 @@ Only the training is different.
 Data augmentation
 -------------------------------------------------------------------------------
 
+!!! WARNING
+    TODO
 
 Tangent propagation
 -------------------------------------------------------------------------------
 
+!!! WARNING
+    TODO
+
 
 Pivot
 -------------------------------------------------------------------------------
+
+!!! WARNING
+    TODO
 
 
 
@@ -303,10 +368,16 @@ Inferno
 Differences with the Standard classifier pipeline
 -------------------------------------------------------------------------------
 
+!!! WARNING
+    TODO
+
 
 
 Training
 -------------------------------------------------------------------------------
+
+!!! WARNING
+    TODO
 
 
 
