@@ -5,6 +5,10 @@
 Documentation of the pipeline of producing inference using pseudo code.
 Inference is two-fold : *point estimation* and *confidence interval estimation*.
 
+- The 1st section describes the theoretical pipeline.
+- The 2nd section describes the differencies with my implementation
+- The 3rd section describes
+
 
 General
 ===============================================================================
@@ -82,7 +86,7 @@ L_{Calib} = Normal(\alpha_c, \sigma_c| \alpha) = \frac{1}{\sigma_c\sqrt{2 \pi}} 
 Finally gathering it all :
 
 \begin{equation}
-\log L(n | \mu, \alpha) = \sum_i n_i \times \log (\mu \times \gamma_i(\alpha) + \beta_i(\alpha)) - \log (n_i!) - \mu \times \gamma_i(\alpha) - \beta_i(\alpha)
+\log L(n | \mu, \alpha) = \left [ \sum_i n_i \times \log (\mu \times \gamma_i(\alpha) + \beta_i(\alpha)) - \log (n_i!) - \mu \times \gamma_i(\alpha) - \beta_i(\alpha) \right ]
     - log(\sigma_c) - log(\sqrt{2 \pi}) + \frac{(\alpha - \alpha_c)^2}{2 \sigma_c^2}
 \end{equation}
 
@@ -96,6 +100,13 @@ def formula(mu, alpha, gamma_i, beta_i, n_i):
 ```
 
 
+!!! note
+    The calibration (how to find $\alpha_c$ and $\sigma_c$) is explained somewhere else.
+
+!!!
+    Calibration pour éviter les maxima locaux et les plateaux.
+
+
 
 Measuring the negative log likelihood on one point $(\mu, \alpha)$
 -------------------------------------------------------------------------------
@@ -107,7 +118,7 @@ decision_test = classifier.predict_score(X_test)
 n_array     = bining(decision_test)
 
 def compute_nll(mu, alpha):
-    global classifer  # from previous training
+    global classifer  #from previous training
     global n_array
 
     Data_valid  <- simulator(mu, alpha)
@@ -215,9 +226,24 @@ Cheaper but symetric, less precise, assumes hyperbolic/parabolic NLL.
 Systematic aware classfiers
 ===============================================================================
 
+This section describes Data augmentation, Tangent propagation, Pivot.
+
 Differences with the Standard classifier pipeline
 -------------------------------------------------------------------------------
 
+It is the exact same pipeline.
+Only the training is different.
+
+Data augmentation
+-------------------------------------------------------------------------------
+
+
+Tangent propagation
+-------------------------------------------------------------------------------
+
+
+Pivot
+-------------------------------------------------------------------------------
 
 
 
