@@ -5,9 +5,15 @@
 Documentation of the pipeline of producing inference using pseudo code.
 Inference is two-fold : *point estimation* and *confidence interval estimation*.
 
-- The 1st section describes the theoretical pipeline.
-- The 2nd section describes the differencies with my implementation
-- The 3rd section describes
+The objective of the document is to explain the inference pipeline first from a theoretical point of view and then the modifications to enable experiments and describe possible improvements.
+The direct regression method will be described in another document.
+
+- The 1st section gives generalities
+- The 2nd section describes the theoretical pipeline
+- The 3rd section describes the differences with my implementation
+- The 4th section describes systematic aware pipeline differences
+- The 5th section describes inferno pipeline differences
+
 
 
 General
@@ -34,6 +40,22 @@ Data <- simulator(mu, alpha, n_samples=5000)
 #  OR
 X, y, w <- simulator(mu, alpha, n_samples=5000)
 ```
+
+Notations / Glossary
+-------------------------------------------------------------------------------
+
+- $\mu$ : the parameter of interest (in general)
+- $\alpha$ : the nuisance parameter (in general)
+- $\mu^\star$ : the true unknown value of the parameter of interest that generated experimental data
+- $\alpha^\star$ : the true unknown value of the nuisance parameter that generated experimental data
+- $\hat \mu$ : the estimator of the parameter of interest
+- $\hat \alpha$ : the estimator of the nuisance parameter
+- $\gamma$ : the expected number of signal events
+- $\beta$ : the expected number of background events
+- $\gamma_i$ : the expected number of signal events in bin number $i$
+- $\beta_i$ : the expected number of background events in bin number $i$
+
+
 
 
 
@@ -222,6 +244,34 @@ Cheaper but symetric, less precise, assumes hyperbolic/parabolic NLL.
 
 
 
+Differences with my implementations
+===============================================================================
+
+
+Simulated Test set
+-------------------------------------------------------------------------------
+
+Since the test set is not available we use the simulator to produce the test set.
+The hidden values of the input parameters are noted $\mu^\star$ and $\alpha^\star$.
+
+```python
+mu_star = 1.1  # for example
+alpha_star = 1.03  # for example
+Data_test <- simulator(mu_star, alpha_star)
+```
+
+The objective is to measure how well the various models manage to find $\mu^\star$ and $\alpha^\star$.
+
+
+
+Hessian confidence interval
+-------------------------------------------------------------------------------
+
+Instead of the ln + 1/2 method with profile likelihood we use the Hessian as an approximation.
+This gives a symetric interval assuming that the negative log likelihood is parabolic/hyperbolic around the minimum (gaussian-like approximation).
+TODO : check if hyperbolic or parabolic ?
+
+
 
 Systematic aware classfiers
 ===============================================================================
@@ -259,33 +309,6 @@ Training
 -------------------------------------------------------------------------------
 
 
-
-Differences with my implementations
-===============================================================================
-
-
-Simulated Test set
--------------------------------------------------------------------------------
-
-Since the test set is not available we use the simulator to produce the test set.
-The hidden values of the input parameters are noted $\mu^\star$ and $\alpha^\star$.
-
-```python
-mu_star = 1.1  # for example
-alpha_star = 1.03  # for example
-Data_test <- simulator(mu_star, alpha_star)
-```
-
-The objective is to measure how well the various models manage to find $\mu^\star$ and $\alpha^\star$.
-
-
-
-Hessian confidence interval
--------------------------------------------------------------------------------
-
-Instead of the ln + 1/2 method with profile likelihood we use the Hessian as an approximation.
-This gives a symetric interval assuming that the negative log likelihood is parabolic/hyperbolic around the minimum (gaussian-like approximation).
-TODO : check if hyperbolic or parabolic ?
 
 
 
