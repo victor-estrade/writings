@@ -1,0 +1,149 @@
+                <meta charset="utf-8" emacsmode="-*- markdown -*-">
+                            **Starter Document**
+
+
+Here is a short description of a paradox around systematic error.
+The first intuition is to train a classifier whose output is more robust to systematic effect ie. some transformation of the input data.
+
+This document will be mostly thoughts on the systematic error *"avec les mains"* without much math.
+
+TDLR
+===============================================================================
+
+The total error is the confidence interval, it is computed from data.
+The error is a deterministic function of the data.
+
+Assuming the nuisance parameters are fixed (but unknown) :
+- If the nuisance parameter have an effect on the data then it can be measured and its effect reduced to (almost) nothing.
+- If the nuisance parameter does not have a measurable effect on the data then it does not have influence on the error then there is no systematic error.
+
+Conclusion :
+Either systematic error is not a problem or the nuisance parameters are not fixed values but random values with non-zero expectation.
+
+!!! WARNING
+    Maybe it is because $E[x] = f(\mu, \alpha)$ not only $E[x] = f(\alpha)$
+
+
+What is systematic error ?
+===============================================================================
+
+This section is about definitions of errors.
+
+
+What is an error ?
+-------------------------------------------------------------------------------
+
+When doing inference one must give the most probable value or the average or expected value of the measured parameter.
+And an interval which may contain the true value of the measured parameter at 99% chance.
+
+The error is the interval.
+A better error is a smaller interval.
+
+
+What is the total error ?
+-------------------------------------------------------------------------------
+
+The total error is opposed to the statistical and the systematic error which compose it.
+
+The total error is simply the error of the inference.
+
+It is assumed that :
+\begin{equation}
+  \text{total error} = \text{statistical error} + \text{systematic error}
+\end{equation}
+
+
+
+What is the statistical error ?
+-------------------------------------------------------------------------------
+
+The statistical error is the error comming only from uncontrolled sources.
+
+example :
+- limited sample size
+- apparatus maximum resolution
+- noises
+
+It is impossible to reduce the statistical error with more knowledge.
+Only more data samples can reduce it.
+
+It is the **"unknown unknown"**.
+Everything that we cannot control which add noise/randomness to the measurements.
+
+!!!
+    Yes I am putting the limited sample size inside the "unknown unknown" category.
+    Because the sampling process itself by definition should not contain or give any information.
+    Samples are taken fully randomly.
+    It is not the main subject of this document anyway.
+
+It is opposed to the systematic error which gather the errors from controlled sources.
+
+
+What is the systematic error ?
+-------------------------------------------------------------------------------
+
+Systematic error is the error comming from controlled sources.
+The "known unknown".
+
+example :
+- Temperature of the room
+- apparatus imperfection
+- etc
+
+Systematic effects are things that will change the measurments and that we cannot avoid or randomize with expectation = zero.
+Meaning that the effects will not disapear by taking more data.
+
+Systematic effect are always parametrized.
+Parameters of the systematic effect that are not the object of the study are named nuisance parameters.
+Parameters of the systematic effect are that are studied are named parameters of interest.
+
+The systematic error is the error coming from nuisance parameters.
+
+
+example : Studying gravity by making measurements on objects falling from the roof of the building.
+Wind, air pressure, magnetic field, coriolis effect do have influence of the measurements but is not the subject of the study.
+
+
+
+
+
+The paradox
+===============================================================================
+
+Computing the statistical error
+-------------------------------------------------------------------------------
+
+To compute the statistical error one assums that the value of the nuisance parameters is known and runs the inference.
+The total error now only contains the statistical error.
+
+
+Computing the systematic error
+-------------------------------------------------------------------------------
+
+On way is to compute the total error and the statistical error to get access to the systematic error.
+
+\begin{equation}
+  \text{systematic error} = \text{total error} - \text{statistical error}
+\end{equation}
+
+But this does not tell us anything about the origin of the systematic error.
+
+
+Origin of the systematic error
+-------------------------------------------------------------------------------
+
+The origin of the systematic error is the fact that the previously known fixed nuisance parameters are now random variables.
+
+Assuming that $\alpha$ is knwon and $\alpha=1$ when actually we do not know for sure will probably lead to a biased estimation.
+
+To avoid biased estimation the value of $\alpha$ is infered and turned into a random variable.
+We traded a reduction of bias for a increase of variance.
+But it is obviously better than being confident on a biased value.
+
+
+
+
+
+
+
+<!-- Markdeep: --><style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style><script src="markdeep.min.js" charset="utf-8"></script><script src="https://morgan3d.github.io/markdeep/latest/markdeep.min.js?" charset="utf-8"></script><script>window.alreadyProcessedMarkdeep||(document.body.style.visibility="visible")</script>
