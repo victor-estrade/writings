@@ -9,70 +9,99 @@ BACKGROUND AND MOTIVATIONS:
 
 The objective of the thesis is
 [… ]
+
+
 in the context of
-[… ]
+**High Energy Physics analysis at the Large Hadron Collider.**
+
 This problem is particularly important because
-[…]
+**data science is taking over science in general**
+
 Although it has been addressed in the past by
 [… ]
+
 in restricted and/or related cases such as
 [… ]
+
 we tackle novel aspects of it, namely
-[… ]
+**trying domain adaptation methods**
+
 which was not studied before. Furthermore, we cast the problem into a novel framework
 [… ]
+
 clarifying the subject with respect to
 [… ]
+
 and we propose and compare machine learning methods against established methods, such as
 [… ]
+
 We are uniquely positioned to address this problem because
 [… ]
+
 
 MATERIAL AND METHODS:
 =====================
 
 To demonstrate advances on this problem, we use
-[… ] “real” data (data obtained with a realistic simulator), obtained in the following matter
+**the publicly available higgsML challenge**
+ “real” data (data obtained with a realistic simulator), obtained in the following matter
 […]
+
 We also conduct systematic experiments on a set of smaller didactic examples to clarify the following points
 [… ]
+
 We benchmark
-[number]
+**8**
 methods. including
-[list]
+**standard classifiers, data augmentation, tangent propagation, pivotal neural network, inference aware neural optimization network, direct regression**.
+
 The experiments are carried out on
 [impressive computers]
+
 In addition, several theoretical insights are obtained by analyzing successes and failures in numerical expériments. We derived several properties of
 […]
+
 using mathematics of statistics techniques
 [… ]
+
 
 RESULTS:
 ========
 
 Our results on realistic synthetic data demonstrate that
 [… ]
+
 One particular highlight is:
 [… ]
+
 This opens the door to:
 [… ]
+
 We noticed that, contrarily to results on smaller artificial examples, we have on realistic synthetic the following behavior
 [… ]
+
 This prompted us to make a more in depth and detailed study using artificial data, which revealed:
 [… ]
+
 This was further substantiated with a theoretical analysis. We proved that
 [… ]
+
 analytically. Although such theoretical results are limited by a given set of assumptions
-[… ],
+[… ]
+,
 they are corroborated by numerical experiments in the broader setting
 [… ]
+
 This leads us to conclude with confidence that
 [… ]
+
 This is the main result of this thesis.
 We also conducted an analysis of the computational efficiency of the algorithms revealing that:
 [… ]
+
 All in all method
 [… ]
+
 provides the best compromise speed/accuracy.
 
 
@@ -81,22 +110,34 @@ CONCLUSION AND FURTHER WORK:
 
 This work allowed us to advance the field of
 [… ]
+
 in a number of directions, including
 [… ]
+
 [… ]
+
 [… ]
+
 The framework we proposed helped us clarify and unify past work and allowed us to identify critics difficulties not anticipated, such as
 [… ]
+
 [… ]
+
 With perseverance, we managed to understand such issues and resolve a number of them using
 [… ]
+
 [… ]
+
 But much work remains to be done to improve
 [… ]
+
 [… ]
+
 Further research directions include
 [… ]
+
 [… ]
+
 
 
 MAIN CONTRIBUTIONS (at least 5 points):
@@ -104,10 +145,15 @@ MAIN CONTRIBUTIONS (at least 5 points):
 
 In summary, the main contributions of this thesis are:
 [… ]
+
 [… ]
+
 [… ]
+
 [… ]
+
 [… ]
+
 
 
 NOTES
@@ -134,6 +180,26 @@ Reg-Mamouth est à mettre en parallele ou en continuité d'INFERNO.
 
 Manque error stat et error syst dans le discours.
 Quid de l'influence de $\gamma << \beta$ sur error stat/syst ?  
+
+Remarks
+-------
+
+Définir en tant que problème de ML
+- shift paramétrisé de la distribution de test. Multi param et non reversible. à la fin on a quand même qu'une valeur dans le test set.
+- Une forme de réduction de dimension ou de construction de summary stat
+- fonction objectif complexe (pas calculable). c'est réduire la taille l'interval de confiance *proxy loss*
+
+Les questions abordées :
+- How to train on a data bunch instead of data sample ?
+- How to train when the training distribution is "wrong" ?
+- How to train with intractable loss function ?
+- Measuring the Impact of training on a shifted distribution on a complex loss
+- comparing methods according to real objective instead of proxy.
+
+
+
+
+
 
 
 <link rel="stylesheet" href="https://casual-effects.com/markdeep/latest/dark.css?">
