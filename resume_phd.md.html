@@ -9,7 +9,6 @@ BACKGROUND AND MOTIVATIONS:
 
 The objective of the thesis is
 to improve the integration of machine learning methods in complex statistical inference pipeline
-
 in the context of
 a High Energy Physics analysis at the Large Hadron Collider.
 
@@ -18,10 +17,10 @@ experimental science now have to cope with huge amount of multidimensional data
 challenging the manpower efficiency of classical hand crafted methods.
 
 Although it has been addressed in the past by
-[… la c'est vrai que je sais pas]
+[… ???]
 
 in restricted and/or related cases such as
-[… ]
+[… ???]
 
 we tackle novel aspects of it, namely
 taking into account the impact of training under the distribution shift induced by nuisance parameters
@@ -30,7 +29,7 @@ which was not studied before. Furthermore, we cast the problem into a novel fram
 [… ???]
 
 clarifying the subject with respect to
-[… ]
+[… ???]
 
 and we propose and compare machine learning methods against established methods, such as
 standard classification or inference on the most promissing feature.
@@ -46,21 +45,19 @@ To demonstrate advances on this problem, we use
 the publicly available higgsML challenge
 “real” data (data obtained with a realistic simulator),
 enhanced with a re-simulation process, develloped for this project,
-recomputing all the attributes as if the full simulation were reran with different input parameters.
+recomputing all the attributes as if the full simulation were re-ran with different input parameters.
 
-We also conduct systematic experiments on a set of smaller didactic examples to clarify the following points
+We also conduct systematic experiments on a set of smaller didactic examples to clarify the following points :
 - impact of signal/background ratio
--
+- variance analysis of the maximum likelihood estimator
 - impact of the number of nuisance parameters (bof)
 
 We benchmark 8 methods. Including
 standard classifiers, data augmentation, tangent propagation, pivotal neural network, inference aware neural optimization network, direct regression.
+The experiments are carried out on a 30+ GPU cluster.
 
-The experiments are carried out on
-a 30+ GPU cluster.
-
-In addition, several theoretical insights are obtained by analyzing successes and failures in numerical expériments. We derived several properties of
-[…]
+In addition, several theoretical insights are obtained by analyzing successes and failures in numerical experiments. We derived several properties of
+[… ???]
 
 using mathematics of statistics techniques
 [… ???]
@@ -143,16 +140,16 @@ and robustness to nuisance parameters in a likelihood free inference framework.
 MAIN CONTRIBUTIONS (at least 5 points):
 =======================================
 
-Les points restent à developper.
+(TODO developper ces points, ne pas juste les citer.)
 
 In summary, the main contributions of this thesis are:
-- **clarifying the interactions between the classifiers and the systematic effects**
+- clarifying the interactions between the classifiers and the systematic effects
   - impact of training under parametrized shift
-- **comparison of the various systematic aware methods**
+- comparison of the various systematic aware methods
   - impact of various proxy loss and regularization
-- **direct regression on empirical distribution**
-- **improving the inference by extracting more information from the data**
-- **???**
+- direct regression on empirical distribution
+- improving the inference by extracting more information from the data
+- ???
 
 NOTES
 =====
@@ -182,7 +179,7 @@ Quid de l'influence de $\gamma << \beta$ sur error stat/syst ?
 Remarks
 -------
 
-Définir en tant que problème de ML
+Définir en tant que problème de ML :
 - shift paramétrisé de la distribution de test. Multi param et non reversible. à la fin on a quand même qu'une valeur dans le test set.
 - Une forme de réduction de dimension ou de construction de summary stat
 - fonction objectif complexe (pas calculable). c'est réduire la taille l'interval de confiance *proxy loss*
