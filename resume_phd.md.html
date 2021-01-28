@@ -8,115 +8,115 @@ BACKGROUND AND MOTIVATIONS:
 ===========================
 
 The objective of the thesis is
-[… ]
-
+to improve the integration of machine learning methods in complex statistical inference pipeline
 
 in the context of
-**High Energy Physics analysis at the Large Hadron Collider.**
+a High Energy Physics analysis at the Large Hadron Collider.
 
 This problem is particularly important because
-**data science is taking over science in general**
+experimental science now have to cope with huge amount of multidimensional data
+challenging the manpower efficiency of classical hand crafted methods.
 
 Although it has been addressed in the past by
-[… ]
+[… la c'est vrai que je sais pas]
 
 in restricted and/or related cases such as
 [… ]
 
 we tackle novel aspects of it, namely
-**trying domain adaptation methods**
+taking into account the impact of training under the distribution shift induced by nuisance parameters
 
 which was not studied before. Furthermore, we cast the problem into a novel framework
-[… ]
+[… ???]
 
 clarifying the subject with respect to
 [… ]
 
 and we propose and compare machine learning methods against established methods, such as
-[… ]
+standard classification or inference on the most promissing feature.
 
 We are uniquely positioned to address this problem because
-[… ]
+this work follows the wave created by the higgsML challenge.
 
 
 MATERIAL AND METHODS:
 =====================
 
 To demonstrate advances on this problem, we use
-**the publicly available higgsML challenge**
- “real” data (data obtained with a realistic simulator), obtained in the following matter
-[…]
+the publicly available higgsML challenge
+“real” data (data obtained with a realistic simulator),
+enhanced with a re-simulation process, develloped for this project,
+recomputing all the attributes as if the full simulation were reran with different input parameters.
 
 We also conduct systematic experiments on a set of smaller didactic examples to clarify the following points
-[… ]
+- impact of signal/background ratio
+-
+- impact of the number of nuisance parameters (bof)
 
-We benchmark
-**8**
-methods. including
-**standard classifiers, data augmentation, tangent propagation, pivotal neural network, inference aware neural optimization network, direct regression**.
+We benchmark 8 methods. Including
+standard classifiers, data augmentation, tangent propagation, pivotal neural network, inference aware neural optimization network, direct regression.
 
 The experiments are carried out on
-[impressive computers]
+a 30+ GPU cluster.
 
 In addition, several theoretical insights are obtained by analyzing successes and failures in numerical expériments. We derived several properties of
 […]
 
 using mathematics of statistics techniques
-[… ]
+[… ???]
 
 
 RESULTS:
 ========
 
 Our results on realistic synthetic data demonstrate that
-[… ]
+robustness to systematic effect improves performances if the regularization is not too strong
+and the suitability of direct regression for inference.
 
 One particular highlight is:
-[… ]
+the evidence that the robustness of INFERNO to systematic effect is similar to the extraction of nuisance parameters related information from the data.
 
 This opens the door to:
 [… ]
 
 We noticed that, contrarily to results on smaller artificial examples, we have on realistic synthetic the following behavior
-[… ]
+[… ???]
 
 This prompted us to make a more in depth and detailed study using artificial data, which revealed:
-[… ]
+[… ???]
 
 This was further substantiated with a theoretical analysis. We proved that
-[… ]
+carefully choosing the binning procedure is critical (but it is not new at all !).
 
 analytically. Although such theoretical results are limited by a given set of assumptions
-[… ]
+ : the lack of nuisance parameter
 ,
 they are corroborated by numerical experiments in the broader setting
-[… ]
+[… ???]
 
 This leads us to conclude with confidence that
-[… ]
-
+having a very signal/background ratio makes the inference extremely difficult for all methods
+and extracting more information about the nuisance parameters always improve the resulting confidence interval.
 This is the main result of this thesis.
+
 We also conducted an analysis of the computational efficiency of the algorithms revealing that:
-[… ]
-
-All in all method
-[… ]
-
-provides the best compromise speed/accuracy.
+tangent propagation suffers from the lack of jacobian vector product in common libraries,
+INFERNO can fully leverage GPU computing and is very accurate,
+data augmentation shows good accuracy and does not requires GPU oriented machines,
+and although direct regression is compuationnaly intensive for training its inference speed is unmached.
 
 
 CONCLUSION AND FURTHER WORK:
 ============================
 
 This work allowed us to advance the field of
-[… ]
+integrating machine learning into statistical analysis
 
 in a number of directions, including
-[… ]
+reducing nuisance parameters influence on the final uncertainty,
+opening the replacements of more parts of the pipeline by specialized neural network,
+and the importance of data mining various informations to impove modelization.
 
-[… ]
-
-[… ]
 
 The framework we proposed helped us clarify and unify past work and allowed us to identify critics difficulties not anticipated, such as
 [… ]
@@ -129,32 +129,30 @@ With perseverance, we managed to understand such issues and resolve a number of 
 [… ]
 
 But much work remains to be done to improve
-[… ]
-
-[… ]
+integration of the final objective figure of merit when the simulator is not differentiable,
+automating relevant summary statistics extraction,
+and ensuring the quality of the uncertainty predicted by neural network direct regression
 
 Further research directions include
-[… ]
-
-[… ]
+extacting more information from the simulator (madminer/mining gold),
+ensemble of neural networks for better measurement of the uncertainty (stochastic weight averaging seems promissing),
+and robustness to nuisance parameters in a likelihood free inference framework.
 
 
 
 MAIN CONTRIBUTIONS (at least 5 points):
 =======================================
 
+Les points restent à developper.
+
 In summary, the main contributions of this thesis are:
-[… ]
-
-[… ]
-
-[… ]
-
-[… ]
-
-[… ]
-
-
+- **clarifying the interactions between the classifiers and the systematic effects**
+  - impact of training under parametrized shift
+- **comparison of the various systematic aware methods**
+  - impact of various proxy loss and regularization
+- **direct regression on empirical distribution**
+- **improving the inference by extracting more information from the data**
+- **???**
 
 NOTES
 =====
@@ -179,7 +177,7 @@ Out of scope / trop dur / trop long de changer la méthode de validation du mod�
 Reg-Mamouth est à mettre en parallele ou en continuité d'INFERNO.
 
 Manque error stat et error syst dans le discours.
-Quid de l'influence de $\gamma << \beta$ sur error stat/syst ?  
+Quid de l'influence de $\gamma << \beta$ sur error stat/syst ?
 
 Remarks
 -------
@@ -197,7 +195,7 @@ Les questions abordées :
 - comparing methods according to real objective instead of proxy.
 
 
-
+- On a pu éclaircir les interactions entre le ML et les systématiques
 
 
 
