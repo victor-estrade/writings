@@ -19,8 +19,19 @@ Contexte
 Statistical inference in ideal case
 -------------------------------------------------------------------------------
 
+- Introduce the 1D example
+  - Measuring leaves length $x$ (for whatever reason) with a ruler
+  - 2 groups of leaves :
+    - 1 following a Gamma distrib (group B)
+    - and another longer following a Gaussian distrib (group S)
+  - Want to know the number of leaves in group S
+  - Want to know the deviation of the $n_S$ from prediction (for numerical convenience)
+  - Giving the likelihood of the data : [formula]
 - maximum likelihood point estimator
+  - Easy with maximum likelihood !
 - invert statistical test to get a confidence set
+  - The final objective is a confidence set (or interval)
+  - We get it by inverting a statistical test.
 
 
 
@@ -28,30 +39,56 @@ Inverse problem
 -------------------------------------------------------------------------------
 
 - No likelihood at the sample level
+  - Now the likelihood for $x$ is intractable in many interesting case
+  - (which is the case fot the HEP experiments)
+  - Because there is a very large number of latent variables
+  - But it is possible to sample from a simulator
 - Inverse problem
+  - This leads to an inverse problem (inverting a simulator/sampler)
 - (or not) likelihood at the distribution level
-- bining ?
+  - But in our particular case an approximative model is available
+  - Poisson count process as an approximation of counting iid Bernoulli rare process
+  - The simulator is part of the model through $\gamma$ and $\beta$
 
+!!!
+    binning will be introduced later whith the classifier improvement.
+    Now we need to introduce systematics.
+
+
+Systematics
+-------------------------------------------------------------------------------
+
+!!! Tip
+    It's better to introduce systematics before the classifier.
+    yes : start with 1D problem (it's easy to visualize) and then go to multi dimnensions
+
+- What are systematics ?
+  - Nuisance parameters are parameters required to fully describes the data generating process but not of direct interest
+  - Systematic effect is the effect of nuisance parameters on the data
+  - How about a super simple example with a ruler ?
+    - Data = Measuring the length of leaves
+    - Systematics = a small offset (or scale factor) on the ruler
+    - Objective = something related with the mean length of the leaves
+    - impossible to disentangle -> measured x = offset + true value
+    - Increases uncertainty on the final measurement
+  - Give the 1D example (scale factor)
+  - Calibration is required to partially disentangle the nuisance parameters and the parameter of interest
+    - It is an additionnal information -> an additional measurement -> an additional likelihood
+- Systematics breaks Bayes optimal classifier garanty
+- Systematics increases the confidence set volume
+- Profiled likelihood method to take systematics into account in uncertainty measurement (volume of confidence set)
 
 
 Classifier to improve binning
 -------------------------------------------------------------------------------
 
-
+- Binning is better !
 - High dimensional data histogram is too expensive
 - dimension reduction
 - Figure of merit is not a tracktable quantity (cannot use as a loss)
 - best to have pure signal or pure background bin
 - Bayes optimal classifiers gives sufficient summary stat (no systematics setting)
 
-
-
-Systematics
--------------------------------------------------------------------------------
-
-- Systematics breaks Bayes optimal classifier garanty
-- Systematics increases the confidence set volume
-- Profiled likelihood method to take systematics into account in uncertainty measurement (volume of confidence set)
 
 
 
@@ -69,10 +106,14 @@ Other
 Regularization
 ===============================================================================
 
-
+!!! error
+    Reprendre les papiers pour compléter
 
 Add regularization to cross entropy loss
 -------------------------------------------------------------------------------
+
+- If the classifier output is independant from the nuisance parameters then we win !
+  - If it is just less dependant it will still decrease the final uncertainty.
 
 
 
@@ -80,14 +121,21 @@ Data augmentation
 -------------------------------------------------------------------------------
 
 
+- Avantages / drawbacks summary
+
+
 
 Tangent Propagation
 -------------------------------------------------------------------------------
 
+- Avantages / drawbacks summary
 
 
 Pivotal neural networks
 -------------------------------------------------------------------------------
+
+- Related to the DANN but without unlabeled data
+- Avantages / drawbacks summary
 
 
 
@@ -105,6 +153,16 @@ Tackling the distribution
 Neural stat & inferno
 -------------------------------------------------------------------------------
 
+- Training neural networks to produced summary statistics
+  - Permutation invariant architectures
+  - Losses on summary stats (and on samples for neural stat)
+- Training on a lower bound of the final uncetrainty
+  - Cramer Rao bound
+- Limitations
+  - Differentiable simulator
+  - Reverse a large hessian matrix can be complicated
+
+
 
 
 Performances on toys ?
@@ -115,6 +173,16 @@ Performances on toys ?
 Direct regression
 -------------------------------------------------------------------------------
 
+- Motivation : likelihood free, no differentiable simulator, simpler
+- Measuring uncertainty with Density networks
+  - There is better ways nowadays
+- Training details
+  - The dynamic of training is unusual
+  - Adjust Adam parameters to reduce intertia
+- Include samples weights into the architecture
+- Two ways to handle nuisance parameters
+  - Ingore them (harder on the network)
+  - Profile them (give as input and marginalize)
 
 
 More details
@@ -156,6 +224,16 @@ Lost and found
 - les résultas des XP
 - Higgs re-simulator
 - 1er Travaux sur sigma mu
+
+- How it is done
+  - hand crafted dimension reduction (ie ask a theorist to find a feature) is not always possible and requires a lot work hours
+  - Poisson count process & binned Poisson count process
+  - Although the model seems simple, most of it is in the simulator ie in the estimation of $\gamma$ and $\beta$
+- Other methods exists but do not fit perfectly to our problem
+  - ABC is likelihood free -> we have a likelihood
+  - Variational inference -> is known to underestimate the uncertainty, and is looking for p(x) instead of p(mu|x)
+  - Bayesian networks -> Other have tried ... need to check more in depth
+  - Mining gold -> I do not have access to the simulator (proprietary code)
 
 
 
