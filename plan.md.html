@@ -19,6 +19,9 @@ Contexte
 Statistical inference in ideal case
 -------------------------------------------------------------------------------
 
+!!!
+    Here is introduced the statistical tools required and illustrated with a simple 1D example
+
 - Introduce the 1D example
   - Measuring leaves length $x$ (for whatever reason) with a ruler
   - 2 groups of leaves :
@@ -27,9 +30,9 @@ Statistical inference in ideal case
   - Want to know the number of leaves in group S
   - Want to know the deviation of the $n_S$ from prediction (for numerical convenience)
   - Giving the likelihood of the data : [formula]
-- maximum likelihood point estimator
+- Maximum likelihood point estimator
   - Easy with maximum likelihood !
-- invert statistical test to get a confidence set
+- Invert statistical test to get a confidence set
   - The final objective is a confidence set (or interval)
   - We get it by inverting a statistical test.
 
@@ -38,6 +41,9 @@ Statistical inference in ideal case
 Inverse problem
 -------------------------------------------------------------------------------
 
+!!!
+    The first difficulty : Not a tracktable likelihood at sample level
+
 - No likelihood at the sample level
   - Now the likelihood for $x$ is intractable in many interesting case
   - (which is the case fot the HEP experiments)
@@ -45,6 +51,7 @@ Inverse problem
   - But it is possible to sample from a simulator
 - Inverse problem
   - This leads to an inverse problem (inverting a simulator/sampler)
+- Particular inverse problem -> looking for a mixture coefficient
 - (or not) likelihood at the distribution level
   - But in our particular case an approximative model is available
   - Poisson count process as an approximation of counting iid Bernoulli rare process
@@ -52,30 +59,28 @@ Inverse problem
 
 !!!
     binning will be introduced later whith the classifier improvement.
-    Now we need to introduce systematics.
+    We now introduce systematics because it is more important.
 
 
 Systematics
 -------------------------------------------------------------------------------
 
-!!! Tip
-    It's better to introduce systematics before the classifier.
-    yes : start with 1D problem (it's easy to visualize) and then go to multi dimnensions
+!!!
+    The second difficulty : systematic effect of the nuisance paramters
+
 
 - What are systematics ?
   - Nuisance parameters are parameters required to fully describes the data generating process but not of direct interest
   - Systematic effect is the effect of nuisance parameters on the data
-  - How about a super simple example with a ruler ?
-    - Data = Measuring the length of leaves
-    - Systematics = a small offset (or scale factor) on the ruler
+  - Update the 1D exampl :
+    - Systematics = a small offset or scale factor on the ruler
+      - (we go with the scale because it will be usefull later)
+      - impossible to disentangle -> measured x = offset + true value or scale * true value
     - Objective = something related with the mean length of the leaves
-    - impossible to disentangle -> measured x = offset + true value
     - Increases uncertainty on the final measurement
-  - Give the 1D example (scale factor)
   - Calibration is required to partially disentangle the nuisance parameters and the parameter of interest
     - It is an additionnal information -> an additional measurement -> an additional likelihood
-- Systematics breaks Bayes optimal classifier garanty
-- Systematics increases the confidence set volume
+- Systematics always increases the confidence set volume
 - Profiled likelihood method to take systematics into account in uncertainty measurement (volume of confidence set)
 
 
@@ -83,24 +88,30 @@ Classifier to improve binning
 -------------------------------------------------------------------------------
 
 - Binning is better !
+  - A good idea to improve the inference is to do binning as long as the Poisson approx remains valid
+  - show math proving that 2 bins is better no matter what threshold is used
+  - show math proving that more bins is probably better too
+  - best to have pure signal or pure background bin
 - High dimensional data histogram is too expensive
+  - Multi dimensional data usually cary more information
+  - Unfortunately binning scales exponentially with increase of dimension
 - dimension reduction
-- Figure of merit is not a tracktable quantity (cannot use as a loss)
-- best to have pure signal or pure background bin
+  - Need to find a good dimension reduction keeping most information about our parameter of interest
+  - Can be crafted by hand but it requires domain knowledge and many work hours
+  - hence the idea of using Machine learning
+- Figure of merit is not a tracktable (additive) quantity (cannot use as a loss)
+  - So we can use a proxy loss to train our ML model
+  - Recall that separating S and B events is reduces the uncertainty -> classifiers
 - Bayes optimal classifiers gives sufficient summary stat (no systematics setting)
+- Systematics breaks Bayes optimal classifier garanty
 
 
 
+!!! error
+    HiggsML data est intro section 1 mais on en parle plus du tout après....
 
-
-
-Other
--------------------------------------------------------------------------------
-
-- **Need to introduce the toy example in the chapter to explain using the example.**
-- Systematics should appear sooner
-
-
+!!! error
+    Le problème de comptage n'est pas assez mis en avant
 
 
 Regularization
