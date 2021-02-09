@@ -1,0 +1,95 @@
+<meta charset="utf-8" emacsmode="-*- markdown -*-">
+
+**How to compute confidence interval**
+
+In this document is explained how the confidence set is computed in our pipeline.
+A 1D toy problem similar to the real HiggsML data illustrates the problem.
+
+It is organized as follow :
+1. In an ideal case (like at school)
+2. First difficulty : with a likelihood using summary statistics
+3. Second difficulty : with systematics (nuisance parameters)
+
+
+In the ideal case
+===============================================================================
+
+This section describes how to compute a confidence set for a parameter from the observed data.
+
+A simple example
+-------------------------------------------------------------------------------
+
+Let's start by how the data generative process is modeled.
+Since this is a toy problem the model will perfectly match the generative process.
+
+!!! tip
+    In real life special care must be taken to check that the model match the data.
+    Validating the model is out of scope of this document.
+
+> Let's imagin that a machine is gathering leaves on the ground and also measures their length.
+> An event is when the machine picked up a leaf and measured it.
+> There is only two kind of leaves in the area, dividing the leaves into two groups noted S and B.
+
+The data is a mixture of two distributions :
+- a gamma distribution to represent the *background* events (group B)
+- and a gaussian distribution to represent the *signal* events (group S)
+
+Theory can predict the mixture coefficient of those two distributions.
+The objective is to infer the signal mixture coefficient deviation, noted $\mu$, of the measured data from the theory.
+
+The model describing the studied phenomenon can be fully described by giving its likelihood :
+\begin{equation}
+  L(\mu) = p(x|\mu) = \mu \times p(S) p(x|S) + p(B) p(x|B)
+\end{equation}
+
+where :
+- $p(S)$ is the probability of a leaf to be in group S
+- $p(x|S)$ is the likelihood of a measuring x knowing the leaf is in group S (gaussian distribution)
+- $p(B)$ is the probability of a leaf to be in group B
+- $p(x|B)$ is the likelihood of a measuring x knowing the leaf is in group B (gamma distribution)
+
+It is supposed that the collection of each leaf is idependant and identically distributed ie. for a full dataset :
+\begin{equation}
+  L(\mu) = p(D|\mu) = \prod_{x \in D} \mu \times p(S) p(x|S) + p(B) p(x|B)
+\end{equation}
+
+
+Building a confidence set for $\mu$ requires two steps :
+- A point estimator
+- Reverting a statistical test using the previous point estimator
+
+
+Step 1 : point estimation
+-------------------------------------------------------------------------------
+
+Point estimation in HEP is dominated by maximum likelihood estimator.
+
+\begin{equation}
+  \hat \mu = argmax_\mu L(\mu)
+\end{equation}
+
+In this simple case $L(\mu)$ is a closed form formula since all its components are known.
+
+
+Step 2 : Confidence set
+-------------------------------------------------------------------------------
+
+Glen's book page 131 :
+> In fact, it can be shown that even if the likelihood function is not a Gaussian
+> function of the parameters, the central confidence interval $[a, b] = [\theta - c, \theta + d]$
+> can still be approximated by using
+> $ log L (\theta^{+d}_{-c}) = log L_max - \frac{N^2}{2} $
+
+- W.T. Eadie, D. Drijard, F.E. James, M. Roos and B. Sadoulet, Statistical Methods in Experimental Physics, North-Holland, Amsterdam (1971).
+- A.G. Frodesen, O. Skjeggestad and H. T0fte, Probability and Statistics in Particle Physics, Universitetsforlaget, Oslo (1979).
+Or
+- Statistical Methods in Experimental Physics 2nd edition
+
+
+
+
+
+<link rel="stylesheet" href="https://casual-effects.com/markdeep/latest/dark.css?">
+<style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style>
+<script>markdeepOptions={tocStyle:'none'};</script>
+<!-- Markdeep: --><script src="markdeep.min.js"></script><script src="https://casual-effects.com/markdeep/latest/markdeep.min.js?"></script><script>window.alreadyProcessedMarkdeep||(document.body.style.visibility="visible")</script>
