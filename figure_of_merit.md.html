@@ -74,6 +74,41 @@ In this simple case $L(\mu)$ is a closed form formula since all its components a
 Step 2 : Confidence set
 -------------------------------------------------------------------------------
 
+!!! error
+    missing : the definition of confidence set.
+
+This section is a bit technical but let's go !
+Most of it is derived from [#Statbook].
+
+For any function $t(X)$ derived from data $X$ with p.d.f $f(t|\theta)$ then :
+\begin{equation}
+ P(t_1 \leq t \leq t_2| \theta) = P[t_1(\theta) \leq t \leq t_2(\theta)] = \int_{t_1}^{t_2} f(t | \theta) dX
+\end{equation}
+
+Note that $[t_1,t_2]$ is written as an interval but in principle it could be any kind of domain in the t-space.
+There is an infinite amount of such domain or interval $[t_1,t_2]$.
+Usually one is looking for particular intervals :
+- central interval
+- upper limit
+- lower limit
+- unified approach
+
+What makes these intervals different from each other is the choice of an *ordering principle*.
+The *ordering principle* is, as its name suggests, sorting the values of $t$
+in order to choose how to grow the interval to reach the target probability.
+
+The recommended ordering principle in HEP is the *unified approach* described in details in [#Feldman].
+It is inspired by the Neyman-Pearson test which uses a likelihood ratio and is proven to be optimal for hypothesis testing.
+This methods was firstly introduced to solve the issue of "flip-flopping" and empty intervals.
+But also open the door for the profiled likelihood which deals with nuisance parameters as described later in this document.
+
+
+And write the argument behind the unified approach using Neyman-Pearson test.
+
+Then
+
+
+
 Glen's book page 131 :
 > In fact, it can be shown that even if the likelihood function is not a Gaussian
 > function of the parameters, the central confidence interval $[a, b] = [\theta - c, \theta + d]$
@@ -86,8 +121,8 @@ Or
 - Statistical Methods in Experimental Physics 2nd edition
 
 
-
-
+[#Statbook] : Statistical Methods in Experimental Physics 2nd edition
+[#Feldman] : "A Unified Approach to the Classical Statistical Analysis of Small Signals", https://arxiv.org/abs/physics/9711021
 
 <link rel="stylesheet" href="https://casual-effects.com/markdeep/latest/dark.css?">
 <style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style>
