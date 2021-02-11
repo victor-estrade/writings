@@ -16,6 +16,7 @@ In the ideal case
 
 This section describes how to compute a confidence set for a parameter from the observed data.
 
+
 A simple example
 -------------------------------------------------------------------------------
 
@@ -59,6 +60,7 @@ Building a confidence set for $\mu$ requires two steps :
 - Reverting a statistical test using the previous point estimator
 
 
+
 Step 1 : point estimation
 -------------------------------------------------------------------------------
 
@@ -71,23 +73,31 @@ Point estimation in HEP is dominated by maximum likelihood estimator.
 In this simple case $L(\mu)$ is a closed form formula since all its components are known.
 
 
+!!!
+    Dans le manuscrit faire : cf annexe pur un exemple détaillé et mettre que le résultat final
+
+
 Step 2 : Confidence set
 -------------------------------------------------------------------------------
 
 !!! error
     missing : the definition of confidence set.
 
+!!! error
+    homogénéiser les notations
+
 This section is a bit technical but let's go !
 Most of it is derived from [#Statbook].
 
 For any function $t(X)$ derived from data $X$ with p.d.f $f(t|\theta)$ then :
 \begin{equation}
- P(t_1 \leq t \leq t_2| \theta) = P[t_1(\theta) \leq t \leq t_2(\theta)] = \int_{t_1}^{t_2} f(t | \theta) dX
+ P(t_1 \leq t \leq t_2| \theta) = P[t_1(\theta) \leq t \leq t_2(\theta)] = \int_{t_1}^{t_2} f(t | \theta) dt
 \end{equation}
 
 Note that $[t_1,t_2]$ is written as an interval but in principle it could be any kind of domain in the t-space.
 There is an infinite amount of such domain or interval $[t_1,t_2]$.
-Usually one is looking for particular intervals :
+Usually one is looking for particular intervals.
+The mosly used intervals are :
 - central interval
 - upper limit
 - lower limit
@@ -102,27 +112,134 @@ It is inspired by the Neyman-Pearson test which uses a likelihood ratio and is p
 This methods was firstly introduced to solve the issue of "flip-flopping" and empty intervals.
 But also open the door for the profiled likelihood which deals with nuisance parameters as described later in this document.
 
+---
 
-And write the argument behind the unified approach using Neyman-Pearson test.
+J'aime pas cette equation elle donne l'impression qu'on se focalise sur la mesure x
+\begin{equation}
+ R(x) = \frac{P(x | \mu_0)}{P(x | \hat \mu)}
+\end{equation}
 
-Then
+On accumule les $\mu$ dans l'intervalle, en suivant la relation d'ordre donnée, jusqu'à ce que l'on atteigne la probabilité souhaité.
+\begin{equation}
+ ordering(\mu) = \frac{L(\mu)}{L(\hat \mu)}
+\end{equation}
 
+---
 
+!!! tip
+    TODO : comment on obtient cet interval en pratique ? En utilisant la méthode graphique (ln + 1/2)
+
+**Notes :**
 
 Glen's book page 131 :
 > In fact, it can be shown that even if the likelihood function is not a Gaussian
 > function of the parameters, the central confidence interval $[a, b] = [\theta - c, \theta + d]$
 > can still be approximated by using
-> $ log L (\theta^{+d}_{-c}) = log L_max - \frac{N^2}{2} $
+> $ log L (\theta^{+d}_{-c}) = log L_{max} - \frac{N^2}{2} $
 
 - W.T. Eadie, D. Drijard, F.E. James, M. Roos and B. Sadoulet, Statistical Methods in Experimental Physics, North-Holland, Amsterdam (1971).
 - A.G. Frodesen, O. Skjeggestad and H. T0fte, Probability and Statistics in Particle Physics, Universitetsforlaget, Oslo (1979).
-Or
-- Statistical Methods in Experimental Physics 2nd edition
+Or better [#Statbook]
 
 
-[#Statbook] : Statistical Methods in Experimental Physics 2nd edition
-[#Feldman] : "A Unified Approach to the Classical Statistical Analysis of Small Signals", https://arxiv.org/abs/physics/9711021
+
+Untracktable sample-wise likelihood
+===============================================================================
+
+Intractable likelihood
+-------------------------------------------------------------------------------
+
+In our simple example the likelihood $L(\mu)$ is a closed form formula.
+But in real experiment the likelihood includes many (millions) latent variables.
+To compute the likelihood according to $\mu$ only one need to marginalize all the latent variables.
+Meaning computing an integral in very high dimension which in intractable in practice.
+
+
+Example Update : Poisson count process
+-------------------------------------------------------------------------------
+
+We keep the simple example but now we cannot use the closed formula of the likelihood.
+This means that we need to find another way to find the maximum likelihood estimator and the interval estimator.
+
+This would usually lead to an inverse problem.
+But in our particular case there is another way around this issue.
+Domain knowledge allows to produce another likelihood linking some observables to our parameter without latent variables.
+
+In short, the process generating the event can be modeled by a rare Bernouilli distribution.
+The problem is casted as a counting problem and counting rare Bernouilli event is very well approximated by a Poisson distribution.
+
+The new observable is a summary statistic : the total number of events observed is assumed to follow a Poisson distribution.
+
+\begin{equation}
+  L(\mu) = p(n|\mu) = Poisson(n | \mu \gamma + \beta)
+\end{equation}
+
+!!!
+    TODO : Simply show that we are back in buisiness using closed form formulas
+
+
+Binning to improve
+-------------------------------------------------------------------------------
+
+!!!
+    TODO : Put here what we know about how binning reduces the final incertainty
+
+
+
+Numerical computing
+-------------------------------------------------------------------------------
+
+!!!
+    TODO : Since the formulas cannot be sovled we are using numerical technics instead
+
+
+Classifier to optimize binning
+-------------------------------------------------------------------------------
+
+
+
+
+Systematics and Nuisance parameters
+===============================================================================
+
+
+Definition
+-------------------------------------------------------------------------------
+
+!!!
+    Explain what systematic effect and nuisance parameters are
+
+
+
+Impact on maximum likelihood estimator
+-------------------------------------------------------------------------------
+
+!!!
+    Makes it even less tracktable but also breaks classifier optimality
+
+
+
+Profiled likelihood
+-------------------------------------------------------------------------------
+
+!!!
+    The universal approach takes into account nuisance parameters using profiled likelihood ratio instead.
+
+
+
+
+Biblio and links
+===============================================================================
+
+
+
+
+[#Statbook]: Statistical Methods in Experimental Physics 2nd edition
+
+[#Feldman]: _A Unified Approach to the Classical Statistical Analysis of Small Signals_, https://arxiv.org/abs/physics/9711021
+
+
+
 
 <link rel="stylesheet" href="https://casual-effects.com/markdeep/latest/dark.css?">
 <style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style>
