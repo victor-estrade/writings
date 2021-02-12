@@ -207,7 +207,42 @@ with $\sigma_{\hat \mu} = \sqrt{V(\hat \mu)}$.
 \right .
 \end{equation}
 
+Giving :
 
+\begin{equation}
+\begin{array}
+  \, V[\hat \mu] =
+      & [\mu(\gamma + \alpha \delta) + \beta + \alpha \Delta] \times \left ( \frac{1}{\gamma + \tilde \alpha \delta} \right )^2 \\
+     & + 1 \times \left ( \frac{(\Delta) \times (\gamma + \tilde \alpha \delta) - (n - \beta - \tilde \alpha \Delta) \times (\delta)} {(\gamma + \tilde \alpha \delta)^2} \right )^2
+\end{array}
+\end{equation}
+
+\begin{equation}
+  V[\hat \mu] = \frac{\mu(\gamma + \alpha \delta) + \beta + \alpha \Delta}{(\gamma + \tilde \alpha \delta)^2}
+        + \frac{[(\Delta) \times (\gamma + \tilde \alpha \delta) - (n - \beta - \tilde \alpha \Delta) \times (\delta)]^2} {(\gamma + \tilde \alpha \delta)^4}
+\end{equation}
+
+Note that :
+- $\alpha$ is the true value (fixed and unknown) for the nuisance parameter
+- $\mu$ is the true value (fixed and unknown) for the parameter of interest
+- $\tilde alpha$ is the measured value (known and random) from calibration
+- $n$ is the measured number of events (known and random) from the experiment
+
+Assuming (I do not know the justifications for this) :
+- $\tilde \alpha \to \mathbb E[\tilde \alpha] = \alpha$
+- $n \to  \mathbb E[n] = \mu (\gamma +\alpha \delta) + \beta + \alpha \Delta$
+- $\alpha \to 0$
+- $\mu \to 1$
+
+\begin{equation}
+  V[\hat \mu] = \frac{\gamma + \beta + (\delta + \Delta)^2}{\gamma^2}
+\end{equation}
+
+with the old notations
+
+\begin{equation}
+  \sigma_{\hat \mu}^2 = \frac{s + b + (\sigma_s + \sigma_b)^2}{s^2}
+\end{equation}
 
 <link rel="stylesheet" href="https://casual-effects.com/markdeep/latest/dark.css?">
 <style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style>
