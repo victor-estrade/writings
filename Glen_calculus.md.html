@@ -1,0 +1,215 @@
+<meta charset="utf-8" emacsmode="-*- markdown -*-">
+
+**Glen's calculus**
+
+
+This diocument describes in details how the $\sigma_\mu$ formulas used in our first paper.
+
+Introduction
+===============================================================================
+
+The model without systematics
+-------------------------------------------------------------------------------
+
+Recall that the observable is a single integer $n$, the total number of events.
+$n$ is a random variable.
+
+In these work a classifier is included to select a region of the feature-space with a high concentration of signals.
+All the event outside this region are ignored, therefor not counted in $n$.
+The classifier is considered part of the apparatus and has to be deterministic.
+
+The $n$ events are separated into 2 categories **signals** and **backgrounds**.
+The number of signals is noted $s$ and the number pf backgrounds is $b$.
+So $n$, $s$, and $b$ are random numbers but only $n$ can be measured.
+
+The model of the generating process is a Poisson count process with likelihood
+\begin{equation}
+  \label{L_no_syst}
+  P(n | \mu) = Poisson(n | \mu \gamma + \beta) = \frac{(\mu \gamma + \beta)^n}{n!} e^{-(\mu \gamma + \beta)}
+\end{equation}
+
+Where $\gamma$ and $\beta$ are, respectively, the expected number of signals and backgrounds according to current knowledge.
+$\mu$ is the deviation from current knowledge and is parameter of interest.
+
+The domain knowledge is fully included in $\gamma$ and $\beta$ which are estimated using the simulator.
+
+
+With systematics
+-------------------------------------------------------------------------------
+
+Taking into account the systematic effects requires to include additional nuisance parameters.
+Let's start with a single nuisance parameter $\alpha$.
+$\alpha$ will modify the behaviour of the data in known way.
+Updating the model requires only to update how $\gamma$ and $\beta$ are computed ie. $\gamma$ and $\beta$ are now functions of $\alpha$ instead of constant values.
+
+\begin{equation}
+  \label{L_with_syst}
+  P(n | \mu) = Poisson(n | \mu \gamma(\alpha) + \beta(\alpha)) = \frac{(\mu \gamma(\alpha) + \beta(\alpha))^n}{n!} e^{-(\mu \gamma(\alpha) + \beta(\alpha))}
+\end{equation}
+
+
+Glen calculus
+===============================================================================
+
+Linearisation
+-------------------------------------------------------------------------------
+
+
+The first step is to linearise the influence of the nuisance parameter.
+In the large sample limit it can be shown that the maximum likelihood estimator (or any estimator ?) follows a chi-squared distribution which correspond to a linear regime.
+
+Moreover the nuisance parameter is measured thanks to a calibration experiment.
+Calibration informs that $\alpha$ is normaly distributed which gives us a likelihood for a measured $\tilde \alpha$.
+
+The model becomes :
+\begin{equation}
+\label{linearised_model}
+\left \{
+\begin{array}
+  \, n \sim Poisson[\mu (\gamma + \alpha \delta) + \beta + \alpha \Delta]\\
+  \tilde \alpha \sim \mathcal N(\alpha, 1)
+\end{array}
+\right .
+\end{equation}
+
+Note that the functions $\gamma(\alpha)$ and $\beta(\alpha)$ from eqn. [L_with_syst] are indeed linearised to $\gamma + \alpha \delta$ and $\beta + \alpha \Delta$.
+With $\delta$ and $\Delta$ estimated using the simulator along with $\gamma$ and $\beta$.
+
+\begin{equation}
+  \label{L_linear}
+  L(\mu, \alpha) = Poisson[n | \mu (\gamma + \alpha \delta) + \beta + \alpha \Delta] \times \mathcal N(\tilde \alpha | \alpha, 1)
+\end{equation}
+
+
+Maximum likelihood estimator
+-------------------------------------------------------------------------------
+
+The next step is to compute the maximum likelihood estimator.
+This is done with the standard method exploiting that the partial derivative of the log-likelihood is zero at a maximum or minimum.
+
+
+
+\begin{equation}
+\begin{array}
+  \, \log(L(\mu, \alpha)) =& n \log(\mu (\gamma + \alpha \delta) + \beta + \alpha \Delta) - (\mu (\gamma + \alpha \delta) + \beta + \alpha \Delta)\\
+  & - \frac{1}{2}(\tilde \alpha - \alpha)^2 - \log(n!) - ln(\sqrt{2 \pi})
+\end{array}
+\end{equation}
+
+\begin{equation}
+  \frac{\partial \log L}{\partial \mu} = \frac{n(\gamma + \alpha \delta)}{\mu (\gamma + \alpha \delta) + \beta + \alpha \Delta} - (\gamma + \alpha \delta)
+\end{equation}
+
+\begin{equation}
+  \frac{\partial \log L}{\partial \alpha} = \frac{n(\mu \delta + \Delta)}{\mu (\gamma + \alpha \delta) + \beta + \alpha \Delta} - \mu \delta - \Delta - (\alpha - \tilde \alpha)
+\end{equation}
+
+\begin{equation}
+\left \{
+\begin{array}
+  \, \frac{\partial \log L}{\partial \mu} = 0 \\
+  \frac{\partial \log L}{\partial \alpha} = 0
+\end{array}
+\right .
+\iff
+\left \{
+\begin{array}
+  \, \frac{n\color{red}{(\gamma + \alpha \delta)}}{\mu (\gamma + \alpha \delta) + \beta + \alpha \Delta} = \color{red}{(\gamma + \alpha \delta)} \\
+  \frac{n(\mu \delta + \Delta)}{\mu (\gamma + \alpha \delta) + \beta + \alpha \Delta} =  \mu \delta + \Delta + (\alpha - \tilde \alpha)
+\end{array}
+\right .
+\end{equation}
+
+
+
+\begin{equation}
+\iff
+\left \{
+\begin{array}
+  \, n = \color{red}{\mu (\gamma + \alpha \delta) + \beta + \alpha \Delta} \\
+  \frac{\color{red}{n}(\mu \delta + \Delta)}{\color{red}{\mu (\gamma + \alpha \delta) + \beta + \alpha \Delta}} =  \mu \delta + \Delta + (\alpha - \tilde \alpha)
+\end{array}
+\right .
+\end{equation}
+
+
+\begin{equation}
+\iff
+\left \{
+\begin{array}
+  \, n = \mu (\gamma + \alpha \delta) + \beta + \alpha \Delta \\
+  \color{red}{\mu \delta + \Delta} =  \color{red}{\mu \delta + \Delta} + (\alpha - \tilde \alpha)
+\end{array}
+\right .
+\end{equation}
+
+
+\begin{equation}
+\iff
+\left \{
+\begin{array}
+  \, n = \mu (\gamma + \alpha \delta) + \beta + \alpha \Delta \\
+  \alpha = \tilde \alpha
+\end{array}
+\right .
+\end{equation}
+
+Now a little check that this is a maximum :
+\begin{equation}
+\left \{
+\begin{array}
+  \, \frac{\partial^2 \log L}{\partial \mu^2} = - \frac{n(\gamma + \alpha \delta)^2}{\mu (\gamma + \alpha \delta) + \beta + \alpha \Delta} \leq 0\\
+  \frac{\partial^2 \log L}{\partial \alpha^2} = - \frac{n(\mu \delta + \Delta)^2}{\mu (\gamma + \alpha \delta) + \beta + \alpha \Delta} - 1 \leq 0 \\
+  \frac{\partial^2 \log L}{\partial \mu\partial \alpha} = ... \leq 0\\
+  \frac{\partial^2 \log L}{\partial \alpha\partial \mu} = ... \leq 0
+\end{array}
+\right .
+\end{equation}
+
+
+So the maximum likelihood estimators $\hat \mu$ and $\hat \alpha$ :
+\begin{equation}
+\left \{
+\begin{array}
+  \, \hat \mu = \frac{n - \beta - \tilde \alpha \Delta} {\gamma + \tilde \alpha \delta} \\
+  \hat \alpha = \tilde \alpha
+\end{array}
+\right .
+\end{equation}
+
+
+Confidence interval
+-------------------------------------------------------------------------------
+
+Recall that we assumed that we are in the linear regime : $\hat \mu$ follows a chi-squared distribution etc.
+So a central confidence interval for $\hat \mu$ with 68% coverage is $[\hat \mu - \sigma_{\hat \mu}, \hat \mu + \sigma_{\hat \mu}]$
+with $\sigma_{\hat \mu} = \sqrt{V(\hat \mu)}$.
+
+\begin{equation}
+  V[\hat \mu] = V[n] \times \left ( \frac{\partial \hat \mu}{\partial n} \right ) ^2 + V[\tilde \alpha] \times \left ( \frac{\partial^2 \hat \mu}{\partial \tilde \alpha} \right )^2
+\end{equation}
+
+\begin{equation}
+\left \{
+\begin{array}
+  \, V[n] = \mu ( \gamma + \alpha \delta) + \beta + \alpha \Delta \\
+  V[\tilde \alpha] = 1
+\end{array}
+\right .
+\end{equation}
+
+\begin{equation}
+\left \{
+\begin{array}
+  \, \frac{\partial \hat \mu }{\partial n} = \frac{1} {\gamma + \tilde \alpha \delta}\\
+  \frac{\partial \hat \mu}{\partial \tilde \alpha} = \frac{(\Delta) \times (\gamma + \tilde \alpha \delta) - (n - \beta - \tilde \alpha \Delta) \times (\delta)} {(\gamma + \tilde \alpha \delta)^2}
+\end{array}
+\right .
+\end{equation}
+
+
+
+<link rel="stylesheet" href="https://casual-effects.com/markdeep/latest/dark.css?">
+<style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style>
+<script>markdeepOptions={tocStyle:'none'};</script>
+<!-- Markdeep: --><script src="markdeep.min.js"></script><script src="https://casual-effects.com/markdeep/latest/markdeep.min.js?"></script><script>window.alreadyProcessedMarkdeep||(document.body.style.visibility="visible")</script>
