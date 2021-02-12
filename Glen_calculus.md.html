@@ -59,7 +59,7 @@ The first step is to linearise the influence of the nuisance parameter.
 In the large sample limit it can be shown that the maximum likelihood estimator (or any estimator ?) follows a chi-squared distribution which correspond to a linear regime.
 
 Moreover the nuisance parameter is measured thanks to a calibration experiment.
-Calibration informs that $\alpha$ is normaly distributed which gives us a likelihood for a measured $\tilde \alpha$.
+Calibration informs that $\alpha$ is normaly distributed which gives us a likelihood for a measured $c$.
 
 The model becomes :
 \begin{equation}
@@ -67,7 +67,7 @@ The model becomes :
 \left \{
 \begin{array}
   \, n \sim Poisson[\mu (\gamma + \alpha \delta) + \beta + \alpha \Delta]\\
-  \tilde \alpha \sim \mathcal N(\alpha, 1)
+  c \sim \mathcal N(\alpha, 1)
 \end{array}
 \right .
 \end{equation}
@@ -77,7 +77,7 @@ With $\delta$ and $\Delta$ estimated using the simulator along with $\gamma$ and
 
 \begin{equation}
   \label{L_linear}
-  L(\mu, \alpha) = Poisson[n | \mu (\gamma + \alpha \delta) + \beta + \alpha \Delta] \times \mathcal N(\tilde \alpha | \alpha, 1)
+  L(\mu, \alpha) = Poisson[n | \mu (\gamma + \alpha \delta) + \beta + \alpha \Delta] \times \mathcal N(c | \alpha, 1)
 \end{equation}
 
 
@@ -92,7 +92,7 @@ This is done with the standard method exploiting that the partial derivative of 
 \begin{equation}
 \begin{array}
   \, \log(L(\mu, \alpha)) =& n \log(\mu (\gamma + \alpha \delta) + \beta + \alpha \Delta) - (\mu (\gamma + \alpha \delta) + \beta + \alpha \Delta)\\
-  & - \frac{1}{2}(\tilde \alpha - \alpha)^2 - \log(n!) - ln(\sqrt{2 \pi})
+  & - \frac{1}{2}(c - \alpha)^2 - \log(n!) - ln(\sqrt{2 \pi})
 \end{array}
 \end{equation}
 
@@ -101,7 +101,7 @@ This is done with the standard method exploiting that the partial derivative of 
 \end{equation}
 
 \begin{equation}
-  \frac{\partial \log L}{\partial \alpha} = \frac{n(\mu \delta + \Delta)}{\mu (\gamma + \alpha \delta) + \beta + \alpha \Delta} - \mu \delta - \Delta - (\alpha - \tilde \alpha)
+  \frac{\partial \log L}{\partial \alpha} = \frac{n(\mu \delta + \Delta)}{\mu (\gamma + \alpha \delta) + \beta + \alpha \Delta} - \mu \delta - \Delta - (\alpha - c)
 \end{equation}
 
 \begin{equation}
@@ -115,7 +115,7 @@ This is done with the standard method exploiting that the partial derivative of 
 \left \{
 \begin{array}
   \, \frac{n\color{red}{(\gamma + \alpha \delta)}}{\mu (\gamma + \alpha \delta) + \beta + \alpha \Delta} = \color{red}{(\gamma + \alpha \delta)} \\
-  \frac{n(\mu \delta + \Delta)}{\mu (\gamma + \alpha \delta) + \beta + \alpha \Delta} =  \mu \delta + \Delta + (\alpha - \tilde \alpha)
+  \frac{n(\mu \delta + \Delta)}{\mu (\gamma + \alpha \delta) + \beta + \alpha \Delta} =  \mu \delta + \Delta + (\alpha - c)
 \end{array}
 \right .
 \end{equation}
@@ -127,7 +127,7 @@ This is done with the standard method exploiting that the partial derivative of 
 \left \{
 \begin{array}
   \, \color{blue}{n} = \color{red}{\mu (\gamma + \alpha \delta) + \beta + \alpha \Delta} \\
-  \frac{\color{blue}{n}(\mu \delta + \Delta)}{\color{red}{\mu (\gamma + \alpha \delta) + \beta + \alpha \Delta}} =  \mu \delta + \Delta + (\alpha - \tilde \alpha)
+  \frac{\color{blue}{n}(\mu \delta + \Delta)}{\color{red}{\mu (\gamma + \alpha \delta) + \beta + \alpha \Delta}} =  \mu \delta + \Delta + (\alpha - c)
 \end{array}
 \right .
 \end{equation}
@@ -138,7 +138,7 @@ This is done with the standard method exploiting that the partial derivative of 
 \left \{
 \begin{array}
   \, n = \mu (\gamma + \alpha \delta) + \beta + \alpha \Delta \\
-  \color{red}{\mu \delta + \Delta} =  \color{red}{\mu \delta + \Delta} + (\alpha - \tilde \alpha)
+  \color{red}{\mu \delta + \Delta} =  \color{red}{\mu \delta + \Delta} + (\alpha - c)
 \end{array}
 \right .
 \end{equation}
@@ -149,7 +149,7 @@ This is done with the standard method exploiting that the partial derivative of 
 \left \{
 \begin{array}
   \, n = \mu (\gamma + \alpha \delta) + \beta + \alpha \Delta \\
-  \alpha = \tilde \alpha
+  \alpha = c
 \end{array}
 \right .
 \end{equation}
@@ -171,8 +171,8 @@ So the maximum likelihood estimators $\hat \mu$ and $\hat \alpha$ :
 \begin{equation}
 \left \{
 \begin{array}
-  \, \hat \mu = \frac{n - \beta - \tilde \alpha \Delta} {\gamma + \tilde \alpha \delta} \\
-  \hat \alpha = \tilde \alpha
+  \, \hat \mu = \frac{n - \beta - c \Delta} {\gamma + c \delta} \\
+  \hat \alpha = c
 \end{array}
 \right .
 \end{equation}
@@ -185,16 +185,16 @@ Recall that we assumed that we are in the linear regime : $\hat \mu$ follows a c
 So a central confidence interval for $\hat \mu$ with 68% coverage is $[\hat \mu - \sigma_{\hat \mu}, \hat \mu + \sigma_{\hat \mu}]$
 with $\sigma_{\hat \mu} = \sqrt{V(\hat \mu)}$.
 
-Assuming that $n$ and $\tilde \alpha$ are independent (which is the case) :
+Assuming that $n$ and $c$ are independent (which is the case) :
 \begin{equation}
-  V[\hat \mu] = V[n] \times \left ( \frac{\partial \hat \mu}{\partial n} \right ) ^2 + V[\tilde \alpha] \times \left ( \frac{\partial^2 \hat \mu}{\partial \tilde \alpha} \right )^2
+  V[\hat \mu] = V[n] \times \left ( \frac{\partial \hat \mu}{\partial n} \right ) ^2 + V[c] \times \left ( \frac{\partial^2 \hat \mu}{\partial c} \right )^2
 \end{equation}
 
 \begin{equation}
 \left \{
 \begin{array}
   \, V[n] = \mu ( \gamma + \alpha \delta) + \beta + \alpha \Delta \\
-  V[\tilde \alpha] = 1
+  V[c] = 1
 \end{array}
 \right .
 \end{equation}
@@ -202,8 +202,8 @@ Assuming that $n$ and $\tilde \alpha$ are independent (which is the case) :
 \begin{equation}
 \left \{
 \begin{array}
-  \, \frac{\partial \hat \mu }{\partial n} = \frac{1} {\gamma + \tilde \alpha \delta}\\
-  \frac{\partial \hat \mu}{\partial \tilde \alpha} = \frac{(\Delta) \times (\gamma + \tilde \alpha \delta) - (n - \beta - \tilde \alpha \Delta) \times (\delta)} {(\gamma + \tilde \alpha \delta)^2}
+  \, \frac{\partial \hat \mu }{\partial n} = \frac{1} {\gamma + c \delta}\\
+  \frac{\partial \hat \mu}{\partial c} = \frac{(\Delta) \times (\gamma + c \delta) - (n - \beta - c \Delta) \times (\delta)} {(\gamma + c \delta)^2}
 \end{array}
 \right .
 \end{equation}
@@ -213,24 +213,24 @@ Giving :
 \begin{equation}
 \begin{array}
   \, V[\hat \mu] =
-      & [\mu(\gamma + \alpha \delta) + \beta + \alpha \Delta] \times \left ( \frac{1}{\gamma + \tilde \alpha \delta} \right )^2 \\
-     & + 1 \times \left ( \frac{(\Delta) \times (\gamma + \tilde \alpha \delta) - (n - \beta - \tilde \alpha \Delta) \times (\delta)} {(\gamma + \tilde \alpha \delta)^2} \right )^2
+      & [\mu(\gamma + \alpha \delta) + \beta + \alpha \Delta] \times \left ( \frac{1}{\gamma + c \delta} \right )^2 \\
+     & + 1 \times \left ( \frac{(\Delta) \times (\gamma + c \delta) - (n - \beta - c \Delta) \times (\delta)} {(\gamma + c \delta)^2} \right )^2
 \end{array}
 \end{equation}
 
 \begin{equation}
-  V[\hat \mu] = \frac{\mu(\gamma + \alpha \delta) + \beta + \alpha \Delta}{(\gamma + \tilde \alpha \delta)^2}
-        + \frac{[(\Delta) \times (\gamma + \tilde \alpha \delta) - (n - \beta - \tilde \alpha \Delta) \times (\delta)]^2} {(\gamma + \tilde \alpha \delta)^4}
+  V[\hat \mu] = \frac{\mu(\gamma + \alpha \delta) + \beta + \alpha \Delta}{(\gamma + c \delta)^2}
+        + \frac{[(\Delta) \times (\gamma + c \delta) - (n - \beta - c \Delta) \times (\delta)]^2} {(\gamma + c \delta)^4}
 \end{equation}
 
 Note that :
 - $\alpha$ is the true value (fixed and unknown) for the nuisance parameter
 - $\mu$ is the true value (fixed and unknown) for the parameter of interest
-- $\tilde \alpha$ is the measured value (known and random) from calibration
+- $c$ is the measured value (known and random) from calibration
 - $n$ is the measured number of events (known and random) from the experiment
 
 Assuming (I do not know the justifications for this) :
-- $\tilde \alpha \to \mathbb E[\tilde \alpha] = \alpha$
+- $c \to \mathbb E[c] = \alpha$
 - $n \to  \mathbb E[n] = \mu (\gamma +\alpha \delta) + \beta + \alpha \Delta$
 - $\alpha \to 0$
 - $\mu \to 1$
