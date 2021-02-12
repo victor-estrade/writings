@@ -25,6 +25,34 @@ Plan
 - But if they all work together they can do better !
 
 
+Version imagée brouillon pour moi
+===============================================================================
+
+Le Machine learning c'est magique. Mais certains problèmes exigent des garanties sur l'incertitude. Ce que le ML n'a pas encore.
+
+Un de ces cas difficiles est l'analyse en HEP sur HiggsML.
+
+Dans les cas 1D avec formule fermée un classique maximum likelihood pour l'estimation du paramètre et un Neyman construction pour l'intervalle se calculent à la main.
+
+Dans les cas + réalistes (ou + récents) une réduction de dimension est nécessaire.
+Le ML permet d'optimiser parfaitement cette réduction de dimension (Bayes classifier optimality).
+
+Dans un cas encore + réaliste on doit gérer les paramètres de nuisance.
+Et c'est difficile.
+
+Solution 1 : régularisation à l'entrainement du ML
+Solution 2 : changer la loss pour une lower bound bien trouvé (inferno)
+En s'inspirant de l'architecture de la solution 2 et d'autre travaux on a ...
+Solution 3 :  Regression directe
+
+C'est bien (ça marche sur les toys) mais rien ne donne de résultats satisfaisant dans le régime faible signal (S << B).
+
+Du coup Solution 4 = utiliser la solution 3 pour soutenir la solution 1 ou 2.
+Par l'extraction de nouvelles summary statistiques très informatives sur les paramètres de nuisance il est possible de systématiquement réduire l'incertitude finale.
+
+C'est chouette !
+
+
 
 Version brouillon
 ===============================================================================
