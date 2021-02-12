@@ -5,7 +5,82 @@
 !!! tip
     Here i'll try to write a story organizing the available materails.
 
-Section
+
+Plan
+===============================================================================
+
+- Explosion of ML in experimental science
+- Improve integration of ML in complex pipeline (ML focuses a lot in classification and regression...)
+- Need to measure uncertainty which is a immature field in ML
+
+- Example with a HEP problem
+- in ideal case we don't even need ML (closed formulas)
+- in more realistic case (poisson + high dimensional) ML can be used to optimize stuff
+- in real world nuisance parameters breaks optimality of current used Ml methods
+
+- Robustness
+- Beyond cross entropy, taking empirical distribution as input
+- Even further with direct regression
+- Unfortunately it does not defeat the big boss HiggsML (S << B regime)
+- But if they all work together they can do better !
+
+
+
+Version brouillon
+===============================================================================
+
+Machine learning has invaded most of the data analysis world.
+The performances achievable by new methods like neural network or ensemble methods open the door to automatization of tasks previously fullfilled only by human labor.
+It includes some very complex data analysis in experimental science where the amount of data and the increase of dimensionality make it impossible for human to process them efficiently.
+The adoption of ML in experimental science is slowed down by mistrust in the predictions of ML models.
+Accurately measure the uncertainty of ML predictions remains a very active research field.
+
+An example embeding these problematics is the analysis of the Higgs boson property at the LHC.
+The data produced by the experiments are huge and very high dimensional.
+
+In an ideal simple case statistical inference only need a model translated to a likelihood given as a closed form formula.
+In this case ML is not required at all.
+For point estimators, maximum likelihood estimators gives good theorical garanties.
+Standard method to compute confidence interval also benefit from theorical garanties making them unbeatable.
+
+But in complex process the likelihood may become intractable.
+It is the case for the particular case that motivates this work.
+The likelihood contains millions of latent variables which requires to be marginalized through a very high dimension intergral.
+This is intracktable in practice.
+
+Fortunately a workaround using domain knowledge produces an approximative but very accurate model of the process.
+The model is using a histogram counting extracted from the raw data.
+Histograms does not scale with increase of dimension but increasing the dimension and the number of bins improves inference.
+ML (classification) is used to find a dimension reduction keeping most of the relevant information for inference.
+Theoretical garanty exists to prove that the summary statistics extracted this way is sufficient for this particular case.
+
+Another difficulty occur in real life experiment : nuisance parameters / systematic effects.
+Taking them into account is required to avoid biased results although it increases uncertainty.
+Nuisance parameters breaks the theoretical garanties of optimality of classification.
+
+Several regularization have been proposed to helps mitigate the increase of the final uncertainty comming from nuisance paramters.
+Some methods (inferno) took a step further by optimizing a neural network directly on a lower bound of the final uncertainty.
+These methods benefits from the flexibility of neural network architectures to take as input empirical distributions instead of samples.
+
+Pushing this further a direct regression of the parameter of interest is possible.
+This 3rd method is likelihood free and is way faster to compute an inference.
+
+But none of these methods performs very well is the rare signal regime (S << B).
+
+Using the best of both world a final proposition is to extract more summary statistics from the high dimensional data.
+New summary statistics giving information about the nuisance parameters could indeed be extracted.
+Doing so complete the approximative model yielding better results in all case.
+
+
+Short version
+===============================================================================
+
+
+
+
+
+
+Long version
 ===============================================================================
 
 
