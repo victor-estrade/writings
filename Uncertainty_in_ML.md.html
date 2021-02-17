@@ -3,28 +3,145 @@
 **Uncertainty in ML**
 
 
-Section
+Methods to predict uncetainty
 ===============================================================================
 
+Here is a list of methods to predict uncertainty of machine learning models.
+We limit ourselves to neural network methods.
 
 
-Subsection
+Mixture density networks
+-------------------------------------------------------------------------------
+
+First occurence in [#Bishop1994].
+Maybe more recent developement in [#PhDPapamakarios].
+Some recent use for inference of SIR model params [#Dav2020] (for fun).
+
+
+Bayesian networks
+-------------------------------------------------------------------------------
+
+!!! error
+    TODO Trouver papiers (Alex Graves 2015 ?) et les travaux suivants
+
+
+
+
+Quantile regression
+-------------------------------------------------------------------------------
+
+Cited in [#Blog1Part3].
+
+
+
+
+MC Dropout
+-------------------------------------------------------------------------------
+
+Method described in [#Gal2015] using dropout layers to measure uncertainty of the output.
+
+
+
+Ensemble
+-------------------------------------------------------------------------------
+
+Described in [#Lak2017].
+Train many neural networks with different initialization an look a the distrib of their predictions.
+
+
+
+Swag ?
+-------------------------------------------------------------------------------
+
+Victor presented a saminar about [#Wilson2020].
+It is mostly about generalization.
+It includes prediction as probability densities which is related to many method to predict uncertainty.
+
+Looking more into it leads to a blog [#PytorchSwagBlog] and the paper [#Mad2019] describing Stochastic weigh averaging (Gaussian) method.
+It seems to be a very good way of prediction uncertainty.
+
+
+
+
+Methods to evaluate uncertainty predictions
+===============================================================================
+
+The idea is to answer to the question :
+*How trustworthy are the uncertainty estimates of proposed methods ?*
+
+Negative log likelihood
 -------------------------------------------------------------------------------
 
 
+
+
+
+Brier score
+-------------------------------------------------------------------------------
+
+in [#Ova2019].  For classifications only ?
+
+
+
+Expected Calibration Error
+-------------------------------------------------------------------------------
+
+in [#Ova2019].  For classifications only ?
+
+
+
+Comments
+-------------------------------------------------------------------------------
+
+Many experiments are about classifications.
+It is easier to measure probabilities in the discrete world of classification.
+
+Unfortunately our problem is a regression problem.
+Classification methods are only used as a proxy to perform dimension reduction.
 
 
 Links and biblio
 ===============================================================================
 
-
-TO read and intergrate
+Evaluation methods
 -------------------------------------------------------------------------------
-
 
 [#Challenge2005]: Evaluating Predictive Uncertainty ftp://nozdr.ru/biblio/kolxoz/Cs/CsLn/Machine%20Learning%20Challenges,%201%20conf.,%20MLCW%202005(LNCS3944,%20Springer,%202006)(ISBN%203540334270)(473s).pdf#page=12
 
 [#Ova2019]: Can you trust your model's uncertainty ? https://arxiv.org/abs/1906.02530
+
+
+Mixture density networks
+-------------------------------------------------------------------------------
+
+[#Bishop1994]: Mixture density networks https://publications.aston.ac.uk/id/eprint/373/1/NCRG_94_004.pdf
+
+[#PhDPapamakarios]: Neural Density Estimation and Likelihood-free Inference https://arxiv.org/pdf/1910.13233.pdf
+
+[#Dav2020]: The use of mixture density networks in the emulation of complex epidemiological individual-based models https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1006869
+
+
+Dropout
+-------------------------------------------------------------------------------
+
+[#Gal2015]: Dropout as Bayesian Approximation  https://arxiv.org/pdf/1506.02142.pdf
+
+
+Ensemble
+-------------------------------------------------------------------------------
+
+[#Lak2017]: Simple and Scalable Predictive Uncertainty Estimation using Deep Ensembles https://arxiv.org/abs/1612.01474
+
+Swag
+-------------------------------------------------------------------------------
+
+[#PytorchSwagBlog]: https://pytorch.org/blog/pytorch-1.6-now-includes-stochastic-weight-averaging/
+
+[#Mad2019]: A Simple Baseline for Bayesian Uncertainty in Deep Learning https://arxiv.org/abs/1902.02476
+
+
+Unsorted
+-------------------------------------------------------------------------------
 
 [#Sha2018]: A Less Biased Evaluation of Out-of-distribution Sample Detectors https://arxiv.org/abs/1809.04729
 
@@ -41,6 +158,10 @@ TO read and intergrate
 [#Blog1Part3]: Estimating Uncertainty in Machine Learning Models - Part 3_ https://medium.com/comet-ml/estimating-uncertainty-in-machine-learning-models-part-3-796efba4a209
 
 [#Blog2]: A Gentle Introduction to Uncertainty in Machine Learning https://machinelearningmastery.com/uncertainty-in-machine-learning/
+
+
+[#Wilson2020]: Bayesian Deep Learning and a Probabilistic Perspective of Generalization https://arxiv.org/pdf/2002.08791.pdf
+
 
 <link rel="stylesheet" href="https://casual-effects.com/markdeep/latest/dark.css?">
 <style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style>
