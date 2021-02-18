@@ -69,24 +69,24 @@ Methods to evaluate uncertainty predictions
 The idea is to answer to the question :
 *How trustworthy are the uncertainty estimates of proposed methods ?*
 
-Negative log likelihood
+But all the proposed metrics evaluates accuracy under uncertainty instead.
+The metrics measure accuracy and penalise over-confidence and under-confidence of the prediction.
+
+
+Classification
 -------------------------------------------------------------------------------
 
+In classification the output is a finite array of probability making scores quite easy.
+The Brier score simply sums/average the probability given to the true class.
+
+Negative log likelihood usually leads to cross-entropy loss.
 
 
 
-
-Brier score
+Regression
 -------------------------------------------------------------------------------
 
-in [#Ova2019].  For classifications only ?
-
-
-
-Expected Calibration Error
--------------------------------------------------------------------------------
-
-in [#Ova2019].  For classifications only ?
+For regression (normalized) Mean Squared Error and Negative Log Likelihood are also the most commons scores.
 
 
 
@@ -98,6 +98,11 @@ It is easier to measure probabilities in the discrete world of classification.
 
 Unfortunately our problem is a regression problem.
 Classification methods are only used as a proxy to perform dimension reduction.
+
+The mostly used metrics measure accuracy and penalise over-confidence and under-confidence of the prediction.
+But neither NLL or MSE gives a numerical answer to the question :
+*How trustworthy are the uncertainty estimates of proposed methods ?*
+Which is a question about the error of the uncertainty (error on error).
 
 
 Links and biblio
