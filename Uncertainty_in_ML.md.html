@@ -9,6 +9,9 @@ Methods to predict uncetainty
 Here is a list of methods to predict uncertainty of machine learning models.
 We limit ourselves to neural network methods.
 
+The methods are not described in details.
+This parts gather comments on the proposed methods.
+
 
 Mixture density networks
 -------------------------------------------------------------------------------
@@ -16,6 +19,16 @@ Mixture density networks
 First occurence in [#Bishop1994].
 Maybe more recent developement in [#PhDPapamakarios].
 Some recent use for inference of SIR model params [#Dav2020] (for fun).
+
+The objective is to build a probability distribution of the random variable target|data.
+Since the link between target and data is not known exactly is will be approximated by a neural netork.
+The general idea is to train neural network as a maximum likelihood estimator of a gaussian distribution.
+Any other assumed distribution of the random variable target|data can be used as long as it is differentiable.
+
+This method was initially proposed as a generatilzation of MSE regression loss.
+MSE is a particular case of Gaussian NLL with unit variance.
+
+More details can be found in other documents.
 
 
 Bayesian networks
@@ -26,12 +39,20 @@ Bayesian networks
 
 
 
-
 Quantile regression
 -------------------------------------------------------------------------------
 
 Cited in [#Blog1Part3].
 
+Quantil regression core idea is to train regressors to predict quantiles instead of the average target value.
+
+The training technics I found were merely training regressors on quantiles computed from the dataset.
+Unfortunately finding those quantiles is extremely data intensive especially in high dimensions (histograms).
+
+Moreover if it is possible to build histograms of target|data then why not directly using the histogram as a density estimator ?
+Or even better density estimators ?
+
+This method does not seems to be very usefull in practice.
 
 
 
@@ -46,14 +67,24 @@ Ensemble
 -------------------------------------------------------------------------------
 
 Described in [#Lak2017].
-Train many neural networks with different initialization an look a the distrib of their predictions.
+
+It gathers many technics together to predict target|data probability density.
+
+- Mixture Density Networks
+- Adversarial samples data augmentation to smooth prediction (in order to counter possible overfitting of MDN)
+- Ensemble networks trained with various initialization and data shuffling.
+
+Any statement about neural network overfitting is suspicious to me.
+Neural network can overfit but expermiments showed that sometimes it does and sometimes it doesn't.
+But also that intuition about overfitting is sometimes refuted by experiments.
+So I am sceptical about this adversarial data augmentation step.
 
 
 
 Swag ?
 -------------------------------------------------------------------------------
 
-Victor presented a saminar about [#Wilson2020].
+Victor presented a seminar about [#Wilson2020].
 It is mostly about generalization.
 It includes prediction as probability densities which is related to many method to predict uncertainty.
 
@@ -88,7 +119,9 @@ Regression
 
 For regression (normalized) Mean Squared Error and Negative Log Likelihood are also the most commons scores.
 
+eval = sum/average of predicted_NLL(target | data)
 
+If target|data is indeed a random variable with non-zero variance then this methods perfectly makes sense.
 
 Comments
 -------------------------------------------------------------------------------
