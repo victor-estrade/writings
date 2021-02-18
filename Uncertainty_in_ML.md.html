@@ -61,9 +61,13 @@ MC Dropout
 
 Method described in [#Gal2015] using dropout layers to measure uncertainty of the output.
 
+Although the uncertainty prediction is not clear to me it is very simple to implement.
+Did not read the bayesian approx / gaussian process part in details.
 
 
-Ensemble
+
+
+Deep ensembles
 -------------------------------------------------------------------------------
 
 Described in [#Lak2017].
@@ -79,6 +83,13 @@ Neural network can overfit but expermiments showed that sometimes it does and so
 But also that intuition about overfitting is sometimes refuted by experiments.
 So I am sceptical about this adversarial data augmentation step.
 
+The ensemble part is computationaly expensive although is can be concurent.
+Training N independant neural network is not complex but still quite expensive.
+
+!!! warning
+    Reminder : the formulas for the total variance is not the mean of the variances of the MDN !
+
+
 
 
 Swag ?
@@ -90,6 +101,34 @@ It includes prediction as probability densities which is related to many method 
 
 Looking more into it leads to a blog [#PytorchSwagBlog] and the paper [#Mad2019] describing Stochastic weigh averaging (Gaussian) method.
 It seems to be a more recent way of prediction uncertainty.
+
+
+
+Comments
+-------------------------------------------------------------------------------
+
+MC-Dropout, Lak2017 and Swag are basically using ensembles of neural networks variance to estimate uncertainty.
+
+- MC-Dropout is using dropout layer to produce sub-networks.
+- Deep ensembles is training networks with various initialization and shuffling samples
+- Swag is sampling networks parameters around the minimum of a pretrained network
+
+
+Swag and Deep ensembles can be combined to give Deep ensemble Swag trained neural networks.
+
+The comparison of Swag and Deep Ensembles is suspicious.
+In the paper [#Mad2019] Deep ensembles is given only 3 or 5 neural net which is a very small ensemble at first glance.
+But Deep ensemble paper [#Lak2017] also uses 5 networks for the real regression proble (sec 3.3)...
+
+
+
+
+Higgs
+-------------------------------------------------------------------------------
+
+
+These methods could be add to the benchmark.
+But none of them will solve the issue on Higgs in the S << B regime for which the regressor is simply not able to train.
 
 
 
@@ -162,7 +201,7 @@ Mixture density networks
 Dropout
 -------------------------------------------------------------------------------
 
-[#Gal2015]: Dropout as Bayesian Approximation  https://arxiv.org/pdf/1506.02142.pdf
+[#Gal2015]: Dropout as Bayesian Approximation  https://arxiv.org/pdf/1506.02142.pdf and appendix : https://arxiv.org/pdf/1506.02157.pdf
 
 
 Ensemble
