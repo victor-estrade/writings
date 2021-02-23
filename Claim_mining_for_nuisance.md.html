@@ -19,7 +19,7 @@ The idea originally comes from a naive thought :
 Of course this works only if the systematic effect and the studied phenomenom impact can be distinguished.
 In real life it is impossible to fully the disentangle the nuisance parameters and parameter of interest impact on data.
 
-But the classic pipeline is optimized a seeting without systematic effect.
+But the classic pipeline is optimized in a seeting without systematic effect.
 The summary statistic ($n_i$) are especially optimized to contain most (if not all) the information about the parameter of interest.
 But the information about the nuisance parameters is lost in the process and we have to rely on another measurement : the calibration.
 
@@ -34,6 +34,25 @@ Results on the 1D toy
 
 Reduces the bias for classifiers
 -------------------------------------------------------------------------------
+
+![Figure [fig:NN-prior]: average of estimators from many Neural network classifier (different hyper-parameters) on 1D toy. Colors are related to the the true value of $\alpha$](./claim_mining_for_nuisance/NN_prior_profusion_true_mu_target_mean.png)
+
+
+As seen in fig. [fig:NN-prior] the classifier are biased.
+
+![Figure [fig:NN-calib]: average of estimators from many Neural network classifier (different hyper-parameters) on 1D toy. Colors are related to the the true value of $\alpha$](./claim_mining_for_nuisance/NN_calib_profusion_true_mu_target_mean.png)
+
+But in fig. [fig:NN-calib] the bias is almost zero.
+
+
+This phenomenon is also present with regularized classifier as seen in Figure [fig:DA-prior] to Figure [fig:Pivot-calib]
+
+![Figure [fig:DA-prior]: Data augmentation (classic)](./claim_mining_for_nuisance/DA_prior_profusion_true_mu_target_mean.png) ![Figure [fig:DA-calib]: Data augmentation (upgrade)](./claim_mining_for_nuisance/DA_calib_profusion_true_mu_target_mean.png)
+![Figure [fig:Pivot-prior]: Pivot (classic)](./claim_mining_for_nuisance/Pivot_prior_profusion_true_mu_target_mean.png) ![Figure [fig:Pivot-calib]: Pivot (upgrade)](./claim_mining_for_nuisance/Pivot_calib_profusion_true_mu_target_mean.png)
+
+And the Parametrised-regresor.
+
+![Figure [fig:Param-Reg-prior]: Param-Regressor (classic)](./claim_mining_for_nuisance/Param-Reg_prior_profusion_true_mu_target_mean.png) ![Figure [fig:Param-Reg-calib]: Param-Regressor (upgrade)](./claim_mining_for_nuisance/Param-Reg_calib_profusion_true_mu_target_mean.png)
 
 
 
