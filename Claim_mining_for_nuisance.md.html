@@ -5,10 +5,12 @@
 This document gather evidence that mining information about the nuisance parameter in the dataset improves inference.
 Also note that it seems that some methods (INFERNO and Blind regressor) already exploit this advantage although they are not explicitly design for it.
 
+Generalities
+===============================================================================
 
 
 Core idea
-===============================================================================
+-------------------------------------------------------------------------------
 
 The idea originally comes from a naive thought :
 > If the systematic effect significantly impacts the data then we can *see* it.
@@ -19,7 +21,7 @@ The idea originally comes from a naive thought :
 Of course this works only if the systematic effect and the studied phenomenom impact can be distinguished.
 In real life it is impossible to fully the disentangle the nuisance parameters and parameter of interest impact on data.
 
-But the classic pipeline is optimized in a seeting without systematic effect.
+But the classic pipeline is optimized in a setting without systematic effect.
 The summary statistic ($n_i$) are especially optimized to contain most (if not all) the information about the parameter of interest.
 But the information about the nuisance parameters is lost in the process and we have to rely on another measurement : the calibration.
 
@@ -28,17 +30,57 @@ The likelihood of the generating process is then updated to take this informatio
 The hope is that these new information improves inference ie reduced bias or shorten the confidence interval.
 
 
+Place in story
+-------------------------------------------------------------------------------
+
+
+This document belong to the chapter about using direct regression to support the original pipeline.
+So probably in the last chapter before discussion and conclusion.
+
+
+
+Method
+-------------------------------------------------------------------------------
+
+To extract information about the nuisance parameter from the data the best way would be to levarage domain knowledge.
+This would update the likelihood using new specialised measured quantities.
+For example : the average of some hand crafted feature may be very corelated with some nuisance parameter but independant from the parameter of interest.
+Unfortunately such advantages are probably already used and included in the calibration.
+
+Meaning we should extract with no domain knowledge at all.
+Which is exactly the purpose of the direct regression.
+
+Assuming that the regression is working and the output distribution is a good approximation then we can add this to the generative process.
+
+Updating the likelihood :
+\begin{equation}
+  L(\mu, \alpha) = L_{classic}(n_i | \mu, \alpha) \times L_{calibration}(C | \alpha) \times  L_{regression}(P | \alpha)
+\end{equation}
+
+Where $L_{classic}(n_i | \mu, \alpha)$ is the poisson likelihood ;
+and $L_{calibration}(C | \alpha)$ is the calibration likelihood given by other experts ;
+and $L_{regression}(P | \alpha)$ is the additional likelihood taking into account the new information extracted from the data.
+
+
+!!! warning
+    I should look into this later : the regressor is producing a posterior distribution and we use this posterior as a likelihood which feels weird and at least requires to be clarified.
+
+
 
 Results on the 1D toy
 ===============================================================================
 
-Reduces the bias for classifiers
+Reduces the bias of the maximum likelihood estimator
 -------------------------------------------------------------------------------
+
+The classifiers and other methods show biased estimators when the test data is not generated with the nominal values of the nuisance parameters.
+See [another document] for details and fig. [fig:NN-prior] for an example.
 
 ![Figure [fig:NN-prior]: average of estimators from many Neural network classifier (different hyper-parameters) on 1D toy. Colors are related to the the true value of $\alpha$](./claim_mining_for_nuisance/NN_prior_profusion_true_mu_target_mean.png)
 
 
-As seen in fig. [fig:NN-prior] the classifier are biased.
+As seen in fig. [fig:NN-prior] the classifier are biased (blue and green points are always below the red target).
+Of course the estimator on the nominal value (orange) is perfectly unbiased.
 
 ![Figure [fig:NN-calib]: average of estimators from many Neural network classifier (different hyper-parameters) on 1D toy. Colors are related to the the true value of $\alpha$](./claim_mining_for_nuisance/NN_calib_profusion_true_mu_target_mean.png)
 
@@ -55,10 +97,19 @@ And the Parametrised-regresor.
 ![Figure [fig:Param-Reg-prior]: Param-Regressor (classic)](./claim_mining_for_nuisance/Param-Reg_prior_profusion_true_mu_target_mean.png) ![Figure [fig:Param-Reg-calib]: Param-Regressor (upgrade)](./claim_mining_for_nuisance/Param-Reg_calib_profusion_true_mu_target_mean.png)
 
 
+Reduces the length of the confidence interval
+-------------------------------------------------------------------------------
+
+!!!
+    TODO !
+
+
 
 Results on higgs
 ===============================================================================
 
+!!!
+    TODO !
 
 
 
@@ -73,7 +124,7 @@ Methods doing it anyway
 Blind regressor
 -------------------------------------------------------------------------------
 
-Of course the Blind regressor ignores the calibration inforamtion and only uses the empirical distribution.
+Of course the Blind regressor ignores the calibration information and only uses the empirical distribution.
 It is natural to think that such method is incline to internally measure the nuisance parameter of at least disentangle it from its target : the parameter of interest.
 
 
