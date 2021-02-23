@@ -29,7 +29,49 @@ The hope is that these new information improves inference ie reduced bias or sho
 
 
 
+Results on the 1D toy
+===============================================================================
 
+Reduces the bias for classifiers
+-------------------------------------------------------------------------------
+
+
+
+Results on higgs
+===============================================================================
+
+
+
+
+
+Methods doing it anyway
+===============================================================================
+
+!!! error
+    ugly title
+
+
+Blind regressor
+-------------------------------------------------------------------------------
+
+Of course the Blind regressor ignores the calibration inforamtion and only uses the empirical distribution.
+It is natural to think that such method is incline to internally measure the nuisance parameter of at least disentangle it from its target : the parameter of interest.
+
+
+
+
+Inferno
+-------------------------------------------------------------------------------
+
+Inferno could use some of the bins to be very sensitive to the nuisance parameter.
+If some $n_i$ are very sensitye to $\alpha$ then the maximizing the likelihood requires to be close to the true $\alpha$.
+
+!!! error
+    C'est un peu maladroitement expliqué...
+
+It seems that inferno is not biased on the 1D toy.
+But also Inferno does not improves much from this new information.
+So maybe it is because it already *knows* about it.
 
 
 
