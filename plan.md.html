@@ -181,41 +181,56 @@ Tackling the distribution
 Neural stat & inferno
 -------------------------------------------------------------------------------
 
-- Training neural networks to produced summary statistics
+- Training neural networks to produce summary statistics
   - Permutation invariant architectures
   - Losses on summary stats (and on samples for neural stat)
 - Training on a lower bound of the final uncetrainty
   - Cramer Rao bound
-- Limitations
+- Limitations (& possible solution)
   - Differentiable simulator
+  - (Approximate derivative with tangent)
   - Reverse a large hessian matrix can be complicated
-
-
+  - (Tackle only the systematic effects with most impact on inference)
 
 
 Performances on toys ?
 -------------------------------------------------------------------------------
 
 
-
-Direct regression
+Measuring uncertainty in ML
 -------------------------------------------------------------------------------
-
-- Motivation : likelihood free, no differentiable simulator, simpler
-- Measuring uncertainty In machine learning
-- Evaluation of uncertainty predictions in machine learning
-- Updating the architecture to tackle empirical distributions
-- Training details
+- Importance of uncertainty in ML
+- Mixture density networks
+  - Predict parameters of distributions (exm : mean and variance of gaussian)
+  - Training details
   - The dynamic of training is unusual
   - Adjust Adam parameters to reduce intertia
+- Short review of more recent methods
+  - MC-dropout
+  - Deep ensembles
+  - Swag (Stochastic weight averaging - Gaussian)
+- Evaluation of uncertainty predictions in machine learning
+  - Brier Score and NLL ("proper scoring" ?)
+  - No real answer to "Can you trust your uncertainty estimation ?" (error on error)
+
+
+Direct regression on empirical distribution
+-------------------------------------------------------------------------------
+
+- Motivation
+  - Likelihood free
+  - No differentiable simulator
+  - Simpler (therefor less accurate)
+  - Faster at inference
+- Updating the architecture to tackle empirical distributions
+  - Permutation invariant networks
+  - Importance that sample size is representative of real data ?
 - Include samples weights into the architecture
 - Two ways to handle nuisance parameters
   - Ingore them (harder on the network)
   - Profile them (give as input and marginalize)
-
-
-More details
--------------------------------------------------------------------------------
+- These architectures are compatible with Inferno
+  - can improve network expressivity
 
 
 
@@ -236,6 +251,110 @@ n_i are not sufficient
 
 Extract using a regressor
 -------------------------------------------------------------------------------
+
+
+Experimental results
+===============================================================================
+
+!!!
+    Je rassemble les résultats ici.
+    Mais en pratique je pense qu'une majorité devrait être distribuée tout le long du manuscrit.
+    Ou bien envoyée en annexe.
+
+First the results of the individual methods and a description of their behaviour.
+Then comparing using the usual model.
+Then comparing using the improved model.
+
+
+!!! Tip
+    Affirmations & interprétation / explications
+
+Classifier
+-------------------------------------------------------------------------------
+
+- On 1D toy
+  - similar to no dimension reduction (which is expected)
+  - biased estimator (which is what we want to avoid)
+  - performance depend a lot of sample size (which is expected)
+-  On 3D toy
+  - TODO
+- On higgs
+  - Completely broken. Inference fails.
+
+
+
+
+Data augmentation
+-------------------------------------------------------------------------------
+
+- On higgs
+  - Completely broken. Inference fails.
+
+
+Tangent Propagation
+-------------------------------------------------------------------------------
+
+- On higgs
+  - Completely broken. Inference fails.
+
+
+Pioval network
+-------------------------------------------------------------------------------
+
+- On higgs
+  - Completely broken. Inference fails.
+
+
+Inferno
+-------------------------------------------------------------------------------
+
+
+- On higgs
+  - It almost works
+  - Sometimes close to constant prediction.
+
+
+Direct regression
+-------------------------------------------------------------------------------
+
+- On 1D toy
+  - Blind-reg is way better than the Param-Reg
+  - Variance does not vary according to the number of samples
+
+
+
+Claim : All methods works (mostly) as expected on toys
+-------------------------------------------------------------------------------
+
+- MSE decreases with increasing the number of samples (except Regressor)
+- Non robust methods are sensitive to systematic effect
+- 1D toy is very easy
+  - Classifiers are (almost) optimal for dimension reduction but there is no reducton here
+  - the problem could be solved with a linear regression
+
+
+
+Claim : The difficulty on Higgs comes only from the rare signal regime (S << B)
+-------------------------------------------------------------------------------
+
+- XP showing that just balancing S and B makes the model's behaviour clother to their behaviour on toys
+- XP showing that just un-balancing S and B on the toys makes the model's behaviour clother to their behaviour on Higgs
+
+
+
+Claim : Extracting nuisance params info from data improves MSE and interval
+-------------------------------------------------------------------------------
+
+- On toys
+- On higgs
+  - the nuisance estimation is often overconfident !
+- Models that does not takes much advantage from it are (maybe) doing it internally
+  - Inferno could naturally use some of the bins for this purpose (the loss may encourage it)
+  - The Blind-regresor could also do it (it is designed with the freedom of fully exploiting the data)
+  - what about methods with regularization ? Why don't they also achieve this ?
+    - regularized methods loss are expressed at a sample level
+    - this information is not available at sample level but only on at a distribution level
+
 
 
 
