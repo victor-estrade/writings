@@ -104,11 +104,16 @@ And the Parametrised-regresor.
 Reduces the length of the confidence interval
 -------------------------------------------------------------------------------
 
-From looking into it and reading the numbers it seems to be true especially when the number of samples is small.
-But I need to make a few plots that better illustrate it and is easier to read than the current ones.
 
-!!!
-    TODO : make sigma plots easier to read ! (fix scale)
+The effect on the confidence interval is quite small.
+
+- It (almost) never is worst but when it's better it is only slightly better.
+- Inferno is significantly better with the upgraded likelihood.
+- Param-regressor's variance is way better with the upgraded method (but it is expected).
+
+![Figure [fig:GG-prior-sigma-50]: (classic)](./claim_mining_for_nuisance/GG-prior_min_avg_mse_N=50-boxplot_sigma_mean.png) ![Figure [fig:GG-calib-sigma-50]:  (upgrade)](./claim_mining_for_nuisance/GG-calib_min_avg_mse_N=50-boxplot_sigma_mean.png)
+![Figure [fig:GG-prior-sigma-100]: (classic)](./claim_mining_for_nuisance/GG-prior_min_avg_mse_N=100-boxplot_sigma_mean.png) ![Figure [fig:GG-calib-sigma-100]:  (upgrade)](./claim_mining_for_nuisance/GG-calib_min_avg_mse_N=100-boxplot_sigma_mean.png)
+![Figure [fig:GG-prior-sigma-500]: (classic)](./claim_mining_for_nuisance/GG-prior_min_avg_mse_N=500-boxplot_sigma_mean.png) ![Figure [fig:GG-calib-sigma-500]:  (upgrade)](./claim_mining_for_nuisance/GG-calib_min_avg_mse_N=500-boxplot_sigma_mean.png)
 
 
 !!!
@@ -153,8 +158,8 @@ If some $n_i$ are very sensitye to $\alpha$ then the maximizing the likelihood r
     C'est un peu maladroitement expliqué...
 
 It seems that inferno is not biased on the 1D toy.
-But also Inferno does not improves much from this new information.
-So maybe it is because it already *knows* about it.
+But also Inferno does improves from this new information.
+So does it already *knows* about it or not ?
 
 
 
