@@ -82,9 +82,13 @@ See [another document] for details and fig. [fig:NN-prior] for an example.
 As seen in fig. [fig:NN-prior] the classifier are biased (blue and green points are always below the red target).
 Of course the estimator on the nominal value (orange) is perfectly unbiased.
 
-![Figure [fig:NN-calib]: average of estimators from many Neural network classifier (different hyper-parameters) on 1D toy. Colors are related to the the true value of $\alpha$](./claim_mining_for_nuisance/NN_calib_profusion_true_mu_target_mean.png)
-
 But in fig. [fig:NN-calib] the bias is almost zero.
+
+![Figure [fig:NN-calib]:
+  average of estimators from many Neural network classifier (different hyper-parameters) on 1D toy.
+  Colors are related to the the true value of $\alpha$
+](./claim_mining_for_nuisance/NN_calib_profusion_true_mu_target_mean.png)
+
 
 
 This phenomenon is also present with regularized classifier as seen in Figure [fig:DA-prior] to Figure [fig:Pivot-calib]
@@ -134,7 +138,7 @@ Blind regressor
 -------------------------------------------------------------------------------
 
 Of course the Blind regressor ignores the calibration information and only uses the empirical distribution.
-It is natural to think that such method is incline to internally measure the nuisance parameter of at least disentangle it from its target : the parameter of interest.
+It is natural to think that such method is incline to internally measure the nuisance parameter or at least disentangle it from its target : the parameter of interest.
 
 
 
