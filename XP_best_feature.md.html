@@ -7,13 +7,128 @@ This is a weak baseline to illustrate the purpose of dimension reduction with a 
 But particularly interesting in the 1D toy since there is no dimension reduction required.
 
 
-Section
+Generalities
 ===============================================================================
 
-
-Subsection
+Description
 -------------------------------------------------------------------------------
 
+This method is the simplest one.
+Only one feature is selected to perform the binning.
+
+The only hyper-parameters is the choice of which feature is selected.
+
+This method can be applied to the real world by simply selecting the feature giving the best estimator.
+
+
+
+Computation Speed
+-------------------------------------------------------------------------------
+
+This methods obviously is faster than any classifier since there is no processing of the data.
+
+The computation speed only depends on MINUIT.
+
+
+
+1D Toy
+===============================================================================
+
+On the 1D toy this method should be comparable to the others since all the information is contained in 1D.
+
+
+
+AUC
+-------------------------------------------------------------------------------
+
+This method can be interpreted as a ranker.
+Although it is not trying at all to rank it can be interesting to see how well the best feature separate the signals and backgrounds.
+
+The AUC is better for classifier (around 0.960 vs around 0.975).
+This is expected since classifiers are optimizing the AUC.
+
+![Figure [fig:GG-AUC-FF]:
+  ROC curve and AUC on the 1D Toy. Best feature method.
+](./xp_best_feature/GG/FF_valid_roc.png) ![Figure [fig:GG-AUC-NN]:
+ROC curve and AUC on the 1D Toy. Neural network classifier.
+](./xp_best_feature/GG/NN_valid_roc.png)
+
+
+This illustrates how easy this 1D toy is since even without doing anything the signal and backgrounds are already well separated.
+
+
+
+Comparison to other methods
+-------------------------------------------------------------------------------
+
+Since classifiers' purpose is to reduce the dimension while keeping as much information about $ \mu $ as possible
+the 1D toy should show comparable performances between classifiers and basic binning.
+
+The best feature method shows better performance on the estimated interval size $\hat \sigma_{\hat \mu}$ (see fig. [fig:GG-compare-sigma]).
+But the MSE is way larger for the best feature method compared to classifiers (see fig. [fig:GG-compare-mse]).
+
+
+![Figure [fig:GG-compare-mse]:
+  MSE of the estimators on the 1D Toy.
+  FF correspond to the best feature methods.
+  The standard classifiers are GG and NN.
+](./xp_best_feature/GG/GG-prior_min_avg_mse_N=300-boxplot_mse.png)
+
+![Figure [fig:GG-compare-sigma]:
+  Estimated interval size on the 1D Toy.
+  FF correspond to the best feature methods.
+  The standard classifiers are GG and NN.
+](./xp_best_feature/GG/GG-prior_min_avg_mse_N=300-boxplot_sigma_mean.png)
+
+
+
+Higgs
+===============================================================================
+
+The best feature model is the best model on Higgs data.
+It seems that feature number 11, 13 and 21 produces excelent summaries althoud they are good at all to separate the signals from the backgrounds.
+
+
+AUC
+-------------------------------------------------------------------------------
+
+![Figure [fig:HIGGS-AUC-FF-21]:
+  ROC curve and AUC on the 1D Toy. Feature 21 method.
+](./xp_best_feature/HIGGS/FF-21-valid_roc.png) ![Figure [fig:HIGGS-AUC-FF-13]:
+  ROC curve and AUC on the 1D Toy. Feature 13 method.
+](./xp_best_feature/HIGGS/FF-13-valid_roc.png)
+
+![Figure [fig:HIGGS-AUC-GB]:
+  ROC curve and AUC on the 1D Toy. Gradient boosting classifier.
+](./xp_best_feature/HIGGS/GB-valid_roc.png) ![Figure [fig:HIGGS-AUC-NN]:
+  ROC curve and AUC on the 1D Toy. Neural network classifier
+](./xp_best_feature/HIGGS/NN-valid_roc.png)
+
+fig. [fig:HIGGS-AUC-FF-13] shows that feature 13 is not separating at all the signals from the backgrounds.
+But is shows very good performances at inference !
+
+![Figure [fig:HIGGS-estimate-FF-13]:
+  Estimation with feature 13 method.
+](./xp_best_feature/HIGGS/FF-13-estimate_mu.png) ![Figure [fig:HIGGS-estimate-NN]:
+  Estimation with Neural network classifier.
+](./xp_best_feature/HIGGS/NN-estimate_mu.png)
+
+
+
+Comparison to other methods
+-------------------------------------------------------------------------------
+
+![Figure [fig:HIGGS-compare-mse]:
+  MSE of the estimators on the 1D Toy.
+  FF correspond to the best feature methods.
+  The standard classifiers are HIGGS and NN.
+](./xp_best_feature/HIGGS/HIGGSTES-prior_min_avg_mse_N=-1-boxplot_mse.png)
+
+![Figure [fig:HIGGS-compare-sigma]:
+  Estimated interval size on the 1D Toy.
+  FF correspond to the best feature methods.
+  The standard classifiers are HIGGS and NN.
+](./xp_best_feature/HIGGS/HIGGSTES-prior_min_avg_mse_N=-1-boxplot_sigma_mean.png)
 
 
 <link rel="stylesheet" href="https://casual-effects.com/markdeep/latest/dark.css?">
