@@ -6,12 +6,41 @@ This document gather experimental results about using a classifier as dimension 
 This is the baseline.
 
 
-Section
+Higgs
 ===============================================================================
 
 
-Subsection
+i	n_test_samples	true_jes	true_les	true_mu	true_tes
+0	0	-1	1.0	1.0	0.5	0.97
+1	1	-1	1.0	1.0	1.0	0.97
+2	2	-1	1.0	1.0	1.5	0.97
+3	3	-1	1.0	1.0	2.0	0.97
+4	4	-1	1.0	1.0	0.5	1.0
+5	5	-1	1.0	1.0	1.0	1.0
+6	6	-1	1.0	1.0	1.5	1.0
+7	7	-1	1.0	1.0	2.0	1.0
+8	8	-1	1.0	1.0	0.5	1.03
+9	9	-1	1.0	1.0	1.0	1.03
+10	10	-1	1.0	1.0	1.5	1.03
+11	11	-1	1.0	1.0	2.0	1.03
+
+
+
+Minuit fails
 -------------------------------------------------------------------------------
+
+
+![Figure [fig:GB-estimate-mu]:
+  Some Gradient boosting Minuit failing to estimate mu
+](./xp_classifier/GB_-0.01-800-3-cv22/estimate_mu.png)
+
+![Figure [fig:GB-nll-iter-10]:
+  NLL of $\mu$ is fine. iter 10
+](./xp_classifier/GB_-0.01-800-3-cv22/NLL_mu-mu=1.50_tes=1.03_jes=1.0_les=1.0.png)
+
+![Figure [fig:GB-nll-iter-11]:
+  NLL of $\mu$ is fine. iter 11
+](./xp_classifier/GB_-0.01-800-3-cv22/NLL_mu-mu=2.00_tes=1.03_jes=1.0_les=1.0.png)
 
 
 
