@@ -2,63 +2,88 @@
 
 **Plan 1.0**
 
-Nouveau chapitrage
+
+This document gathers (almost) everything related to our work.
+Organize everything to show a possible plan for the thesis.
+Since removing parts are easier than adding some, some parts are deliberately too developped.
+
+To help modeling/rearanging the plan the content is broken down to the smallest pieces possible : one (sub-)bullet = one idea.
+
+- Everything should look like claims and/or assetions (maximizing focus on the message).
+- Sub-bullets are to be developed into a few sentences or full paragraph (with figures and equations if needed).
+- Lonely bullet are ideas that remains to be broken down into smaller pieces or very small sub-sections
+- Chapter or section titles are uninspired (improve it later)
+
+
+
+High energy physics
 ===============================================================================
 
-- La physique
-  - ML everywhere at CERN
-  - Les systematiques c'est les influences peu connues
-  - HiggsML challenge et pipeline de découverte
-  - Distribution des higgs
-  - importance sampling (données HiggsML challenge)
-  - On ne cherche pas d'info sur les particule individuelles mais sur la distribution. Introduire Neural stat
-  - On essais de réconcilier 2 choses ensembles : confidence set et prédiction individuelle de ML
-  - parler du role de la simulation
-- Modèle formel
-  - Likelihood
-  - Poisson
-  - Binning
-  - Mensionner la partie uncertainty in ML et renvoyer à une ref en avant
-- La litterature
-- Les solutions que l'on propose
-
-
-
-
-- Ou est-ce qu'on case erreur statistique et erreur systematique ?
-- Les biais ?
-- Sigma mu sur mu
-- Les travaux de 1ere et 2eme année
-- ne pas oublier le binning et la preuve
-- Découpage de la Variance totale en variance "syst/stat"
-
-
-Positioner le problème
-===============================================================================
-
-
-!!! error
-    Ne pas se limiter à l'interval de confiance des physiciens mais aussi inclure les méthodes ML de calcul de confiance
-    cf Can you trust your model uncertainty et Evaluating predictive uncertainty challenge
-
-
-
-
-
-Contexte
+ML to understand the universe
 -------------------------------------------------------------------------------
 
-!!! tip
-    ça va faire un chapitre complet. Détailer +
+- ML is a very efficient tool to exploit high dimensional or big data produced by modern exprimental science
+- Also everywhere CERN
+  - To select data (2nd level trigger if I recall correctly)
+  - To monitor data quality (Adrian's PhD)
+  - To make inference
+  - To design apparatus ?
+- The importance of Higgs related research
+  - Meta-stability of the Universe
+  - And other Physics related thing to shine
 
-- Explosion of ML in experimental science
-- LHC at CERN
-- HiggsML challenge
-- ML is everywhere now at CERN
-- Classifieur dans la découverte (pipeline de la découverte ?)
+
+
+The importance of uncertainty
+-------------------------------------------------------------------------------
+
+- Systematics uncertainty comes from unknown or not well known "influences" on the data/process
+  - (Need to break it down)
+- Uncertainty from a ML point of view
+  - (Need to break it down)
+  - Or Point forward ?
+
+
+
+The Higgs to tau tau process
+-------------------------------------------------------------------------------
+
+- The HiggsML Challenge is one relevant example of ML for HEP (aka the discovery pipeline)
+  - Discovery pipeline revolves around statistical test
+  - The generative process is complex and involves importance sampling
+  - Descibe the features distributions
+  - The discovery pipeline involves a classifier
+  - The simulator is used to generate training data **but also** to estimate Standard Model predictions
+  - Systematic uncertainty have to be taken into account
+- Measure Higgs to tau tau cross section uses the exact same dataset but a different approach
+  - The parameter of interest relate to the distribution NOT the invidual events
+  - Emphasize that the objective is to build a confidence set not only a point estimator
+  - The event wise generative likelihood is not tracktable (High dimensional integrals)
+  - Point forward to Formal Model Chapter for more information about how to tackle this
+
+
+
+Efforts to reconciliate confidence set and individual predictions in ML
+-------------------------------------------------------------------------------
 
 - Motivation = Tackling systematics takes a lot of effort (manpower). We are looking for a way to make it easier !
-- Ou plutôt expertise de fragilité. Si on change un truc tout doit être revu pour s'assurer que rien de casse.
+  - Ou plutôt expertise de fragilité. Si on change un truc tout doit être revu pour s'assurer que rien de casse.
+- Recent progress in Neural networks toward tackling distributions instead of individual instances
+  - Neural Statistician paper
+  - Inferno ?
+  - PointNet ?
+- The remaining of this document :
+  - Give more details about the modeling of the problem
+  - Explore relevant porposed regularizations from litterature which may help
+  - Propose direct regression using a Bayesian point of view
+  - Use the direct regression to support the more classical approach by extracting "more" from the data
+
+
+
+
+
+Formal modeling
+===============================================================================
 
 
 Statistical inference in ideal case
@@ -67,7 +92,7 @@ Statistical inference in ideal case
 !!!
     Here is introduced the statistical tools required and illustrated with a simple 1D example
 
-- Introduce the 1D example
+- From a simple 1D example : explain the pipeline in an ideal case (separable classes, no systematics)
   - Measuring leaves length $x$ (for whatever reason) with a ruler
   - 2 groups of leaves :
     - 1 following a Gamma distrib (group B)
@@ -82,36 +107,11 @@ Statistical inference in ideal case
   - We get it by inverting a statistical test.
 
 
-
-Not an Inverse problem (bad title)
--------------------------------------------------------------------------------
-
-!!!
-    The first difficulty : Not a tracktable likelihood at sample level
-
-- No likelihood at the sample level
-  - Now the likelihood for $x$ is intractable in many interesting case
-  - (which is the case fot the HEP experiments)
-  - Because there is a very large number of latent variables
-  - But it is possible to sample from a simulator
-- Inverse problem
-  - This leads to an inverse problem (inverting a simulator/sampler)
-- Particular inverse problem -> looking for a mixture coefficient
-- (or not) likelihood at the distribution level
-  - But in our particular case an approximative model is available
-  - Poisson count process as an approximation of counting iid Bernoulli rare process
-  - The simulator is part of the model through $\gamma$ and $\beta$
-
-!!!
-    binning will be introduced later whith the classifier improvement.
-    We now introduce systematics because it is more important.
-
-
 Systematics
 -------------------------------------------------------------------------------
 
 !!!
-    The second difficulty : systematic effect of the nuisance paramters
+    First difficulty : systematic effect of the nuisance parameters
 
 
 - What are systematics ?
@@ -127,10 +127,17 @@ Systematics
     - It is an additionnal information -> an additional measurement -> an additional likelihood
 - Systematics always increases the confidence set volume
 - Profiled likelihood method to take systematics into account in uncertainty measurement (volume of confidence set)
+  - The unified approcah [paper] using profiled likelihood to fix flip-flopping
+  - The graphical methods (convergence to chi squared distribution)
+  - Some coverage garanties in large samples limit
+
 
 
 Classifier to improve binning
 -------------------------------------------------------------------------------
+
+!!!
+    Second difficulty : High dimensional data
 
 - Binning is better !
   - A good idea to improve the inference is to do binning as long as the Poisson approx remains valid
@@ -151,7 +158,7 @@ Classifier to improve binning
 - Systematics breaks Bayes optimal classifier garanty
 
 
-Solutions and outline
+Solutions and outline (point to next chapters)
 -------------------------------------------------------------------------------
 
 - Regularization to train a robust classifier
@@ -159,24 +166,15 @@ Solutions and outline
 - Direct regression (likelihood free setting)
 - Mining data for nuisance parameters to improve model
 
-!!! tip
-    Contribution ?
-
-- ML uncetrainty vs Xp science uncertainty ?
-- Very-fast re-simulator of HiggsML dataset
-- Direct regression
-- Mining data for nuisance parameters
 
 
-!!! error
-    HiggsML data est intro section 1 mais on en parle plus du tout après....
-
-!!! error
-    Le problème de comptage n'est pas assez mis en avant
 
 
-Regularization
+State of the art
 ===============================================================================
+
+!!!
+    For each method this is the place to disseminate some experimental results illustrating successes and failures of the models
 
 !!! error
     Reprendre les papiers pour compléter
@@ -222,17 +220,6 @@ Pivotal neural networks
 
 
 
-Compare performances ?
--------------------------------------------------------------------------------
-
-
-
-
-Tackling the distribution
-===============================================================================
-
-
-
 Neural stat & inferno
 -------------------------------------------------------------------------------
 
@@ -248,12 +235,9 @@ Neural stat & inferno
   - (Tackle only the systematic effects with most impact on inference)
 
 
-Performances on toys ?
--------------------------------------------------------------------------------
-
-
 Measuring uncertainty in ML
 -------------------------------------------------------------------------------
+
 - Importance of uncertainty in ML
 - Mixture density networks
   - Predict parameters of distributions (exm : mean and variance of gaussian)
@@ -270,6 +254,12 @@ Measuring uncertainty in ML
 - Compare uncertainty in ML and Experimental science
   - In ML the target is still the objective. We want the target to be inside the interval and close to the prediction
   - In HEP the target cannot be reached anyway. The interval has coverage anyway : the objective is to reduce the interval.
+
+
+
+
+Proposed solutions
+===============================================================================
 
 Direct regression on empirical distribution
 -------------------------------------------------------------------------------
@@ -290,18 +280,6 @@ Direct regression on empirical distribution
   - can improve network expressivity
 
 
-
-Performances ?
--------------------------------------------------------------------------------
-
-
-
-Improve model / extract more info from data
-===============================================================================
-
-
-!!!
-    Too short for a chapter ?
 
 n_i are not sufficient
 -------------------------------------------------------------------------------
@@ -352,7 +330,7 @@ Classifier
 -  On 3D toy
   - TODO
 - On higgs
-  - Completely broken. Inference fails.
+  - TODO update with new results
 
 
 
@@ -361,21 +339,21 @@ Data augmentation
 -------------------------------------------------------------------------------
 
 - On higgs
-  - Completely broken. Inference fails.
+  - TODO update with new results
 
 
 Tangent Propagation
 -------------------------------------------------------------------------------
 
 - On higgs
-  - Completely broken. Inference fails.
+  - TODO update with new results
 
 
 Pioval network
 -------------------------------------------------------------------------------
 
 - On higgs
-  - Completely broken. Inference fails.
+  - TODO update with new results
 
 
 Inferno
@@ -458,10 +436,6 @@ Lost and found
   - Variational inference -> is known to underestimate the uncertainty, and is looking for p(x) instead of p(mu|x)
   - Bayesian networks -> Other have tried ... need to check more in depth
   - Mining gold -> I do not have access to the simulator (proprietary code)
-
-
-
-
 
 
 
