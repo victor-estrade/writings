@@ -2,6 +2,36 @@
 
 **Plan 1.0**
 
+Nouveau chapitrage
+===============================================================================
+
+- La physique
+  - ML everywhere at CERN
+  - Les systematiques c'est les influences peu connues
+  - HiggsML challenge et pipeline de découverte
+  - Distribution des higgs
+  - importance sampling (données HiggsML challenge)
+  - On ne cherche pas d'info sur les particule individuelles mais sur la distribution. Introduire Neural stat
+  - On essais de réconcilier 2 choses ensembles : confidence set et prédiction individuelle de ML
+  - parler du role de la simulation
+- Modèle formel
+  - Likelihood
+  - Poisson
+  - Binning
+  - Mensionner la partie uncertainty in ML et renvoyer à une ref en avant
+- La litterature
+- Les solutions que l'on propose
+
+
+
+
+- Ou est-ce qu'on case erreur statistique et erreur systematique ?
+- Les biais ?
+- Sigma mu sur mu
+- Les travaux de 1ere et 2eme année
+- ne pas oublier le binning et la preuve
+- Découpage de la Variance totale en variance "syst/stat"
+
 
 Positioner le problème
 ===============================================================================
@@ -18,10 +48,17 @@ Positioner le problème
 Contexte
 -------------------------------------------------------------------------------
 
+!!! tip
+    ça va faire un chapitre complet. Détailer +
+
 - Explosion of ML in experimental science
 - LHC at CERN
 - HiggsML challenge
+- ML is everywhere now at CERN
+- Classifieur dans la découverte (pipeline de la découverte ?)
 
+- Motivation = Tackling systematics takes a lot of effort (manpower). We are looking for a way to make it easier !
+- Ou plutôt expertise de fragilité. Si on change un truc tout doit être revu pour s'assurer que rien de casse.
 
 
 Statistical inference in ideal case
@@ -46,7 +83,7 @@ Statistical inference in ideal case
 
 
 
-Inverse problem
+Not an Inverse problem (bad title)
 -------------------------------------------------------------------------------
 
 !!!
@@ -80,7 +117,7 @@ Systematics
 - What are systematics ?
   - Nuisance parameters are parameters required to fully describes the data generating process but not of direct interest
   - Systematic effect is the effect of nuisance parameters on the data
-  - Update the 1D exampl :
+  - Update the 1D example :
     - Systematics = a small offset or scale factor on the ruler
       - (we go with the scale because it will be usefull later)
       - impossible to disentangle -> measured x = offset + true value or scale * true value
@@ -122,6 +159,13 @@ Solutions and outline
 - Direct regression (likelihood free setting)
 - Mining data for nuisance parameters to improve model
 
+!!! tip
+    Contribution ?
+
+- ML uncetrainty vs Xp science uncertainty ?
+- Very-fast re-simulator of HiggsML dataset
+- Direct regression
+- Mining data for nuisance parameters
 
 
 !!! error
@@ -148,26 +192,37 @@ Add regularization to cross entropy loss
 Data augmentation
 -------------------------------------------------------------------------------
 
-
+- Describe method
+  - Why it should work
+  - How to train it correctly (with details)
 - Avantages / drawbacks summary
+- Performances
 
 
 
 Tangent Propagation
 -------------------------------------------------------------------------------
 
+- Describe method
+  - Why it should work
+  - How to train it correctly (with details)
 - Avantages / drawbacks summary
+- Performances
 
 
 Pivotal neural networks
 -------------------------------------------------------------------------------
 
 - Related to the DANN but without unlabeled data
+- Describe method
+  - Why it should work
+  - How to train it correctly (with details)
 - Avantages / drawbacks summary
+- Performances
 
 
 
-Performances ?
+Compare performances ?
 -------------------------------------------------------------------------------
 
 
@@ -212,7 +267,9 @@ Measuring uncertainty in ML
 - Evaluation of uncertainty predictions in machine learning
   - Brier Score and NLL ("proper scoring" ?)
   - No real answer to "Can you trust your uncertainty estimation ?" (error on error)
-
+- Compare uncertainty in ML and Experimental science
+  - In ML the target is still the objective. We want the target to be inside the interval and close to the prediction
+  - In HEP the target cannot be reached anyway. The interval has coverage anyway : the objective is to reduce the interval.
 
 Direct regression on empirical distribution
 -------------------------------------------------------------------------------
@@ -401,6 +458,8 @@ Lost and found
   - Variational inference -> is known to underestimate the uncertainty, and is looking for p(x) instead of p(mu|x)
   - Bayesian networks -> Other have tried ... need to check more in depth
   - Mining gold -> I do not have access to the simulator (proprietary code)
+
+
 
 
 
