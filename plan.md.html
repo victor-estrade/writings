@@ -1,6 +1,6 @@
 <meta charset="utf-8" emacsmode="-*- markdown -*-">
 
-**Plan 1.0**
+**Plan 1.1**
 
 
 This document gathers (almost) everything related to our work.
@@ -413,6 +413,10 @@ Claim : Extracting nuisance params info from data improves MSE and interval
 Discussion and conclusion
 ===============================================================================
 
+TODO !!!!
+- Timestamp
+- Faire le ménage dans les résultats
+- Relancer la simulation à tol=100
 
 
 
@@ -426,6 +430,15 @@ Lost and found
 - Insister sur le fait que S & B ne sont pas séparable (sinon c'est trop facile)
 - Peut-être que le regresseur ne marche pas dans le régime S << B car le ML s'occupe de performance en moyenne et nous on cherche à mesurer un petit bump dans la queue de la distribution. C'est pas quelque chose de commun dans le ML.
 - Est-ce que l'échec de Regressor sur Higgs (S << B) ne vient pas d'un sample size trop petit ? 10k events ça donne peut-être une "pente" à fit très variable d'un batch à l'autre !
+
+
+- Le critère de performance n'est pas amenable à un critère individuel
+  - et ce dès le début : critère de la découverte aussi s/sqrt b
+  - Le ML donne une valeur d'incertitude sur chaque prédiction individuelle
+  - c'est en ça qu'on a problème original
+  - à mettre dans l'introduction
+- Quelque part on fait du ML parce qu'on a l'intuition que ça peut le faire mais c'est pas un problème typique de ML
+
 
 - How it is done
   - hand crafted dimension reduction (ie ask a theorist to find a feature) is not always possible and requires a lot work hours
