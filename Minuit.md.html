@@ -1,0 +1,59 @@
+<meta charset="utf-8" emacsmode="-*- markdown -*-">
+
+**Some title**
+
+Welcome to Markdeep. It's the simple way to write plain text with
+_style_. From https://casual-effects.com/markdeep.
+
+Intro
+-------------------------------------------------------------------------------
+
+Suite à la réunion de ce matin (12/04/2021) j'ai cherché à comprendre + en profondeur l'algo MIGRAD de Minuit afin de trouver comment choisir la tolerance.
+
+En lisant la doc de MINUIT et les papiers fondateur j'ai pu trouver que :
+- L'algo MIGRAD était + connu sous le nom BFGS qui est l'état de l'art des méthodes Quasi-Newtonienne pour la minimization
+- Que la tolérance : tout le monde s'en fous ! (ie. le diable est dans les détails -> je l'ai trouvé)
+- EDM (estimated distance to minimum) n'est décrit que dans le papier d'origine qui est derrière un paywall
+- Mais en fait c'est + ou - (à la covariance près) juste la norme du gradient
+
+Ce qui fait du sens en fait. On a un algo qui cherche numériquement à diminuer le gradient à zéro.
+Comme le zéro n'est pas vraiment atteignable on doit choisir une valeur acceptable.
+
+
+Section
+===============================================================================
+
+
+Minuit's minimization algorithm is described in [#Fletcher70]
+
+
+One of Minuit's first paper describes how the Estimated Distance to the Minimum is computed :
+
+\begin{equation}
+EDM = GS^T V GS
+\end{equation}
+
+with GS the gradient and V the covariance matrix.
+
+Blabla
+-------------------------------------------------------------------------------
+
+Minuit's minimization algorithm is better known as BFGS (Broyden–Fletcher–Goldfarb–Shanno) algorithm.
+It is a Quasi-Newton optimization algorithm.
+
+
+References
+-------------------------------------------------------------------------------
+
+
+[#StatMethods]: Statistical methods in experimental science 2nd Edition
+
+[#Fletcher70]: R. Fletcher. A new approach to variable metric algorithms. Comput. J.13, 317 (1970) https://academic.oup.com/comjnl/article/13/3/317/345520
+
+[#Minuit75]: MINUIT a system for function minimization and analysis of the parameter errors and correlations
+
+
+<link rel="stylesheet" href="https://casual-effects.com/markdeep/latest/dark.css?">
+<style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style>
+<script>markdeepOptions={tocStyle:'long'};</script>
+<!-- Markdeep: --><script src="markdeep.min.js"></script><script src="https://casual-effects.com/markdeep/latest/markdeep.min.js?"></script><script>window.alreadyProcessedMarkdeep||(document.body.style.visibility="visible")</script>
