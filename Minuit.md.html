@@ -1,16 +1,16 @@
 <meta charset="utf-8" emacsmode="-*- markdown -*-">
 
-**Some title**
+**Minuit**
 
-Welcome to Markdeep. It's the simple way to write plain text with
-_style_. From https://casual-effects.com/markdeep.
+
 
 Intro
 -------------------------------------------------------------------------------
 
+
 Suite à la réunion de ce matin (12/04/2021) j'ai cherché à comprendre + en profondeur l'algo MIGRAD de Minuit afin de trouver comment choisir la tolerance.
 
-En lisant la doc de MINUIT et les papiers fondateur j'ai pu trouver que :
+En lisant la doc de MINUIT et les papiers fondateurs j'ai pu trouver que :
 - L'algo MIGRAD était + connu sous le nom BFGS qui est l'état de l'art des méthodes Quasi-Newtonienne pour la minimization
 - Que la tolérance : tout le monde s'en fous ! (ie. le diable est dans les détails -> je l'ai trouvé)
 - EDM (estimated distance to minimum) n'est décrit que dans le papier d'origine qui est derrière un paywall
@@ -20,26 +20,65 @@ Ce qui fait du sens en fait. On a un algo qui cherche numériquement à diminuer
 Comme le zéro n'est pas vraiment atteignable on doit choisir une valeur acceptable.
 
 
-Section
+
+MIGRAD's algorithm
 ===============================================================================
 
 
-Minuit's minimization algorithm is described in [#Fletcher70]
-
-
-One of Minuit's first paper describes how the Estimated Distance to the Minimum is computed :
-
-\begin{equation}
-EDM = GS^T V GS
-\end{equation}
-
-with GS the gradient and V the covariance matrix.
-
-Blabla
+The program
 -------------------------------------------------------------------------------
 
-Minuit's minimization algorithm is better known as BFGS (Broyden–Fletcher–Goldfarb–Shanno) algorithm.
-It is a Quasi-Newton optimization algorithm.
+
+
+BFGS
+-------------------------------------------------------------------------------
+
+Minuit's default algorithm is MIGRAD.
+This algorithm is described in [#Fletcher70].
+
+In the documentation the minimization algorithm is refered as a "variable metric method".
+Googling it does not gives much information with these key words.
+
+Today we mostly use the term *Quasi-Newton* to designate these methods.
+
+MIGRAD is an implementation of the BFGS (Broyden-Fletcher-Goldfarb-Shanno) algorithm.
+
+
+
+Estimated distance to minimum
+-------------------------------------------------------------------------------
+
+
+[#Minuit75] describes how the Estimated Distance to the Minimum is computed :
+
+![Figure [fig:EDM]:
+  Exctract of [#Minuit75] page 8
+](./Minuit/EDM_minuit_paper.png)
+
+\begin{equation}
+EDM = \nabla f^T V \nabla f
+\end{equation}
+
+with $\nabla f$ the gradient and $V$ the covariance matrix.
+
+Basically it is the norm of the gradient.
+Which makes sense since the algorithm is numerically decreasing the gradient toward zero.
+
+
+
+Tolerance
+-------------------------------------------------------------------------------
+
+
+The tolerance controls the convergence criterion.
+The convergence criterion is simply : the value of the (estimated or real) gradient is below the tolerance (usually the default is $10^{-5}$).
+
+In books and documentation about BFGS the tolerance (usually noted $\epsilon$) is left to the user.
+The devil is in the details and I think I found the detail.
+There is **no prescription to how the tolerance should be set**.
+
+
+
 
 
 References
