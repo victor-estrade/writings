@@ -1,0 +1,69 @@
+<meta charset="utf-8" emacsmode="-*- markdown -*-">
+
+**Validation of the pipeline with ML**
+
+
+Here I discuss about validation of the inference pipeline.
+
+
+Validation
+===============================================================================
+
+Why validation is important ?
+
+The experiment is extremely expensive making the "repetition" bias even more important.
+(j'ai oublié le nom du biais due au fait d'utiliser plusieurs fois le même test set)
+
+The experimental data is supposed to be used only once !
+For this reason the experimental data is "locked up in a safe".
+
+The analysis and other inference applied on the experimental data must be carefuly validated.
+Validation requires many test on simulations and a deep understanding of its behaviour.
+
+
+Double seed in Machine learning
+===============================================================================
+
+Simulations plays a critical role in validating the pipeline.
+Simulations of random behaviour requires to set up a seed.
+
+This seed is also present for real data since real data is at best randomly sampled from real world.
+But discussion about sampling biases of real data is not our concern here.
+
+The trained models depends heavily on the training data with is linked to the chosen seed.
+Many machine learning methods (random forest, neural networks) also comes with another seed for initialisation and/or sampling order of the training data.
+
+There is 2 seeds then :
+1. the simulator one to handle random process
+2. the training of machine learning
+
+
+Not a big deal in ML
+===============================================================================
+
+Usually in machine learning this is not a big deal as long as the training data is representative enough to the real distribution.
+
+For example, in binary classification if a region contains slightly less backgrounds than normal the classification boundary may slightly off.
+This may only lead to a small group of instances to be misclassified.
+
+**Small difference = small impact on the results**
+
+
+A big deal in our pipeline
+===============================================================================
+
+In our pipeline if a region close to a signal rich bin boundary contains less backgrounds then the boundary may slightly change.
+
+But including even a small amount of unexpected background in a signal rich bin may change a lot the inference of $\mu$
+
+**Small diference = significant impact on the results**
+
+
+
+
+
+
+<link rel="stylesheet" href="https://casual-effects.com/markdeep/latest/dark.css?">
+<style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style>
+<script>markdeepOptions={tocStyle:'long'};</script>
+<!-- Markdeep: --><script src="markdeep.min.js"></script><script src="https://casual-effects.com/markdeep/latest/markdeep.min.js?"></script><script>window.alreadyProcessedMarkdeep||(document.body.style.visibility="visible")</script>
