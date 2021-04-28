@@ -1,0 +1,147 @@
+<meta charset="utf-8" emacsmode="-*- markdown -*-">
+
+**Debug BFGS de MINUIT**
+
+
+
+
+
+Contexte
+===============================================================================
+
+Le pipeline classique consiste à rechercher le maximum likelihood estimator.
+Puis construire l'intervalle de confiance autour de ce maximum.
+
+On ne peut pas calculer analytiquement ce maximum.
+Donc on fait appel à un optimiseur numérique (Minuit)
+
+L'algo de Minuit
+===============================================================================
+
+L'algorithme utilisé par Minuit pour faire cette minimisation est une descente de gradient quasi-newtonienne nommé BFGS.
+
+Le problème
+===============================================================================
+
+On a identifié un problème : l'algo s'arrête avant d'atteindre le minimum sans activer de warning.
+
+L'Estimated Distance to Mimimum (EDM), qui est grosso modo la norme du gradient, rapporté à la fin de l'optimisation est parfois au dessus de la valeur objectif EDM_max.
+Parfois l'algo s'autorise 10 x EDM_max ce qui est normal dans certain cas (même si la documentation reste obscure à ce sujet).
+Mais on trouve quand même des cas avec un EDM au dessus de 10 x EDM_max et sans aucun warning.
+
+Donc Minuit pense que tout va bien alors que clairement ça ne devrait pas être le cas.
+Ou bien la valeur de EDM indiqué dans mes fichiers n'est pas la bonne.
+
+Ce bug s'observe dans le toy 1D (GG) et dans HiggsML.
+
+
+Script débug
+===============================================================================
+
+J'ai donc écrit un petit script pour reproduire ce bug et l'observer de plus près.
+En extrayant de mon code la partie minimisation.
+
+Puisque BFGS est un algo très classique on le trouve aussi dans sicpy.
+Je vais donc comparer l'algo de scipy et celui de Minuit (scipy a l'air un peu plus bavard sur certains aspects)
+
+
+Observations
+===============================================================================
+
+- BFGS de scipy et Minuit trouvent exactement (tout les chiffres sont rigoureusement les mêmes) le même minimum lorsque la descente se passe sans encombre
+
+Ce qui indique qu'on a bien le même algo.
+
+- BFGS de scipy explore des valeurs négatives pour mu et alpha ce qui n'est pas autorisé normalement
+
+J'ai donc cherché comment Minuit impose en interne les limites que je lui donne.
+
+J'ai trouvé la formule (à base de sinus) et fait la transformation en amont de scipy.
+Mais du coup l'algo de scipy ne converge plus du tout.
+
+J'ai trouvé une transformation plus simple pour imposer que mu et alpha soit positif : softplus
+
+Mais là encore BFGS de scipy ne converge plus du tout.
+
+Conclusion je ne comprend pas comment Minuit impose les limites que je lui donne (paramètre positif).
+Cette transformation s'accompagne d'une correction de "error matrix" qui est l'inverse de la hessian
+Mais les détails ne sont pas indiqués dans la doc.
+J'ai lu rapidement la section
+8.3.4. Constrained parameters in maximum likelihood B (p. 179)
+ de Statistical methods in experimental physics second edition
+
+Et je ne me voit pas implémenter ça.
+
+- Lorsque la descente ne converge pas, Minuit et BFGS ne s'arrêtent pas au même endroit.
+
+Donc Minuit doit utiliser une version modifiée de BFGS ou bien c'est la transformation pour inclure les limites (paramètre positif) qui explique ce changement.
+
+
+- La negative log likelihood (NLL) au minimum trouvé par BFGS (Minuit ou sicpy) est plus grande que celle calculée avec les "vrais" paramètres .
+C'est à dire, le true_mu et true_alpha utilisé pour générer le test set que l'optimiseur recherche.
+
+Donc le minimum trouvé est un minimum locale
+
+- la norme du gradient (approximatif avec différence finie) au niveau des "vrais" paramètres est grand donc ce n'est pas un minimum
+
+- Les plots de contours de NLL et des gradients réalisés montrent aussi l'existence de ces minima locaux
+
+
+Corrections
+===============================================================================
+
+- J'ai corrigé le point de départ de l'optimisation pour GG (toy 1D) mu = 1 au lieu de mu = 0.5
+- J'ai corrigé le reset du générateur de donnée de test dans le benchmark pour faciliter la reproductibilité
+
+
+Fail sur GG
+===============================================================================
+
+Je n'arrive pas à reproduire le bug sur le toy 1D.
+Ni avec mon nouveau script ni avec celui du benchmark.
+
+Maintenant les warning s'activent correctement.
+
+Pourtant aucune des corrections faites ne devrait avoir cet impact.
+
+Peut-être que c'est du à la mise à jour de iMinuit de décembre que j'ai intégré vers fin février (si je me souvient bien) ? Mais ça m'étonnerais beaucoup qu'un tel bug dans iMinuit soit resté invisible aussi longtemps.
+
+
+Reproduction sur HiggsML
+===============================================================================
+
+Je relance la même chose sur HiggsML puisque le même bug a été observé et que ces runs datent d'après ma mise à jour de iMinuit
+
+Pour le moment je n'arrive pas non plus à reproduire un cas où l'algo n'a pas convergé et n'active pas ses warnings.
+
+Cependant le cluster est en panne (problème de drivers GPU et d'espace disque sur les noeuds).
+Donc j'ai tout lancé sur mon portable et c'est long (pas de GPU).
+
+Donc je n'ai pas encore retrouvé de cas où ça plante.
+
+Conclusion
+===============================================================================
+
+Soit le bug a été corrigé par une des corrections (ce qui est peu probable)
+
+Soit le bug n'a lieu qu'en présence de GPU.
+Précision float 32 de la classification ou du générateur versus précision float 64 de l'optimiseur ?
+Ou autre chose...
+
+
+References
+===============================================================================
+
+
+[#StatMethods]: Statistical methods in experimental science 2nd Edition
+
+[#Fletcher70]: R. Fletcher. A new approach to variable metric algorithms. Comput. J.13, 317 (1970) https://academic.oup.com/comjnl/article/13/3/317/345520
+
+[#Minuit75]: MINUIT a system for function minimization and analysis of the parameter errors and correlations
+
+[#Minuit94]: https://root.cern.ch/download/minuit.pdf
+
+<link rel="stylesheet" href="https://casual-effects.com/markdeep/latest/dark.css?">
+<style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style>
+<script>markdeepOptions={tocStyle:'long'};</script>
+<!-- Markdeep: --><script src="markdeep.min.js"></script><script src="https://casual-effects.com/markdeep/latest/markdeep.min.js?"></script><script>window.alreadyProcessedMarkdeep||(document.body.style.visibility="visible")</script>
