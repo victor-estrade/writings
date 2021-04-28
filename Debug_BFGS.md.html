@@ -15,10 +15,14 @@ Puis construire l'intervalle de confiance autour de ce maximum.
 On ne peut pas calculer analytiquement ce maximum.
 Donc on fait appel à un optimiseur numérique (Minuit)
 
+
+
 L'algo de Minuit
 ===============================================================================
 
 L'algorithme utilisé par Minuit pour faire cette minimisation est une descente de gradient quasi-newtonienne nommé BFGS.
+
+
 
 Le problème
 ===============================================================================
@@ -35,6 +39,7 @@ Ou bien la valeur de EDM indiqué dans mes fichiers n'est pas la bonne.
 Ce bug s'observe dans le toy 1D (GG) et dans HiggsML.
 
 
+
 Script débug
 ===============================================================================
 
@@ -43,6 +48,7 @@ En extrayant de mon code la partie minimisation.
 
 Puisque BFGS est un algo très classique on le trouve aussi dans sicpy.
 Je vais donc comparer l'algo de scipy et celui de Minuit (scipy a l'air un peu plus bavard sur certains aspects)
+
 
 
 Observations
@@ -87,11 +93,13 @@ Donc le minimum trouvé est un minimum locale
 - Les plots de contours de NLL et des gradients réalisés montrent aussi l'existence de ces minima locaux
 
 
+
 Corrections
 ===============================================================================
 
 - J'ai corrigé le point de départ de l'optimisation pour GG (toy 1D) mu = 1 au lieu de mu = 0.5
 - J'ai corrigé le reset du générateur de donnée de test dans le benchmark pour faciliter la reproductibilité
+
 
 
 Fail sur GG
@@ -107,6 +115,7 @@ Pourtant aucune des corrections faites ne devrait avoir cet impact.
 Peut-être que c'est du à la mise à jour de iMinuit de décembre que j'ai intégré vers fin février (si je me souvient bien) ? Mais ça m'étonnerais beaucoup qu'un tel bug dans iMinuit soit resté invisible aussi longtemps.
 
 
+
 Reproduction sur HiggsML
 ===============================================================================
 
@@ -119,6 +128,8 @@ Donc j'ai tout lancé sur mon portable et c'est long (pas de GPU).
 
 Donc je n'ai pas encore retrouvé de cas où ça plante.
 
+
+
 Conclusion
 ===============================================================================
 
@@ -127,6 +138,7 @@ Soit le bug a été corrigé par une des corrections (ce qui est peu probable)
 Soit le bug n'a lieu qu'en présence de GPU.
 Précision float 32 de la classification ou du générateur versus précision float 64 de l'optimiseur ?
 Ou autre chose...
+
 
 
 References
