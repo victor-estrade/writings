@@ -86,6 +86,99 @@ Algorithm very detailed description
 
 
 
+
+
+Mail
+===============================================================================
+
+
+"paramètres" désigne les paramètres que Minuit cherche pour maximiser la Likelihood ie. mu et alpha
+"Variable Metric Method (VMM)" est plus couramment appelé Méthode Quasi-newtonienne de nos jours.
+
+L'algo de descente utilisé par Minuit est connu sous l'appellation BFGS de nos jours.
+
+
+La doc de la version FORTRAN (1994)
+-------------------------------------------------------------------------------
+
+Lien : https://root.cern.ch/download/minuit.pdf
+
+Page 8 section 1.2.1 : La formule pour les transformations en interne pour appliquer des limites aux paramètres
+Pour nous mu est alpha doivent être positif. La formule qu'on utilise n'est donc pas celle là.
+
+Page 14 section 2.4 : Avertissement sur la précision des calculs avec float 32.
+
+Page 26 en bas : MIGraD formule indiquant le lien entre la tolérance de l'algo BFGS et celle donnée à Minuit (tolérance = 0.001 * tol * UP)
+UP vaut 0.5 dans notre cas (Likelihood Fit à 1 sigma)
+
+Page 28 SET ERRordef : indication que ERRORDEF = 0.5 si la FCN est un log likelihood
+
+Page 36 section 5.7 : Un autre avertissement concernant la précision
+
+Page 43 Chapter 7 : Comment interpréter les valeurs "d'erreur" donnée par Minuit et les détails sur ERRORDEF.
+
+
+
+La doc de la version C++
+-------------------------------------------------------------------------------
+
+Lien : https://iminuit.readthedocs.io/en/stable/_downloads/165972a3b917b0f71940b3aac68fb978/mnusersguide.pdf
+
+
+Page 13 section 1.3.1 : La formule pour les transformations en interne pour appliquer des limites aux paramètres
+Pour nous mu est alpha doivent être positif
+
+
+Page 15 section 1.5.1 :  Explication sur ERRORDEF et le lien avec l'interval de confiance (1-sigma)
+
+Page 23 section 2.7 :  Avertissement concernant la précision float32
+
+Page 45 Chap 5 : toutes les recettes de cuisine pour faire marcher Minuit.
+
+
+
+
+Concernant la doc de iMinuit sur le net :
+-------------------------------------------------------------------------------
+
+La doc sur la précision est ici :
+https://iminuit.readthedocs.io/en/stable/reference.html?highlight=precision#iminuit.Minuit.precision
+
+La doc sur l'algo migrad est là
+https://iminuit.readthedocs.io/en/stable/reference.html?highlight=precision#iminuit.Minuit.migrad
+Et renvoi vers un papier qui est bloqué par un paywall.
+Du coup je le join au mail
+
+
+
+
+Le papier original de Minuit 1975 (join au mail)
+-------------------------------------------------------------------------------
+
+Page 10 Subroutine MIGRAD : explique comment marche l'algo de descente de Minuit (avant qu'il ne soit renommé BFGS je suppose)
+En particulier page 11 on a le critère de convergence et la formule pour calculer EDM
+
+
+C'est dans ce papier que j'ai trouvé la ref vers :
+https://www.semanticscholar.org/paper/A-New-Approach-to-Variable-Metric-Algorithms-Fletcher/bb787c61efda995b99fb939b743c99cda3f0b9f4
+Qui est + ou - le papier original de l'algo de descente (détaillé Section 5 page 4)
+
+L'algo a probablement été un peu amélioré depuis.
+
+Je n'ai pas trouvé l'explication sur le cas où Minuit s'autorise de changer le critère de convergence à 10 * tolérance au lieu de tolérance.
+
+
+
+Le livre
+-------------------------------------------------------------------------------
+
+
+Ce livre est cité de temps en temps : https://cds.cern.ch/record/1019859/files/9789812567956_TOC.pdf
+Le chapitre 8 et 9 donnent beaucoup de détails sur ce qu'on est en train de faire.
+
+
+
+
 References
 -------------------------------------------------------------------------------
 
