@@ -1,10 +1,72 @@
 <meta charset="utf-8" emacsmode="-*- markdown -*-">
 
-**Story 1.0**
+**Story 2.0**
 
 !!! tip
     Here i'll try to write a story organizing the available materails.
 
+
+
+
+New
+===============================================================================
+
+
+
+C'est quoi le contexte ? L'objet de notre étude ?
+-------------------------------------------------------------------------------
+
+> On commence par le début.
+
+Avant les expérimentations mesuraient quelques grandeurs physiques.
+Avec le développement des outils numériques les expérimentations ont gagné en complexité et mesurent de nombreuses grandeurs.
+Mais il est difficile de gérer des données en haute dimension et d'en tirer des conclusions.
+De plus l'augmentation de la dimensionalité s’accompagne d'une augmentation de la complexité du modèle qui doit prendre en compte de nouveaux paramètres (en particulier les réponses des nombreux appareils de mesure).
+Ces paramètres n'étant pas l'objet de l'étude, ils sont qualifiés de *paramètres de nuisance* par opposition au *paramètre d'intérêt* que l'on souhaite inférer.
+
+L'introduction de nouveaux paramètres libres entraîne une ambiguïté sur l'origine des variations des observables : d'une part le paramètres d'intérêt et d'autre par les paramètres de nuisance.
+Il faut faire l'effort supplémentaire de démêler l'influence des uns et des autres.
+Ce qui n'est en général pas possible à 100% et donc augmente mécaniquement l'incertitude de l'inférence.
+C'est ce que l'on nomme **l'erreur systématique**.
+L'erreur systématique est souvent opposé à **l'erreur statistique** qui elle provient du manque d'information sur le paramètre d'intérêt.
+Ce dernier est due principalement à une faible influence du paramètre d'intérêt sur les observables (ou autres grandeurs résumées / agrégées) ou encore au manque de données.
+On a alors un compromis entre le gain d'information apporté par la mesure de nouvelles observables et la perte de précision de l'inférence (du paramètre d'intérêt) due à l'introduction de nouveaux paramètres libres (nuisances).
+
+La méthode classique, pour gérer la haute dimensionalité des données, consiste a construire à la main une ou quelques quantités agrégeant au mieux l'information que l'on cherche.
+Cette méthode est limitée par les connaissances et outils théoriques et demande de la main d'oeuvre très qualifié.
+Mais elle permet souvent d'obtenir des propriétés utiles comme une faible sensibilité aux paramètres de nuisance.
+
+Opposé à la méthode classique on trouve les méthodes de réduction de dimension (machine learning).
+Les réductions de dimension permettent de retenir au maximum l'information lié au paramètre d'intérêt.
+Donc réduisent l'erreur statistique.
+Cependant les nouvelles quantités obtenues sont souvent aussi très sensibles aux paramètres de nuisance.
+Ce qui rend de démêlage difficile donc augmente l'erreur systématique.
+
+L'objectif ici est d'étudier des méthodes pour réduire l'erreur systématique des réductions de dimension.
+Plusieurs méthodes sont proposés dans la littérature :
+- Devenir insensible aux effets systématique (Data augmentation, Pivotal neural network, tangent propagation)
+- Profiler l'effet systématique (que l'on a écarté parce que pas le temps de tout tester non plus)
+- Optimiser plus directement l'erreur totale
+
+Nous proposons d'utiliser des architectures récentes de réseaux de neurones pour effectuer une inférence directe.
+Ainsi qu'une façon de combiner cette méthode avec les méthodes précédentes pour bénéficier de leurs avantages respectifs.
+
+
+
+
+C'est quoi la question ? Qu'est-ce qu'on cherche à voir ou mesurer ou vérifier ?
+-------------------------------------------------------------------------------
+
+> Dire qu'on va regarder ce qui se passe ou comparer les méthodes c'est flou. Ici on précise ce que l'on cherche.
+
+
+
+
+
+
+
+OLD
+===============================================================================
 
 Plan
 ===============================================================================
