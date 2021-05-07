@@ -59,7 +59,38 @@ C'est quoi la question ? Qu'est-ce qu'on cherche à voir ou mesurer ou vérifier
 
 > Dire qu'on va regarder ce qui se passe ou comparer les méthodes c'est flou. Ici on précise ce que l'on cherche.
 
+L'inférence qui nous concerne mesure deux grandeurs.
+D'une part l'estimateur (ponctuel) du paramètre d'intérêt.
+D'autre part un intervalle de confiance du paramètre d'intérêt.
 
+Pour mesurer les performance de l'estimateur ponctuel on utilise les indicateurs classiques, **biais et variance**, qui combiné donne la **Mean Squared Error** (MSE).
+
+L'intervalle de confiance (CI) est centré sur l'estimateur ponctuel et couvrant par construction.
+Donc la seule mesure de performance est sa **taille** (longueur ou volume).
+
+On cherche donc à mesurer ces grandeurs pour chacune des méthodes présentées.
+Mais aussi, lorsque c'est possible, expliquer les raisons des performances mesurées.
+
+L'idée est d'appliquer le pipeline complet d'analyse (de la simulation à l'inférence) et d'observer les forces et faiblesses de chaque méthodes :
+- temps de calcul à l'entraînement
+- temps de calcul à l'inférence
+- hypothèse supplémentaire nécessaire (ou domaine d'application)
+- facilité de mise en place
+- stabilité
+- possibilités de généralisation à d'autres problèmes
+- performance de l'inférence (MSE, taille du CI)
+
+!!! tip
+    J'insiste sur le fait que l'on est presque les seuls à reproduire le pipeline de bout en bout. C'est une des raisons pour lesquelles on est autant en galère d'ailleurs.
+
+
+
+
+
+Comment on va répondre aux questions ?
+-------------------------------------------------------------------------------
+
+> Le protocole expérimental.
 
 
 
