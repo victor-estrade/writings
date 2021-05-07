@@ -11,7 +11,7 @@
 New
 ===============================================================================
 
-L'idée de ce plan est de présenter les chose en suivant la méthode scientifique :
+L'idée de ce plan est de présenter les choses en suivant la méthode scientifique :
 1. étudier le problème (lire la littérature)
 2. poser des questions mesurables (inédites de préférence)
 3. proposer un protocole expérimental pour effectuer ces mesures
@@ -20,18 +20,19 @@ L'idée de ce plan est de présenter les chose en suivant la méthode scientifiq
 6. ouvrir sur toutes les nouvelles questions qui sont apparues en cours de route.
 
 
+
 C'est quoi le contexte ? L'objet de notre étude ?
 -------------------------------------------------------------------------------
 
 > On commence par le début.
 
-Avant les expérimentations mesuraient quelques grandeurs physiques.
+"Avant" les expérimentations mesuraient quelques grandeurs physiques.
 Avec le développement des outils numériques les expérimentations ont gagné en complexité et mesurent de nombreuses grandeurs.
 Mais il est difficile de gérer des données en haute dimension et d'en tirer des conclusions.
 De plus l'augmentation de la dimensionalité s’accompagne d'une augmentation de la complexité du modèle qui doit prendre en compte de nouveaux paramètres (en particulier les réponses des nombreux appareils de mesure).
 Ces paramètres n'étant pas l'objet de l'étude, ils sont qualifiés de *paramètres de nuisance* par opposition au *paramètre d'intérêt* que l'on souhaite inférer.
 
-L'introduction de nouveaux paramètres libres entraîne une ambiguïté sur l'origine des variations des observables : d'une part le paramètres d'intérêt et d'autre par les paramètres de nuisance.
+L'introduction de nouveaux paramètres libres entraîne une ambiguïté sur l'origine des variations des observables : d'une part le paramètre d'intérêt et d'autre par les paramètres de nuisance.
 Il faut faire l'effort supplémentaire de démêler l'influence des uns et des autres.
 Ce qui n'est en général pas possible à 100% et donc augmente mécaniquement l'incertitude de l'inférence.
 C'est ce que l'on nomme **l'erreur systématique**.
@@ -104,6 +105,42 @@ Comment on va répondre aux questions ?
 
 
 
+
+Qu'est qu'on observe ?
+-------------------------------------------------------------------------------
+
+Une fois les derniers détails pour s'assurer que l'optimisation numérique est utilisé dans de bonnes conditions on pourra vérifier si les résultats précédents tiennent toujours.
+
+1. Data augmentation et INFERNO sont cools
+2. Tangent Prop et Pivot sont trop instables
+3. La regression directe a besoin que le paramètre d'intérêt ait une forte influence sur les données
+4. Le pipeline combinant inférence directe des paramètres de nuisance et pipeline classique est systématiquement meilleur
+
+
+
+
+
+Conclusion  / Discussion
+-------------------------------------------------------------------------------
+
+
+Chercher à devenir insensible aux paramètres de nuisance n'est pas nécessairement la solution.
+Ce qu'il faut c'est démêler les paramètres de nuisance et le paramètre d'intérêt.
+Donc avoir une grandeur très sensible au paramètre de nuisance et faiblement sensible au paramètre d'intérêt permet de fortement contraindre le paramètre de nuisance.
+Ceci permet d'exploiter des grandeurs qui sont à la fois sensible au paramètre d'intérêt et aux paramètres de nuisance.
+Jeter volontairement l'information sur les paramètres de nuisance peut donc être contre-productif en jetant au passage de l'information sur le paramètre d'intérêt.
+
+Le pipeline Bayesien de régression directe peut-être utile en absence de connaissance experte du domaine offrant une likelihood.
+Mais il requiert que le paramètre inféré ait une forte influence sur les données.
+De plus la confiance accordé à l'incertitude/variance prédite doit être vérifié avec attention car un mauvais l'entraînement peut mener des surprises.
+De la littérature plus récente sur le sujet de l'incertitude des NN existe et propose de solides pistes d'amélioration.
+
+
+En HEP les données expérimentales sont très coûteuses rendant la validation des modèles avant leur application critique.
+Hors le pipeline présenté ici peut s'avérer instable.
+Une attention humaine experte reste nécessaire.
+L'automatisation de la validation d'un pipeline d'analyse contenant des composants aléatoires comme l'entraînement d'un modèle de ML est un sujet difficile mais pouvant ouvrir la porte à l'automatisation complète d'analyses complexes sur de très très grande masse de données.
+En particulier le fait qu'un petit effet sur les données peut mener à un gros effet sur l'inférence est inhabituel en ML (donc peu étudié).
 
 
 
