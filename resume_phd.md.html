@@ -47,12 +47,12 @@ enhanced with a re-simulation process, develloped for this project,
 recomputing all the attributes as if the full simulation were re-ran with different input parameters.
 
 We also conduct systematic experiments on a set of smaller didactic examples to clarify the following points :
-- impact of signal/background ratio
-- variance analysis of the maximum likelihood estimator
-- impact of the number of nuisance parameters (bof)
+- (impact of signal/background ratio)
+- (variance analysis of the maximum likelihood estimator)
+- (impact of the number of nuisance parameters (bof))
 
 We benchmark 8 methods. Including
-standard classifiers, data augmentation, tangent propagation, pivotal neural network, inference aware neural optimization network, direct regression.
+standard classifiers, data augmentation, tangent propagation, pivotal neural network, inference aware neural optimization network, and direct regression.
 The experiments are carried out on a 30+ GPU cluster.
 
 In addition, several theoretical insights are obtained by analyzing successes and failures in numerical experiments. We derived several properties of
@@ -140,16 +140,22 @@ and robustness to nuisance parameters in a likelihood free inference framework.
 MAIN CONTRIBUTIONS (at least 5 points):
 =======================================
 
-(TODO developper ces points, ne pas juste les citer.)
-
 In summary, the main contributions of this thesis are:
-- clarifying the interactions between the classifiers and the systematic effects
-  - impact of training under parametrized shift
-- comparison of the various systematic aware methods
-  - impact of various proxy loss and regularization
-- direct regression on empirical distribution
-- improving the inference by extracting more information from the data
-- ???
+
+Techniques to implement the standard pipeline and automate it.
+Like the algorithm chain to help the minimization step.
+Or the heuristic to choose the number of bins.
+
+Experimental evidence against systematic invariance methods.
+The objective of the inference is clother to disentangling the parameter of interest from the nuisance parameters.
+
+Proof of concept using direct regression using modern neural network architectures.
+The speed of inference and simplicity of this direct pipeline comes at the expense of theoretical guarantees on the coverage of the confidence interval.
+
+An improved pipeline using additional data mining.
+Using a dataset wise neural network regressor to measure the nuisance parameters from experimental data it is possible to improve inference.
+
+No free lunch : On the realistic problem the old ways using just one feature still offer competitive performance.
 
 
 
