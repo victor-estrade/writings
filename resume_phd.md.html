@@ -23,8 +23,8 @@ in restricted and/or related cases such as
 [… ???]
 
 we tackle novel aspects of it, namely
-taking into account the impact of training under the distribution shift induced by nuisance parameters
-which was not studied before. Furthermore, we cast the problem into a novel framework
+reproducing the full analysis pipeline use the size of the final confidence interval as a figure of merit which was not studied before on a realistic case.
+Furthermore, we cast the problem into a novel framework
 [… ???]
 
 clarifying the subject with respect to
@@ -47,15 +47,15 @@ enhanced with a re-simulation process, develloped for this project,
 recomputing all the attributes as if the full simulation were re-ran with different input parameters.
 
 We also conduct systematic experiments on a set of smaller didactic examples to clarify the following points :
-- (impact of signal/background ratio)
-- (variance analysis of the maximum likelihood estimator)
-- (impact of the number of nuisance parameters (bof))
+- is using a simplified statistical model preventing to reach best possible performances
+- sustainability of direct inference using modern neural network architecture.
 
 We benchmark 8 methods. Including
 standard classifiers, data augmentation, tangent propagation, pivotal neural network, inference aware neural optimization network, and direct regression.
 The experiments are carried out on a 30+ GPU cluster.
 
-In addition, several theoretical insights are obtained by analyzing successes and failures in numerical experiments. We derived several properties of
+In addition, several theoretical insights are obtained by analyzing successes and failures in numerical experiments.
+We derived several properties of
 [… ???]
 
 using mathematics of statistics techniques
@@ -66,23 +66,25 @@ RESULTS:
 ========
 
 Our results on realistic synthetic data demonstrate that
-[… ???]
-and the suitability of direct regression for inference.
+using a simplified statistical model (Binned Poisson count process) allows to reach the same performances as using the true generative model.
+And the suitability of direct regression for inference.
 
 One particular highlight is:
-
-the evidence that the robustness of INFERNO to systematic effect is similar to the extraction of nuisance parameters related information from the data  ??????
+That direct inference may suffer from overconfidence in a small samples regime.
 
 This opens the door to:
-[… ]
+Use of an hybrid pipeline using the direct inference to mine information about the nuisance parameters from the data.
+But also more recent research around uncertainty estimations of neural network outputs to improve the direct inference pipeline.
 
 We noticed that, contrarily to results on smaller artificial examples, we have on realistic synthetic the following behavior
 [… ???]
+The improved pipeline does improves (FIXME wait for the final HIGGS-CALIB results !) is giving better MSE and/or size of the confidence interval.
 
 This prompted us to make a more in depth and detailed study using artificial data, which revealed:
-[… ???]
+A similar behaviour of a more complex 3D toy problem.
 
-This was further substantiated with a theoretical analysis. We proved that
+This was further substantiated with a theoretical analysis (FIXME or not !??? No link with previous paragraph).
+We proved that
 carefully choosing the binning procedure is critical (but it is not new at all !).
 
 analytically. Although such theoretical results are limited by a given set of assumptions
@@ -92,14 +94,13 @@ they are corroborated by numerical experiments in the broader setting
 [… ???]
 
 This leads us to conclude with confidence that
-having a very low signal/background ratio makes the inference extremely difficult for all methods
-and extracting more information about the nuisance parameters always improve the resulting confidence interval.
+extracting more information about the nuisance parameters always improve the resulting confidence interval.
 This is the main result of this thesis.
 
 We also conducted an analysis of the computational efficiency of the algorithms revealing that:
 tangent propagation suffers from the lack of jacobian vector product in common libraries,
-INFERNO can fully leverage GPU computing and is very accurate,
-data augmentation shows good accuracy and does not requires GPU oriented machines,
+INFERNO is (FIXME : still true ???) very accurate,
+data augmentation shows good accuracy (FIXME : still true ???) and does not requires a differentiable generator,
 and although direct regression is compuationnaly intensive for training its inference speed is unmached.
 
 
@@ -110,18 +111,17 @@ This work allowed us to advance the field of
 integrating machine learning into statistical analysis
 
 in a number of directions, including
-reducing nuisance parameters influence on the final uncertainty,
 opening the replacements of more parts of the pipeline by specialized neural network,
 and the importance of data mining various informations to impove modelization.
 
 
 The framework we proposed helped us clarify and unify past work and allowed us to identify critics difficulties not anticipated, such as
-[… ]
+reaching an acurate measuring of the confidence interval which requires many parameter and algorithm adjustment for minimization;
 
 [… ]
 
 With perseverance, we managed to understand such issues and resolve a number of them using
-[… ]
+a heuristic to choose the number of bins, adjust the minimal precision of the minimizer, using multiple minimization algorithm together to automatically reach the minimum;
 
 [… ]
 
