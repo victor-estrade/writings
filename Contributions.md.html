@@ -1,0 +1,119 @@
+<meta charset="utf-8" emacsmode="-*- markdown -*-">
+
+**Contributions**
+
+
+
+Techniques
+===============================================================================
+
+
+Simulateur rapide sur Higgs
+-------------------------------------------------------------------------------
+
+Développement d'un simulateur rapide utilisant les données du HiggsML Challenge.
+Ce simulateur gère 5 paramètres de nuisance pour la version CPU et 3 paramètres de nuisance pour la version GPU.
+
+Il permet de faciliter l'étude d'un cas très réaliste.
+
+
+Heuristique pour le choix du nombre de bins
+-------------------------------------------------------------------------------
+
+La méthode empirique pour déterminer le bon nombre de bins.
+
+
+Recette pour Minuit pour nos 3 cas
+-------------------------------------------------------------------------------
+
+Recette minimaliste pour l'utilisation des minimiseurs de Minuit.
+1. 1ère tentative
+  1. Scan
+  2. Migrad
+2. si non convergence
+  1. Simplex
+  2. Migrad
+
+Puis calculer les intervalles de confiances avec Hesse et Minos.
+
+
+En + de toutes les considérations technique sur Minuit
+
+
+Considérations technique sur l'entrainement
+-------------------------------------------------------------------------------
+
+- Inferno parfois instable => auto-détection et checkpoint pour régénérer un état précédent
+- (Pivot => attention à bien utiliser un adversaire Mixture density network [comme dans le papier])
+- Tangent propagation est très lent (forward jacobian vector product n'est pas implémenté dans la plupart des frameworks)
+
+
+
+
+Algorithmiques
+===============================================================================
+
+Régression directe des paramètres
+-------------------------------------------------------------------------------
+
+Utiliser la puissance des réseaux de neurones à l'échelle d'un dataset.
+
+Problème : la mesure de l'incertitude de la prédiction des réseau de neurones reste un sujet d'actualité.
+
+Le réseau nécessite un lien fort entre entré et sortie pour réaliser une régression.
+On a pas ce lien avec le paramètre d'intérêt.
+Mais on l'a avec les paramètres de nuisance !
+
+
+Pipeline amélioré
+-------------------------------------------------------------------------------
+
+Utiliser les réseaux de neurones pour extraire + de d'information du dataset sur les paramètres de nuisance.
+
+
+
+
+
+
+
+Conceptuelles
+===============================================================================
+
+
+Exclusion des méthodes d'invariance
+-------------------------------------------------------------------------------
+
+Devenir invariant aux paramètres de nuisance n'est pas forcément utile.
+
+Ce dont on a besoin c'est de démêler le paramètre d'intérêt des paramètres de nuisances !
+
+Relancer le débat entre profilage et invariance.
+Des résultats récents sont plutôt en faveur du profilage.
+
+
+
+Amélioration des performance avec le pipeline amélioré
+-------------------------------------------------------------------------------
+
+
+On observe sur le toy 3D une amélioration de la taille de l'intervalle de confiance qui devient comparable au pipeline idéal.
+
+Sur Higgs ?  Run en cour (mais c'est bien parti).
+
+
+
+Bonne performance de simplement sélectionner la bonne feature
+-------------------------------------------------------------------------------
+
+Sur les toys aucune feature seule ne donne de bon résultats (MSE élevé).
+
+Mais sur le cas de HiggsML on a certaines features qui sont très efficaces sans aucun traitement particulier.
+(Ne pas jeter le bébé avec l'eau du bain)
+
+
+
+
+<link rel="stylesheet" href="https://casual-effects.com/markdeep/latest/dark.css?">
+<style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style>
+<script>markdeepOptions={tocStyle:'long'};</script>
+<!-- Markdeep: --><script src="markdeep.min.js"></script><script src="https://casual-effects.com/markdeep/latest/markdeep.min.js?"></script><script>window.alreadyProcessedMarkdeep||(document.body.style.visibility="visible")</script>
