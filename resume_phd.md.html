@@ -1,53 +1,66 @@
-<meta charset="utf-8" emacsmode="-*- markdown -*-">
+APPRENTISSAGE ROBUSTE AU TRANSFERT, AVEC APPLICATION EN PHYSIQUE DES HAUTES ÉNERGIES
+===========================
 
-**Resume**
+Robust transfer learning, with application to high energy physics
+===========================
 
+Systematic aware particle physics modeling with machine learning
+===========================
+
+### Keywords :
+
+Machine learning
+transfer learning
+simulateur
+big data
+Statistical Estimation
+Physical modeling
+Systematic error, systematic bias
+Counting problems
+Poisson process
+Data driven "dimension reduction" vs knowledge driven
+Optimization
+Calibration
+Dataset wise neural network / permutation invariant neural network
+Learning to discover => learning to measure/learning to count
+LHC
+particle physics
+Higgs Boson
+High Energy Physics
 
 
 BACKGROUND AND MOTIVATIONS:
-===========================
+---------------------------
 
-The objective of the thesis is
-to improve the integration of machine learning methods in complex statistical inference pipeline
-in the context of
-a High Energy Physics analysis at the Large Hadron Collider.
 
-This problem is particularly important because
-experimental science now have to cope with huge amount of multidimensional data
-challenging the manpower efficiency of classical hand crafted methods.
+The objective of this thesis is to leverage novel machine learning methods to reduce systematic errors introduced in the complex physics modeling and simulation of particule physics pipelines, like those of the Large Hadron Collider.
 
-Although it has been addressed in the past by
-[… ???]
+The central problem we adress is that of estimating
+the branching factor of Higgs to tau tau, which can be brought back to counting a number of rare events amount a very large number of background events of lesser interest.
+This problem, which involves building and using accurate simulators, is fraught with modeling and computational challenges due to the ever increasing number of detectors (hundreds of millions in the newests colliders). In particular, avoiding, diagnozing, reducing, and compensating
+the impact of nuisance parameters has become one of the bottlenecks and will be the focus of our attention.
 
-in restricted and/or related cases such as
-[… ???]
 
-we tackle novel aspects of it, namely
-reproducing the full analysis pipeline use the size of the final confidence interval as a figure of merit which was not studied before on a realistic case.
-Furthermore, we cast the problem into a novel framework
-[… ???]
+Although it has been addressed in the past in several manners, including calibrating simulators with real data from independent measurements (citation), projecting data on hand-crafted feature(s) designed by an expert to factor out systematic effects (citation), and, more recently, training a learning machine with synthetic data to optimize such projection(s) (cite Pivot and Inferno), such methods have a number of limitations: the two former are man-power intensive, require domain knowledge, and may discard valuable information invisible to the human eye; the latter have shown promises on toy problems, but make strong hypotheses not verified in practice, such as separability of the effect of the parameter of interest and the nuisance parameters.
 
-clarifying the subject with respect to
-[… ???]
 
-and we propose and compare machine learning methods against established methods, such as
-standard classification or inference on the most promissing feature.
+We tackle novel aspects of this last line of research from three points of view: conceptual, algorithmic, and technical. Conceptually, we make connections between calibration of simulators and transfer learning, we clarify that systematic aware modeling implies disentangling nuisance factors as opposed to enforcing invariance to nuisance factors. We put in practice such concepts by designing learning machines, trained on simulated data, which predict nuisance factors and factor them into the prediction of the parameter of interest, when applied to real data.
 
-We are uniquely positioned to address this problem because
-this work follows the "wave" created by the higgsML challenge.
+Our contributions include proposing proposing novel algorithms to take into account systematic errors and benchmarking them against established methods, such as the ones mentionned before. We leverage our experience with the organization and analysis of the higgsML challenge, including the dataset, and evaluation methods, as well as collaborations with the LAL.
 
 
 MATERIAL AND METHODS:
-=====================
+---------------------
 
 To demonstrate advances on this problem, we use
 the publicly available higgsML challenge
 “real” data (data obtained with a realistic simulator),
-enhanced with a re-simulation process, develloped for this project,
+enhanced with a re-simulation process, developped for this project,
 recomputing all the attributes as if the full simulation were re-ran with different input parameters.
+[trop detaillé?]
 
 We also conduct systematic experiments on a set of smaller didactic examples to clarify the following points :
-- is using a simplified statistical model preventing to reach best possible performances
+- is using a poisson count process instead of the generative model preventing to reach best possible performances
 - sustainability of direct inference using modern neural network architecture.
 
 We benchmark 8 methods. Including
@@ -63,41 +76,34 @@ using mathematics of statistics techniques
 
 
 RESULTS:
-========
+--------
+
+[Ici on répond aux questions posées avant]
 
 Our results on realistic synthetic data demonstrate that
-using a simplified statistical model (Binned Poisson count process) allows to reach the same performances as using the true generative model.
-And the suitability of direct regression for inference.
+using a simplified statistical model (Binned Poisson count process) allows us to reach the same performances as using the true generative model.
+[ré-expliqué mieux]
 
 One particular highlight is:
-That direct inference may suffer from overconfidence in a small samples regime.
+[Using predictions of the nuisance parameters helps the estimations]
+the suitability of direct regression for inference. Although direct inference may suffer from overconfidence in a small samples regime.
 
 This opens the door to:
-Use of an hybrid pipeline using the direct inference to mine information about the nuisance parameters from the data.
+usage of an hybrid pipeline using the direct inference to mine information about the nuisance parameters from the data.
 But also more recent research around uncertainty estimations of neural network outputs to improve the direct inference pipeline.
 
-We noticed that, contrarily to results on smaller artificial examples, we have on realistic synthetic the following behavior
-[… ???]
-The improved pipeline does improves (FIXME wait for the final HIGGS-CALIB results !) is giving better MSE and/or size of the confidence interval.
+[être + précis sur le pipeline hybrid, c'est trop générique/flou]
+[Les ingrédients et comment ils se complémentent]
 
 This prompted us to make a more in depth and detailed study using artificial data, which revealed:
-A similar behaviour of a more complex 3D toy problem.
-
-This was further substantiated with a theoretical analysis (FIXME or not !??? No link with previous paragraph).
-We proved that
-carefully choosing the binning procedure is critical (but it is not new at all !).
-
-analytically. Although such theoretical results are limited by a given set of assumptions
- : the lack of nuisance parameter
-,
-they are corroborated by numerical experiments in the broader setting
-[… ???]
+that this hybrid pipeline is improving the inference (size of the confidence interval) for both the paramter of interest and the nuisance parameters.
 
 This leads us to conclude with confidence that
 extracting more information about the nuisance parameters always improve the resulting confidence interval.
 This is the main result of this thesis.
 
 We also conducted an analysis of the computational efficiency of the algorithms revealing that:
+[refaire : Pivot + tangent prop + DA = Inforcing invariance]
 tangent propagation suffers from the lack of jacobian vector product in common libraries,
 INFERNO is (FIXME : still true ???) very accurate,
 data augmentation shows good accuracy (FIXME : still true ???) and does not requires a differentiable generator,
@@ -105,25 +111,28 @@ and although direct regression is compuationnaly intensive for training its infe
 
 
 CONCLUSION AND FURTHER WORK:
-============================
+----------------------------
+
+[Ici c'est : tel résultat a montré que ... et donc on doit faire de tel manière]
 
 This work allowed us to advance the field of
-integrating machine learning into statistical analysis
-
+systematic aware learning
 in a number of directions, including
-opening the replacements of more parts of the pipeline by specialized neural network,
-and the importance of data mining various informations to impove modelization.
+insights that disentangling the parameters of interest from nuisance parameters is more valuable than invariance of systematic effect induces by those nuisance parameters,
+and the importance of data mining nuisance paramters related information to impove modelization.
 
 
 The framework we proposed helped us clarify and unify past work and allowed us to identify critics difficulties not anticipated, such as
 reaching an acurate measuring of the confidence interval which requires many parameter and algorithm adjustment for minimization;
+
+[… ] Likelihood free method ?
 
 [… ]
 
 With perseverance, we managed to understand such issues and resolve a number of them using
 a heuristic to choose the number of bins, adjust the minimal precision of the minimizer, using multiple minimization algorithm together to automatically reach the minimum;
 
-[… ]
+[… ] propose a direct aproach using modern neural network architecture to train a regressor on a dataset instead of individual instances;
 
 But much work remains to be done to improve
 integration of the final objective figure of merit when the simulator is not differentiable,
@@ -138,78 +147,23 @@ and robustness to nuisance parameters in a likelihood free inference framework.
 
 
 MAIN CONTRIBUTIONS (at least 5 points):
-=======================================
+---------------------------------------
 
 In summary, the main contributions of this thesis are:
 
-Implementation of a realistic fast re-simulator leveraging GPU computation.
-
-Technics to implement the standard pipeline and automate it.
+- Implementation of a realistic fast re-simulator leveraging GPU computation.
+- Technics to implement the standard pipeline and automate it.
 Like the algorithm chain to help the minimization step.
 Or the heuristic to choose the number of bins.
 (Or the details around training some of the compared ML models.)
 
-Experimental evidence against systematic invariance methods.
+- Experimental evidence against systematic invariance methods.
 The objective of the inference is clother to disentangling the parameter of interest from the nuisance parameters.
 
-Proof of concept using direct regression using modern neural network architectures.
+- Proof of concept using direct regression using modern neural network architectures.
 The speed of inference and simplicity of this direct pipeline comes at the expense of theoretical guarantees on the coverage of the confidence interval.
 
-An improved pipeline using additional data mining.
-Using a dataset wise neural network regressor to measure the nuisance parameters from experimental data it is possible to improve inference.
+- An improved pipeline using additional data mining.
+It is possible to improve inference by using a dataset wise neural network regressor to measure the nuisance parameters from experimental data .
 
-No free lunch : On the realistic problem the old ways using just one feature still offer competitive performance.
-
-
-
-NOTES
-=====
-
-Ne pas se focaliser sur les stats.
-Entre nous on sait la partie ML donc on en parle pas.
-Mais ici c'est du ML qui doit ressortir.
-
-Idée du Neural stat -> les exemples individuels ne donne pas d'info.
-C'est les ensembles qui contiennent l'info.
-
-C'est pas du transfert...
-Reprendre le sujet de thèse (document de départ) et le mettre à jour.
-Reprendre le papier de NIPS workshop version longue.
-Supervisé vs non-supervisé -> on veut valider la méthode (sur les simulations)
-
-Gap Réalité/Simulation -> transfert learning
-Transfert = utiliser les données réelles, sauf qu'on a besoin de valider le modèle...
-Mais comment valider un modèle utilisant les données réelle.
-Out of scope / trop dur / trop long de changer la méthode de validation du modèle/pipeline.
-
-Reg-Mamouth est à mettre en parallele ou en continuité d'INFERNO.
-
-Manque error stat et error syst dans le discours.
-Quid de l'influence de $\gamma << \beta$ sur error stat/syst ?
-
-
-Remarks
--------
-
-Définir en tant que problème de ML :
-- shift paramétrisé de la distribution de test. Multi param et non reversible. à la fin on a quand même qu'une valeur dans le test set.
-- Une forme de réduction de dimension ou de construction de summary stat
-- fonction objectif complexe (pas calculable). c'est réduire la taille l'interval de confiance *proxy loss*
-
-Les questions abordées :
-- How to train on a data bunch instead of data sample ?
-- How to train when the training distribution is "wrong" ?
-- How to train with intractable loss function ?
-- Measuring the Impact of training on a shifted distribution on a complex loss
-- comparing methods according to real objective instead of proxy.
-
-
-- On a pu éclaircir les interactions entre le ML et les systématiques
-
-
-
-
-<link rel="stylesheet" href="https://casual-effects.com/markdeep/latest/dark.css?">
-<style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style>
-<script>markdeepOptions={tocStyle:'none'};</script>
-<!-- Markdeep: --><script src="markdeep.min.js"></script><script src="https://casual-effects.com/markdeep/latest/markdeep.min.js?"></script><script>window.alreadyProcessedMarkdeep||(document.body.style.visibility="visible")</script>
+- No free lunch : On the realistic problem the old ways using just one feature still offer competitive performance.
