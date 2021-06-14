@@ -16,30 +16,9 @@ The direct regression method will be described in another document.
 
 
 
-General
+Generalities
 ===============================================================================
 
-Describes general features shared by all methods.
-
-Simulator
--------------------------------------------------------------------------------
-
-The **simulator** is a program allowing to sample a virtually infinite amount of data points $x$ given some parameters $\mu$ and $\alpha$.
-
-The simulator produces:
-- the *observables* as a matrix `X`
-- the *labels* as an array `y`
-- the sample (importance) *weights* `w`
-Usually those 3 elements will be gathered into one object (tuple) named `Data`.
-
-Usage (usually the number of samples will be discarded) :
-```python
-mu = 1
-alpha = 1
-Data <- simulator(mu, alpha, n_samples=5000)
-#  OR
-X, y, w <- simulator(mu, alpha, n_samples=5000)
-```
 
 Notations / Glossary
 -------------------------------------------------------------------------------
@@ -56,6 +35,47 @@ Notations / Glossary
 - $\beta_i$ : the expected number of background events in bin number $i$
 
 
+
+
+The generative model
+-------------------------------------------------------------------------------
+
+The studied phenomenon is described by a (statistical) model.
+This model relates the fundamental principles to the observations made during the experiment and is named *generative model*.
+This model has some free parameters that we have to adjust on the experimental data.
+
+These parameters are arbitrarily classified in two categories:
+1. the parameter(s) of interest whose measurement is the motivation of the experiment (noted $\mu$);
+2. the nuisance parameters (noted $\alpha$) which are necessary to report the observations but are not of scientific interest.
+
+
+
+Simulator
+-------------------------------------------------------------------------------
+
+The **simulator** is a program allowing to sample a virtually infinite amount of data points $x$, from the generative model, given some parameters $\mu$ and $\alpha$.
+
+The simulator produces:
+- the *observables* as a matrix `X`
+- the *labels* as an array `y`
+- the sample (importance) *weights* `w`
+Usually those 3 elements will be gathered into one object (tuple) named `Data`.
+
+Usage (usually the number of samples will be discarded) :
+```python
+mu = 1
+alpha = 1
+Data <- simulator(mu, alpha, n_samples=5000)
+#  OR
+X, y, w <- simulator(mu, alpha, n_samples=5000)
+```
+
+The ideal pipeline
+===============================================================================
+
+
+Example : the 1D toy problem
+-------------------------------------------------------------------------------
 
 
 
@@ -384,7 +404,7 @@ Training
 
 
 
-<!-- <link rel="stylesheet" href="https://casual-effects.com/markdeep/latest/dark.css?"> -->
+<link rel="stylesheet" href="https://casual-effects.com/markdeep/latest/dark.css?">
 <style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style>
 <script>markdeepOptions={tocStyle:'long'};</script>
 <!-- Markdeep: --><script src="markdeep.min.js"></script><script src="https://casual-effects.com/markdeep/latest/markdeep.min.js?"></script><script>window.alreadyProcessedMarkdeep||(document.body.style.visibility="visible")</script>
