@@ -1,3 +1,5 @@
+<meta charset="utf-8" emacsmode="-*- markdown -*-">
+
 APPRENTISSAGE ROBUSTE AU TRANSFERT, AVEC APPLICATION EN PHYSIQUE DES HAUTES ÉNERGIES
 ===========================
 
@@ -52,6 +54,8 @@ Our contributions include proposing proposing novel algorithms to take into acco
 MATERIAL AND METHODS:
 ---------------------
 
+[Ici pose les questions et on décrit comment on va y répondre]
+
 To demonstrate advances on this problem, we use
 the publicly available higgsML challenge
 “real” data (data obtained with a realistic simulator),
@@ -60,12 +64,16 @@ recomputing all the attributes as if the full simulation were re-ran with differ
 [trop detaillé?]
 
 We also conduct systematic experiments on a set of smaller didactic examples to clarify the following points :
-- is using a poisson count process instead of the generative model preventing to reach best possible performances
-- sustainability of direct inference using modern neural network architecture.
+- sustainability of direct inference using modern neural network architecture (for "easy" problems only ?).
+- is using a poisson count process instead of the generative model preventing to reach best possible performances [peu d'intérêt ?]
 
-We benchmark 8 methods. Including
+We benchmark 8 methods on a 30+ GPU cluster.
+Including
 standard classifiers, data augmentation, tangent propagation, pivotal neural network, inference aware neural optimization network, and direct regression.
-The experiments are carried out on a 30+ GPU cluster.
+For which we compare produced estimators with the standard pipeline alone to the pipeline using additional nuisance parameter related data mining.
+
+
+[Qu'est ce qu'on a comme résultats théoriques ?]
 
 In addition, several theoretical insights are obtained by analyzing successes and failures in numerical experiments.
 We derived several properties of
@@ -80,23 +88,26 @@ RESULTS:
 
 [Ici on répond aux questions posées avant]
 
+[Using predictions of the nuisance parameters helps the estimations]
 Our results on realistic synthetic data demonstrate that
-using a simplified statistical model (Binned Poisson count process) allows us to reach the same performances as using the true generative model.
-[ré-expliqué mieux]
+combining the standard method, optimized to extract parameter of interest related summary statistics, and nuisance parameter oriented data mining reduces uncertainty of the estimators.
+
+[être + précis sur le pipeline hybrid, c'est trop générique/flou]
+[Les ingrédients et comment ils se complémentent]
 
 One particular highlight is:
-[Using predictions of the nuisance parameters helps the estimations]
-the suitability of direct regression for inference. Although direct inference may suffer from overconfidence in a small samples regime.
+[...]
 
 This opens the door to:
 usage of an hybrid pipeline using the direct inference to mine information about the nuisance parameters from the data.
 But also more recent research around uncertainty estimations of neural network outputs to improve the direct inference pipeline.
 
-[être + précis sur le pipeline hybrid, c'est trop générique/flou]
-[Les ingrédients et comment ils se complémentent]
+
+the suitability of direct regression for inference. Although direct inference may suffer from overconfidence in a small samples regime.
+
 
 This prompted us to make a more in depth and detailed study using artificial data, which revealed:
-that this hybrid pipeline is improving the inference (size of the confidence interval) for both the paramter of interest and the nuisance parameters.
+[...]
 
 This leads us to conclude with confidence that
 extracting more information about the nuisance parameters always improve the resulting confidence interval.
@@ -151,19 +162,61 @@ MAIN CONTRIBUTIONS (at least 5 points):
 
 In summary, the main contributions of this thesis are:
 
+- An improved pipeline using additional data mining.
+It is possible to improve inference by using a dataset wise neural network regressor to measure the nuisance parameters from experimental data .
 - Implementation of a realistic fast re-simulator leveraging GPU computation.
 - Technics to implement the standard pipeline and automate it.
 Like the algorithm chain to help the minimization step.
 Or the heuristic to choose the number of bins.
 (Or the details around training some of the compared ML models.)
-
 - Experimental evidence against systematic invariance methods.
-The objective of the inference is clother to disentangling the parameter of interest from the nuisance parameters.
-
+The objective of the inference is disentangling the parameter of interest from the nuisance parameters.
 - Proof of concept using direct regression using modern neural network architectures.
 The speed of inference and simplicity of this direct pipeline comes at the expense of theoretical guarantees on the coverage of the confidence interval.
 
-- An improved pipeline using additional data mining.
-It is possible to improve inference by using a dataset wise neural network regressor to measure the nuisance parameters from experimental data .
 
-- No free lunch : On the realistic problem the old ways using just one feature still offer competitive performance.
+
+Notes:
+---------------------------------------
+
+Juste un coin où noter les choses utiles au résumé
+
+### La liste des questions et leur réponses
+
+Ici je rassemble la liste des questions auxquelles nos travaux répondent clairement.
+
+1. Comment intégrer + de features pour améliorer les estimateurs tout en limitant l'impact (négatif) des paramètres de nuisance qui les accompagnent ?
+    - Graçe à un data mining visant spécifiquement les paramètres de nuisance pour acompagner les summary statistics, qui elles visent spécifiquement le paramètre d'intérêt
+    - Rassembler ces deux informations améliore l'estimation
+    - réduction de l'interval de confiance sur le Toy 3D
+    - résultats similaires sur HiggsML en cour de solidification mais à l'oeil ça a l'ai bon.
+2. Est-ce que rendre robuste aux effets (géométriques induit par les) systématiques améliore systématiquement les estimateurs  ?
+    - S'il existe une projection (ou transformation) des données pour laquelle le paramètre d'intérêt et les paramètres de nuisance sont indépendants alors Oui (citation Pivot et success story de Pivot).
+    - Sinon la qualité des estimateurs sera insensible aux efforts fournis.
+3. Est-ce que l'on peut remplacer toute la chaine amenant à l'estimation par un apprentissage supervisé ?
+    - En utilisant le simulateur pour générer plein des paires (dataset, mu) au lieu de (event, label) on peut entrainer un réseaux de neuronne pour estimer directement mu
+    - :-)  C'est complètement domain knowledge free
+    - :-( Pas de garantie théorique forte sur l'estimation de l'incertitude sur mu
+
+
+### Autres observations
+
+Ici je rassemble les autres observations moins intéréssantes.
+Peut-être à garder pour la partie discussion ou autre.
+Bref que je ne juge pas utile pour le résumé.
+
+- La vielle méthode consistant à ne choisir qu'une feature et faire notre histogram dessus reste assez performante même si elle est systématiquement moins bonne qu'un simple classifieur
+    - Elle reste utile si l'on a besoin de résultat facile et rapide par exemple.
+- La partie technique comporte beaucoup de détails importants !
+    - Mettre en garde de futurs travaux : mesurer correctement l'intervalle de confiance demande de l'attention
+    - Il faut éviter des conclusions faussées par :
+        - Une mauvaise optimisation
+        - Une fuite de donnée du simulateur
+        - ?
+- using a simplified statistical model (Binned Poisson count process) allows us to reach the same performances as using the true generative model. [ré-expliqué mieux]
+
+
+<link rel="stylesheet" href="https://casual-effects.com/markdeep/latest/dark.css?">
+<style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style>
+<script>markdeepOptions={tocStyle:'none'};</script>
+<!-- Markdeep: --><script src="markdeep.min.js"></script><script src="https://casual-effects.com/markdeep/latest/markdeep.min.js?"></script><script>window.alreadyProcessedMarkdeep||(document.body.style.visibility="visible")</script>
