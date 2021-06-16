@@ -106,28 +106,35 @@ Le maximum likelihood est obtenu par une minimisation numérique de la negative 
 Boucle d'optimisation
 -------------------------------------------------------------------------------
 
-On représente ici la boucle d'optimisation.
+L'optimiseur choisi pour réaliser cette minimisation numérique est BFGS.
+En effet la pratique montre que souvent la forme de la NLL est convexe proche du minimum.
+Il suffit donc de commencer non loin du minimum ce qui est en général possible en science expérimentale car souvent les connaissances du domaine donnent un intervalle assez serré des valeurs probables du paramètre d'intérêt.
 
 ![Figure [fig:optimiseur_loop]:
   Optimiseur loop
 ](./modules/optimiseur_loop.png)
 
-Elle est composé de 3 modules :
+Elle est composé de 3 modules.
+
+Le premier calcule la valeur de la negative log likelihood $v$ à partir de valeur des paramètres $\mu$ et $\alpha$.
 
 ![Figure [fig:nll_value]:
   Negative log likelihood full computation module
 ](./modules/nll_value.png)
 
+Le second calcule le gradient de la negative log likelihood $g$ à partir de valeur des paramètres $\mu$ et $\alpha$.
 
 ![Figure [fig:gradient]:
   Gradient computation module
 ](./modules/gradient.png)
 
+Qui peut être une simple estimation par différence finie.
 
 ![Figure [fig:finite-diff]:
   Example of gradient estimation using finite differences
 ](./modules/finite_difference.png)
 
+Et le dernier module est l'optimiseur qui met à jour les valeurs de $\mu$ et $\alpha$ en fonction des valeurs de la NLL $v$ et de son gradient $g$.
 
 ![Figure [fig:optimiseur]:
   Optimiseur module
