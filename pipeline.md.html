@@ -70,8 +70,34 @@ Data <- simulator(mu, alpha, n_samples=5000)
 X, y, w <- simulator(mu, alpha, n_samples=5000)
 ```
 
+
+
 The ideal pipeline
 ===============================================================================
+
+
+Point estimation - Maximum likelihood
+-------------------------------------------------------------------------------
+
+- Maximum likelihood estimator
+- Minimizing negative log likelihood
+- Using Minuit's BFGS implementation
+
+
+
+Confidence interval estimation
+-------------------------------------------------------------------------------
+
+- Chi squarred approximation
+- Cramer-Rao bound
+- Using Minuit's Hesse implementation
+- Marginalization or Profiled likelihood
+- Using Minuit's Minos implementation
+
+
+Gathering it all
+-------------------------------------------------------------------------------
+
 
 
 Example : the 1D toy problem
@@ -79,26 +105,25 @@ Example : the 1D toy problem
 
 
 
-Standard Classifier method
+
+The standard pipeline
 ===============================================================================
 
-How to infer using a classifier.
 
-
-
-Training the classifier
+Intractable likelihood
 -------------------------------------------------------------------------------
 
-The classifier is trained on a simulated dataset generated with nominal values ie. with the expected or most probable values of $\mu$ and $\alpha$.
-Moreover the importance weights of signal and backgrounds are rebalanced (overrides the given value of $\mu$) to avoid issues with heavily imbalanced class.
+- Large dimensional intergral due to latent variables
 
 
-```python
-mu_nominal = 1
-alpha_nominal = 1
-Data_train_nominal <- simulator(mu_nominal, alpha_nominal)
-classifier <- SomeAlgo.fit(Data_train)
-```
+
+Poisson count process
+-------------------------------------------------------------------------------
+
+- Change to generative model for a simpler one
+- Poisson as an approximation of Binomial count
+- Binned Poisson count to reduce the variance
+
 
 
 The log likelihood
@@ -165,6 +190,26 @@ def formula(mu, alpha, gamma_i, beta_i, n_i):
 !!!
     Since the measurements may not be very informative about $\alpha$,
     the calibration is also very helpful to avoid plateau around the maximum likelihood or local maxima.
+
+
+
+Histograms for bins
+-------------------------------------------------------------------------------
+
+- Histograms don't scale to large dimensions
+- Classifiers as the best dimension reduction
+- Training the classifier
+
+The classifier is trained on a simulated dataset generated with nominal values ie. with the expected or most probable values of $\mu$ and $\alpha$.
+Moreover the importance weights of signal and backgrounds are rebalanced (overrides the given value of $\mu$) to avoid issues with heavily imbalanced class.
+
+
+```python
+mu_nominal = 1
+alpha_nominal = 1
+Data_train_nominal <- simulator(mu_nominal, alpha_nominal)
+classifier <- SomeAlgo.fit(Data_train)
+```
 
 
 
@@ -350,54 +395,20 @@ This gives a symetric interval assuming that the negative log likelihood is para
 
 
 
-Systematic aware classfiers
+
+
+The regressor pipeline
 ===============================================================================
 
-This section describes Data augmentation, Tangent propagation, Pivot.
-
-Differences with the Standard classifier pipeline
--------------------------------------------------------------------------------
-
-It is the exact same pipeline.
-Only the training is different.
-
-Data augmentation
--------------------------------------------------------------------------------
-
-!!! WARNING
-    TODO
-
-Tangent propagation
--------------------------------------------------------------------------------
-
-!!! WARNING
-    TODO
-
-
-Pivot
--------------------------------------------------------------------------------
-
-!!! WARNING
-    TODO
 
 
 
-Inferno
+
+
+The hybrid pipeline
 ===============================================================================
 
-Differences with the Standard classifier pipeline
--------------------------------------------------------------------------------
 
-!!! WARNING
-    TODO
-
-
-
-Training
--------------------------------------------------------------------------------
-
-!!! WARNING
-    TODO
 
 
 
