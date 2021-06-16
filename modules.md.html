@@ -1,0 +1,73 @@
+<meta charset="utf-8" emacsmode="-*- markdown -*-">
+
+**Modules**
+
+Description des différentes parties du montage expérimental.
+
+
+Généralités
+===============================================================================
+
+Notations / Glossary
+-------------------------------------------------------------------------------
+
+- $\mu$ : the parameter of interest (in general)
+- $\alpha$ : the nuisance parameter (in general)
+- $\mu^\star$ : the true unknown value of the parameter of interest that generated experimental data
+- $\alpha^\star$ : the true unknown value of the nuisance parameter that generated experimental data
+- $\hat \mu$ : the estimator of the parameter of interest
+- $\hat \alpha$ : the estimator of the nuisance parameter
+- $\gamma$ : the expected number of signal events
+- $\beta$ : the expected number of background events
+- $\gamma_i$ : the expected number of signal events in bin number $i$
+- $\beta_i$ : the expected number of background events in bin number $i$
+
+
+Liste des modules
+-------------------------------------------------------------------------------
+
+- [S] Simulateur
+- [O] Optimiseur / Minimizeur
+- [PL] Profiled likelihood fit (Minos)
+- [CR] Cramer-Rao bound (Hesse)
+- [T] Entrainement
+- [C] Classifieur
+- [H] Histogram
+- [NLL] Negative Log-Likelihood
+
+
+
+Liste des données
+-------------------------------------------------------------------------------
+
+- X = les observables
+- y = les labels
+- w = les poids
+- Data = (X, y, w)
+- $\mu$
+- $\alpha$
+- $\mu^\star$
+- $\alpha^\star$
+- $\hat \mu$
+- $\hat \alpha$
+- $\gamma$
+- $\beta$
+- $\gamma_i$
+- $\beta_i$
+- l = negative log-likelihood value
+- r_x = reduced X
+
+
+
+
+Le pipeline classique
+===============================================================================
+
+
+
+
+
+<link rel="stylesheet" href="https://casual-effects.com/markdeep/latest/dark.css?">
+<style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style>
+<script>markdeepOptions={tocStyle:'long'};</script>
+<!-- Markdeep: --><script src="markdeep.min.js"></script><script src="https://casual-effects.com/markdeep/latest/markdeep.min.js?"></script><script>window.alreadyProcessedMarkdeep||(document.body.style.visibility="visible")</script>
