@@ -100,7 +100,7 @@ Le pipeline idéale
 ===============================================================================
 
 Le pipeline idéale consiste à utiliser directement la likelihood du modèle génératif.
-Le maximum likelihood est obtenu par une minimisation numérique de la negative log likelihhod.
+Le maximum likelihood est obtenu par une minimisation numérique de la negative log likelihood.
 
 
 Boucle d'optimisation
@@ -117,6 +117,7 @@ Il suffit donc de commencer non loin du minimum ce qui est en général possible
 Elle est composé de 3 modules.
 
 Le premier calcule la valeur de la negative log likelihood $v$ à partir de valeur des paramètres $\mu$ et $\alpha$.
+Dans ce cas de pipeline idéale on applique simplement les formules données par le modèle génératif.
 
 ![Figure [fig:nll_value]:
   Negative log likelihood full computation module
@@ -145,41 +146,74 @@ Et le dernier module est l'optimiseur qui met à jour les valeurs de $\mu$ et $\
 Le pipeline classique
 ===============================================================================
 
+Dans le cas de HiggsML la likelihood du modèle génératif fait intervenir un très grand nombre de variables latentes.
+Calculer la likelihood requiert le calcul incalculable d'une intégrale de très haute dimension.
 
+On modifie donc le modèle décrivant le processus par un comptage Poissonien.
 
+!!! WARNING
+    TODO : ajouter l'explication pour utiliser Poisson (approx de Binomiale, etc) ?
 
-
+Ce qui rend le calcul de la negative log likelihood plus complexe.
 
 
 Calcul de la NLL
 -------------------------------------------------------------------------------
 
+Le calcul de la NLL inclus de nombreuses étapes dont la construction d'un histogramme visant à diminuer la taille de l'intervalle de confiance.
+
+Le calcul d'un histogramme voit sa complexité croître de façon exponentielle avec le nombre de dimension.
+Hors l'intérêt de ces travaux est d'exploiter plus d'observables donc d'augmenter la dimensionnalité des données.
+On réalise donc une réduction de dimension à l'aide d'un classifieur (ou d'une autre méthode).
+
+Le schéma général de calcul de la NLL est donc le suivant :
 
 ![Figure [fig:value_loop]:
-  Zoom on the negative log likelihood value module
+  Zoom on the negative log likelihood value module ($\mu^\star$ et $\alpha^\star$ sont en rouge car l'étoile se voit peu sur le schéma)
 ](./modules/value_loop.png)
 
+Le simulateur produit à la demande un dataset $X, y, w$ à partir de la seed $s$ et des paramètres $\mu$ et $\alpha$.
 
-![Figure [fig:clf]:
-  Classifieur
-](./modules/classifieur.png)
+![Figure [fig:simulation]:
+  Simulation module
+](./modules/simulation.png)
 
+
+Les données expérimentales sont générées une seule fois à partir d'une seed $s$ et des "vrais" paramètres caché que les estimateurs doivent retrouver.
 
 ![Figure [fig:xp]:
   Experience data
 ](./modules/experience.png)
 
-
-
-![Figure [fig:histogram]:
-  Histogram
-](./modules/histogram.png)
-
+Les données simulées sont séparées en 2 parties : signaux et backgrounds
 
 ![Figure [fig:label]:
   Label filter module
 ](./modules/label.png)
 
+
+Les données simulées et expérimentales sont réduites à 1 dimension par un classifieur.
+
+![Figure [fig:clf]:
+  Classifieur
+](./modules/classifieur.png)
+
+Les données réduites servent à produire les summary statistics par construction d'un histogramme.
+Ces summary statistics correspondent au nombre attendu par le modèle de signaux dans les bins ($\gamma_i$),
+au nombre attendu de backgrounds par le modèle dans les bins ($\beta_i$) et
+au nombre d'événement obtenu par l'expérience dans les bins ($n_i$)
+
+
+\begin{equation}
+  L(\mu, \alpha) =  Poisson(X | \mu, \alpha) \times Calib(Other measure | \mu, \alpha)
+\end{equation}
+
+![Figure [fig:histogram]:
+  Histogram
+](./modules/histogram.png)
+
+Les summary statistics servent alors à calculer la NLL (simple calcul d'une formule).
+La calibration est intégré dans ce calcul (mais pas représenté sur le schéma car c'est un élément fixe).
 
 ![Figure [fig:nll]:
   Negative log likelihood formulas computation
@@ -188,25 +222,39 @@ Calcul de la NLL
 
 
 
-![Figure [fig:regressor]:
-  Regressor
-](./modules/regressor.png)
-
-![Figure [fig:simulation]:
-  Simulation module
-](./modules/simulation.png)
-
-
-
 
 Les alternatives
 ===============================================================================
+
+
+L'estimation directe
+-------------------------------------------------------------------------------
+
+
+!!! WARNING
+    TODO
+
+
+
+
+Le pipeline hybride
+-------------------------------------------------------------------------------
+
+La différence est l'intégration d'une nouvelle mesure sur les données expérimentales s'ajoutant à la formule de la NLL de la même manière que la calibration.
+
+\begin{equation}
+  L(\mu, \alpha) =  Poisson(X | \mu, \alpha) \times Calib(Other measure | \mu, \alpha) \times N(\alpha | k )
+\end{equation}
 
 
 ![Figure [fig:value_loop_hybrid]:
   Zoom on the negative log likelihood value module using hybrid pipeline
 ](./modules/value_loop_hybrid.png)
 
+
+![Figure [fig:regressor]:
+  Regressor
+](./modules/regressor.png)
 
 
 
