@@ -108,15 +108,15 @@ the distribution of $−2 \log [ \lambda (\mu, Data) ]$ is approximately a $\chi
 
 
 
-Le pipeline idéale
+Le pipeline idéal
 ===============================================================================
 
-Le pipeline idéale consiste à utiliser directement la likelihood du modèle génératif.
+Le pipeline idéal consiste à utiliser directement la likelihood du modèle génératif.
 Le maximum likelihood est obtenu par une minimisation numérique de la negative log likelihood.
 
 Le principale point sur lequel les pipelines diffèrent est sur le calcul de la likelihood.
 
-Ici est présenté le pipeline idéale donnant les performances optimales.
+Ici est présenté le pipeline idéal donnant les performances optimales.
 Ce pipeline est réalisable sur les toys et permet de comparer les performances des autres pipelines au maximum théorique.
 
 Ce pipeline sert de base pour le pipeline classique et hybride.
@@ -139,7 +139,7 @@ Module V : calcul de la NLL
 -------------------------------------------------------------------------------
 
 Le premier calcule la valeur de la negative log likelihood $v$ à partir de valeur des paramètres $\mu$ et $\alpha$.
-Dans ce cas de pipeline idéale on applique simplement les formules données par le modèle génératif.
+Dans ce cas de pipeline idéal on applique simplement les formules données par le modèle génératif.
 
 ![Figure [fig:nll_value]:
   Negative log likelihood full computation module
@@ -224,7 +224,7 @@ Le schéma général de calcul de la NLL est donc le suivant :
 
 ![Figure [fig:value_loop]:
   Zoom on the negative log likelihood value module ($\mu^\star$ et $\alpha^\star$ sont en rouge car l'étoile se voit peu sur le schéma)
-](./modules/value_loop.png)
+](./modules/value_loop.png height="700px")
 
 
 
@@ -241,7 +241,7 @@ Le simulateur produit à la demande un dataset $X, y, w$ à partir de la seed $s
 Module XP : les données expérimentales
 -------------------------------------------------------------------------------
 
-Les données expérimentales sont générées une seule fois à partir d'une seed $s$ et des "vrais" paramètres caché que les estimateurs doivent retrouver.
+Les données expérimentales sont générées une seule fois à partir d'une seed $s$ et des "vrais" paramètres cachés que les estimateurs doivent retrouver.
 En production les données expérimentales proviendrais des mesure faite avec l'appareil de mesure.
 Ces données étant confidentielles nous utilisons ici le simulateur avec des valeurs cachées.
 Ceci facilite la mesure des performances puisque la vérité terrain est ainsi connue.
@@ -322,7 +322,7 @@ L'estimation directe
 
 
 !!! WARNING
-    TODO
+    TODO : Pour le moment j'ai exclu ce pipeline de ce document et des résultats expérimentaux.
 
 
 Inferno
@@ -346,7 +346,7 @@ La différence est l'intégration d'une nouvelle mesure sur les données expéri
 
 ![Figure [fig:value_loop_hybrid]:
   Zoom on the negative log likelihood value module using hybrid pipeline
-](./modules/value_loop_hybrid.png)
+](./modules/value_loop_hybrid.png height="700px")
 
 
 ![Figure [fig:regressor]:
@@ -413,7 +413,7 @@ C'est uniquement à l'étape de la construction de l'intervalle de confiance ou 
 
 Les divers estimateurs de $\mu$ et $\alpha$ sont caractérisés par 2 éléments qui définissent la manière de calculer la NLL :
 - Le pipeline utilisé
-    - idéale
+    - idéal
     - classique
     - régression directe
     - hybride
@@ -426,7 +426,7 @@ Les divers estimateurs de $\mu$ et $\alpha$ sont caractérisés par 2 éléments
     - feature filter
     - inferno
 
-Le pipeline idéale ou la régression directe ne requièrent pas de réduction de dimension donc pas de classifieurs ou d'inferno.
+Le pipeline idéal ou la régression directe ne requièrent pas de réduction de dimension donc pas de classifieurs ou d'inferno.
 
 
 Estimateurs de l'intervalle de mu
@@ -575,11 +575,11 @@ Je met les MSE plots ici pour éviter de surcharger les sections précédentes.
 Toy 1D
 -------------------------------------------------------------------------------
 
-Sur le toy 1D presque toutes les méthodes utilisant le pipeline classique ou hybride atteignent les mêmes performances que le pipeline idéale.
+Sur le toy 1D presque toutes les méthodes utilisant le pipeline classique ou hybride atteignent les mêmes performances que le pipeline idéal.
 Le problème est *trop simple*.
 Mais cela permet de montrer qu'il est possible d'atteindre des performances parfaite malgrés une modélisation différente (Poisson count process).
 
-Les intervalles de confiances du pipeline idéale sont un peu plus grand.
+Les intervalles de confiances du pipeline idéal sont un peu plus grand.
 Est-ce que c'est de l'over-confidence ou de l'under-coverage ?
 
 ![Figure [fig:GG-Prior-500]:
