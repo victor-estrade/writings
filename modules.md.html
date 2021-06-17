@@ -93,6 +93,8 @@ the distribution of $−2 \log [ \lambda (\mu, Data) ]$ is approximately a $\chi
 !!! WARNING
     TODO : find again why this is supposed to cover.
 
+!!! ERROR
+    TODO : Explain that Minos algorithm does not work in our case + the Hessian inverse approximation
 
 
 
@@ -204,16 +206,16 @@ au nombre attendu de backgrounds par le modèle dans les bins ($\beta_i$) et
 au nombre d'événement obtenu par l'expérience dans les bins ($n_i$)
 
 
-\begin{equation}
-  L(\mu, \alpha) =  Poisson(X | \mu, \alpha) \times Calib(Other measure | \mu, \alpha)
-\end{equation}
-
 ![Figure [fig:histogram]:
   Histogram
 ](./modules/histogram.png)
 
 Les summary statistics servent alors à calculer la NLL (simple calcul d'une formule).
 La calibration est intégré dans ce calcul (mais pas représenté sur le schéma car c'est un élément fixe).
+
+\begin{equation}
+L(\mu, \alpha) =  Poisson(X | \mu, \alpha) \times Calib(Other measure | \mu, \alpha)
+\end{equation}
 
 ![Figure [fig:nll]:
   Negative log likelihood formulas computation
@@ -235,6 +237,11 @@ L'estimation directe
     TODO
 
 
+Inferno
+-------------------------------------------------------------------------------
+
+La méthode INFERNO combine à la fois la réduction de dimension et la construction d'un histogramme.
+
 
 
 Le pipeline hybride
@@ -246,6 +253,8 @@ La différence est l'intégration d'une nouvelle mesure sur les données expéri
   L(\mu, \alpha) =  Poisson(X | \mu, \alpha) \times Calib(Other measure | \mu, \alpha) \times N(\alpha | k )
 \end{equation}
 
+!!! INFO
+    Validité de cette opération statistique ?  X et k ne sont pas indépendant...
 
 ![Figure [fig:value_loop_hybrid]:
   Zoom on the negative log likelihood value module using hybrid pipeline
@@ -262,11 +271,84 @@ La différence est l'intégration d'une nouvelle mesure sur les données expéri
 ===============================================================================
 
 
+Critères de performance
+-------------------------------------------------------------------------------
+
+Les diverses alternatives seront évaluées selon 2 critères :
+1. La Mean Squared Error (MSE) de l'estimateur de $\mu$
+2. La taille de l'intervalle de confiance
+
+La MSE combine à la fois le biais et la variance de l'estimateur qui sont primordiaux pour une mesure de qualité.
+Un estimateur biaisé est un estimateur quasiment inutilisable en Physique (source ?).
+De plus une grande variance implique une estimation peu stable donc assez peu satisfaisante.
+
+La MSE est donc la première mesure de performance pour sélectionner les hyper-paramètres des algorithmes de ML impliqué.
+
+La taille de l'intervalle de confiance est précisément ce que l'on souhaite réduire au maximum.
+Il représente l'incertitude finale sur le paramètre de nuisance.
+
+
+Mesure de performance
+-------------------------------------------------------------------------------
+
+Afin de mesurer la MSE des estimateurs le processus complet (entraînement et estimation) est répété 30 fois en changeant uniquement la seed.
+La seed contrôle à la fois l'échantillonnage du simulateur mais aussi l'initialisation de réseaux de neurones.
+
+
+
+Estimateur de mu et de alpha
+-------------------------------------------------------------------------------
+
+Lors de la maximisation de la likelihood $\mu$ et $\alpha$ sont traités exactement de la même manière.
+C'est uniquement à l'étape de la construction de l'intervalle de confiance ou de l'entrainement des réductions de dimension que la différence entre paramètre d'intérêt et de nuisance intervient.
+
+Les divers estimateurs de $\mu$ et $\alpha$ sont caractérisés par 2 éléments qui définissent la manière de calculer la NLL :
+- Le pipeline utilisé
+    - idéale
+    - classique
+    - regression directe
+    - hybride
+- La réduction de dimension utilisé
+    - classifieur classique
+    - data augmentation
+    - tangent propagation
+    - Pivotal neural network
+    - feature filter
+    - inferno
+
+Le pipeline idéale ou la régression directe ne requièrent pas de réduction de dimension donc pas de classifieurs ou d'inferno.
+
+
+Estimateurs de l'intervalle de mu
+-------------------------------------------------------------------------------
+
+Identiquement à l'estimation des paramètres du modèle statistique les différences sur l'estimation de l'intervalle de confiance proviennent de la façon de calculer la NLL.
+
 
 
 
 Claims
 ===============================================================================
+
+
+
+![Figure [fig:S3D2-Prior]:
+  Confidence interval length using classic and ideal pipeline on the 3D toy
+](./modules/S3D2-prior_min_avg_mse_N=30000-boxplot_sigma_mean.png)
+
+![Figure [fig:S3D2-Calib]:
+  Confidence interval length using hybrid and ideal pipeline on the 3D toy
+](./modules/S3D2-calib_min_avg_mse_N=30000-boxplot_sigma_mean.png)
+
+
+![Figure [fig:HiggsML-Prior]:
+  Confidence interval length using classic and ideal pipeline on the HiggsML data
+](./modules/HIGGSTES-prior_min_avg_mse_N=-1-boxplot_sigma_mean.png)
+
+![Figure [fig:HiggsML-Prior]:
+  Confidence interval length using classic and ideal pipeline on the HiggsML data
+](./modules/HIGGSTES-calib_min_avg_mse_N=-1-boxplot_sigma_mean.png)
+
 
 
 
@@ -277,7 +359,7 @@ Le mail
 
 (1) Schema général “classique”:
 
-[+] FIGURE: faire un graphe avec le pipeline general “classique” des physiciens
+[+] FIGURE: faire un graphe avec le pipeline général “classique” des physiciens
 		* numéroter les modules
 		* pour chaque module, indiquer
 			- quelles dont les données d’entrée  (par exemple, l’entrée d’un certain module pourrait être un "dataset d’evènements” ou un batch, ou un seul évènement, ou beta, ou gamma)
@@ -296,7 +378,7 @@ En se référent au graphe:
 		* identifier les méthodes alternatives aux procédures utilisées en (1) que tu as explorées dans ta thèse
 Si besoin est: faire un deuxième graphe avec un pipeline alternatif si les méthodes que tu as explorées ne fittent pas bien dans le pipeline classique
 
-(3) Evaluation empirique:
+(3) Évaluation empirique:
 		* Métriques de succès: qu'est-ce qu'on mesure pour comparer les résultats et évaluer les progrès?
 		* Estimateurs de mu: faire la liste des méthodes comparées (ou à comparer)
 		* Estimateurs de alpha: faire la liste des méthodes comparées (ou à comparer)
