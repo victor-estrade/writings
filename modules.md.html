@@ -131,6 +131,7 @@ On représente ici la boucle d'optimisation qui met à jour les valeurs de $\mu$
 
 Cette boucle est composé de 3 modules [O] [V] et [G] décrit dans les sections suivantes.
 
+
 Module V : calcul de la NLL
 -------------------------------------------------------------------------------
 
@@ -140,6 +141,9 @@ Dans ce cas de pipeline idéale on applique simplement les formules données par
 ![Figure [fig:nll_value]:
   Negative log likelihood full computation module
 ](./modules/nll_value.png)
+
+!!! INFO
+    réference dans le code : compute_nll()
 
 
 Module G : calcul du gradient de la NLL
@@ -151,11 +155,17 @@ Le second module calcule le gradient de la negative log likelihood $g$ à partir
   Gradient computation module
 ](./modules/gradient.png)
 
-Qui peut être une simple estimation par différence finie.
+Ce module peut être une simple estimation par différence finie.
 
 ![Figure [fig:finite-diff]:
   Example of gradient estimation using finite differences
 ](./modules/finite_difference.png)
+
+Mais en pratique une heuristique (toujours inconnue) est employée afin de trouver la meilleure valeur pour $\epsilon$.
+
+!!! INFO
+    réference dans le code : fonction ingerne à Minuit
+
 
 Module O : mise à jour des paramètres mu et alpha
 -------------------------------------------------------------------------------
@@ -170,8 +180,10 @@ Il suffit donc de commencer non loin du minimum ce qui est en général possible
   Optimiseur module
 ](./modules/optimiseur.png)
 
+La méthode de Nelder–Mead est parfois utilisé alternativement avec BFGS si ce dernier rencontre un problème pour atteindre le minimum.
 
-
+!!! INFO
+    réference dans le code : Minuit.Migrad() [BFGS] et Minuit.simplex() [Nelder-Mead] sont utilisés alternativement afin d'aider à la convergence.
 
 
 
