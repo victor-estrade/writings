@@ -226,6 +226,11 @@ Le schéma général de calcul de la NLL est donc le suivant :
   Zoom on the negative log likelihood value module ($\mu^\star$ et $\alpha^\star$ sont en rouge car l'étoile se voit peu sur le schéma)
 ](./modules/value_loop.png)
 
+
+
+Module S : le simulateur
+-------------------------------------------------------------------------------
+
 Le simulateur produit à la demande un dataset $X, y, w$ à partir de la seed $s$ et des paramètres $\mu$ et $\alpha$.
 
 ![Figure [fig:simulation]:
@@ -233,11 +238,22 @@ Le simulateur produit à la demande un dataset $X, y, w$ à partir de la seed $s
 ](./modules/simulation.png)
 
 
+Module XP : les données expérimentales
+-------------------------------------------------------------------------------
+
 Les données expérimentales sont générées une seule fois à partir d'une seed $s$ et des "vrais" paramètres caché que les estimateurs doivent retrouver.
+En production les données expérimentales proviendrais des mesure faite avec l'appareil de mesure.
+Ces données étant confidentielles nous utilisons ici le simulateur avec des valeurs cachées.
+Ceci facilite la mesure des performances puisque la vérité terrain est ainsi connue.
+
 
 ![Figure [fig:xp]:
   Experience data
 ](./modules/experience.png)
+
+
+Module L : séparation des signaux et background
+-------------------------------------------------------------------------------
 
 Les données simulées sont séparées en 2 parties : signaux et backgrounds
 
@@ -246,11 +262,22 @@ Les données simulées sont séparées en 2 parties : signaux et backgrounds
 ](./modules/label.png)
 
 
+Module C : classifieur
+-------------------------------------------------------------------------------
+
 Les données simulées et expérimentales sont réduites à 1 dimension par un classifieur.
+Le classifieur est entraîné en utilisant des données différentes provenant aussi du simulateurs.
+
+La réduction de dimension peut aussi être une simple sélection d'une observable.
+Cette méthode ne change rien au pipeline.
 
 ![Figure [fig:clf]:
   Classifieur
 ](./modules/classifieur.png)
+
+
+Module H : histogramme
+-------------------------------------------------------------------------------
 
 Les données réduites servent à produire les summary statistics par construction d'un histogramme.
 Ces summary statistics correspondent au nombre attendu par le modèle de signaux dans les bins ($\gamma_i$),
@@ -261,6 +288,10 @@ au nombre d'événement obtenu par l'expérience dans les bins ($n_i$)
 ![Figure [fig:histogram]:
   Histogram
 ](./modules/histogram.png)
+
+
+Module NLL : negative log likelihood
+-------------------------------------------------------------------------------
 
 Les summary statistics servent alors à calculer la NLL (simple calcul d'une formule).
 La calibration est intégré dans ce calcul (mais pas représenté sur le schéma car c'est un élément fixe).
