@@ -534,6 +534,15 @@ Ceci pourrait indiquer que nos toys sont mals choisis ?
 Ceci pourrait indiquer que le pouvoir séparateur (S vs B) de la réduction de dimension n'est pas nécessaire ?
 
 
+Claim 4 : Direct regression est possible
+-------------------------------------------------------------------------------
+
+Preuve de concepte sur les toys.
+Mais ça ne marche pas si l'effet du paramètre d'intérêt sur les distributions est trop faible.
+
+
+
+
 
 MSE plots
 -------------------------------------------------------------------------------
@@ -544,6 +553,10 @@ Je met les MSE plots ici pour éviter de surcharger les sections précédentes.
 ![Figure [fig:S3D2-Prior]:
   Confidence interval length using **classic** and ideal (label *likelihood*) pipeline on the 3D toy
 ](./modules/S3D2-prior_min_avg_mse_N=30000-boxplot_mse.png)
+
+!!! WARNING
+    La MSE de TP est très proche de zéro. C'est surprenant !
+    J'ai vérifié et c'est pas un bug. J'ignore pourquoi mais même Minos fonctionne pour ce cas.
 
 ![Figure [fig:S3D2-Calib]:
   Confidence interval length using **hybrid** and ideal (label *likelihood*) pipeline on the 3D toy
