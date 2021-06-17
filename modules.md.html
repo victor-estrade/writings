@@ -294,7 +294,8 @@ Module NLL : negative log likelihood
 -------------------------------------------------------------------------------
 
 Les summary statistics servent alors à calculer la NLL (simple calcul d'une formule).
-La calibration est intégré dans ce calcul (mais pas représenté sur le schéma car c'est un élément fixe).
+La calibration est intégrée dans ce calcul.
+La calibration n'est pas représentée sur le schéma pour l'alléger et parce qu'il s'agit d'un élément commun à toutes la variante du pipeline.
 
 \begin{equation}
 L(\mu, \alpha) =  Poisson(X | \mu, \alpha) \times Calib(Other measure | \mu, \alpha)
@@ -337,7 +338,7 @@ Le pipeline hybride
 La différence est l'intégration d'une nouvelle mesure sur les données expérimentales s'ajoutant à la formule de la NLL de la même manière que la calibration.
 
 \begin{equation}
-  L(\mu, \alpha) =  Poisson(X | \mu, \alpha) \times Calib(Other measure | \mu, \alpha) \times N(\alpha | k )
+  L(\mu, \alpha) =  Poisson(X | \mu, \alpha) \times Calib(Other measure | \alpha) \times N(\alpha | k )
 \end{equation}
 
 !!! INFO
@@ -385,6 +386,15 @@ Mesure de performance
 
 Afin de mesurer la MSE des estimateurs le processus complet (entraînement et estimation) est répété 30 fois en changeant uniquement la seed.
 La seed contrôle à la fois l'échantillonnage du simulateur mais aussi l'initialisation de réseaux de neurones.
+On échantillonne ainsi 30 valeurs de $\hat \mu$ et 30 intervalles.
+
+Ces échantillons dépendent des valeurs "vraies" $\mu^\star$ et $\alpha^\star$ choisies.
+Afin d'observer les performances en dehors du nominal on utilise 3 valeurs de $\alpha^\star$ : le nominal plus ou moins 1 déviation standard telle que définie par la calibration; de même 3, voir 4 si le temps de calcul le permet, valeurs de $\mu^\star$ sont utilisés [0.5, 1, 1.5, 2].
+
+Au final plusieurs dizaines d'estimation de $\hat \mu$ et de son intervalle de confiance sont réalisées afin de mesurer empiriquement la MSE et la taille moyenne de l'intervalle de confiance en fonction de $\mu^\star$ et $\alpha^\star$.
+
+
+
 
 
 
@@ -392,7 +402,7 @@ Estimateur de mu et de alpha
 -------------------------------------------------------------------------------
 
 Lors de la maximisation de la likelihood $\mu$ et $\alpha$ sont traités exactement de la même manière.
-C'est uniquement à l'étape de la construction de l'intervalle de confiance ou de l'entrainement des réductions de dimension que la différence entre paramètre d'intérêt et de nuisance intervient.
+C'est uniquement à l'étape de la construction de l'intervalle de confiance ou de l'entraînement des réductions de dimension que la différence entre paramètre d'intérêt et de nuisance intervient.
 
 Les divers estimateurs de $\mu$ et $\alpha$ sont caractérisés par 2 éléments qui définissent la manière de calculer la NLL :
 - Le pipeline utilisé
@@ -423,6 +433,13 @@ Illustration des résultats
 
 !!! WARNING
     TODO : Quelles tableaux/graphiques pour illustrer mes claims et comment ils sont obtenus
+
+Les performances mesurées sont la MSE et la taille moyenne de l'intervalle de confiance à $\mu^\star$ et $\alpha^\star$ fixé.
+Afin de comparer les diverses méthodes on plot sous forme de boite à moustache les critères de performances pour chaque méthode.
+Une boite resserrée indique une méthode stable vis-a-vis des variations de $\mu^\star$ et $\alpha^\star$.
+La hauteur de la boite (en particulier la médiane) indique la qualité de la méthode (pour les deux critères : lower is better).
+
+Des graphes remplaçant les boites à moustaches par moyenne/variance sont aussi disponible mais moins informatif (trop sensible aux valeurs extrêmes à mon goût).
 
 
 
