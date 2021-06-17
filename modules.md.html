@@ -389,10 +389,16 @@ La seed contrôle à la fois l'échantillonnage du simulateur mais aussi l'initi
 On échantillonne ainsi 30 valeurs de $\hat \mu$ et 30 intervalles.
 
 Ces échantillons dépendent des valeurs "vraies" $\mu^\star$ et $\alpha^\star$ choisies.
-Afin d'observer les performances en dehors du nominal on utilise 3 valeurs de $\alpha^\star$ : le nominal plus ou moins 1 déviation standard telle que définie par la calibration; de même 3, voir 4 si le temps de calcul le permet, valeurs de $\mu^\star$ sont utilisés [0.5, 1, 1.5, 2].
+Afin d'observer les performances en dehors du nominal on utilise 3 valeurs de $\alpha^\star$ : le nominal plus ou moins 1 déviation standard telle que définie par la calibration; plusieurs valeurs de $\mu^\star$ sont utilisés :
+-  HiggsML [0.5, 1, 1.5, 2]
+-  Toy 1D [0.5, 0.75, 1, 1.25, 1.5]
+-  Toy 3D [0.5, 1.25, 2]
+
+!!! ERROR
+    Et merde ! Le nominal est pas inclus dans le toy 3D.
+    À corriger.
 
 Au final plusieurs dizaines d'estimation de $\hat \mu$ et de son intervalle de confiance sont réalisées afin de mesurer empiriquement la MSE et la taille moyenne de l'intervalle de confiance en fonction de $\mu^\star$ et $\alpha^\star$.
-
 
 
 
