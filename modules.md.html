@@ -28,7 +28,10 @@ Notations / Glossary
 - v : negative log-likelihood value
 - d : reduction of X to 1D (classifier decision for example)
 
-
+!!! WARNING
+    Pour alléger les notations dans les schémas les données ou valeurs calculées peuvent utiliser les mêmes lettres.
+    Les lettres (X, v, d, etc) servent surtout à décrire la nature de la grandeur (dataset, valeur de NLL, décision d'un classifieur, etc).
+    Les données ayant les mêmes lettres ne contiennent pas les mêmes valeurs si elles n'ont pas été obtenue par le même chemin de calcul.
 
 Estimateurs des paramètres
 -------------------------------------------------------------------------------
@@ -197,7 +200,7 @@ Le pipeline classique
 ===============================================================================
 
 Dans le cas de HiggsML la likelihood du modèle génératif fait intervenir un très grand nombre de variables latentes.
-Calculer la likelihood requiert le calcul incalculable d'une intégrale de très haute dimension.
+Calculer la likelihood requiert le calcul irréalisable d'une intégrale de très haute dimension.
 
 On modifie donc le modèle décrivant le processus par un comptage Poissonien.
 
@@ -205,6 +208,7 @@ On modifie donc le modèle décrivant le processus par un comptage Poissonien.
     TODO : ajouter l'explication pour utiliser Poisson (approx de Binomiale, etc) ?
 
 Ce qui rend le calcul de la negative log likelihood plus complexe.
+Les modifications de la NLL sont le sujet principal de cette section.
 
 
 Calcul de la NLL
