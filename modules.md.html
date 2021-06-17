@@ -98,25 +98,41 @@ the distribution of $−2 \log [ \lambda (\mu, Data) ]$ is approximately a $\chi
 
 
 
+
+
+
+
+
+
+
 Le pipeline idéale
 ===============================================================================
 
 Le pipeline idéale consiste à utiliser directement la likelihood du modèle génératif.
 Le maximum likelihood est obtenu par une minimisation numérique de la negative log likelihood.
 
+Le principale point sur lequel les pipelines diffèrent est sur le calcul de la likelihood.
+
+Ici est présenté le pipeline idéale donnant les performances optimales.
+Ce pipeline est réalisable sur les toys et permet de comparer les performances des autres pipelines au maximum théorique.
+
+Ce pipeline sert de base pour le pipeline classique et hybride.
+
 
 Boucle d'optimisation
 -------------------------------------------------------------------------------
 
-L'optimiseur choisi pour réaliser cette minimisation numérique est BFGS.
-En effet la pratique montre que souvent la forme de la NLL est convexe proche du minimum.
-Il suffit donc de commencer non loin du minimum ce qui est en général possible en science expérimentale car souvent les connaissances du domaine donnent un intervalle assez serré des valeurs probables du paramètre d'intérêt.
+L'optimisation numérique employé est une descente de gradient.
+On représente ici la boucle d'optimisation qui met à jour les valeurs de $\mu$ et $\alpha$ à l'aide d'évaluations successive de la NLL afin de se rapprocher du minimum.
 
 ![Figure [fig:optimiseur_loop]:
   Optimiseur loop
 ](./modules/optimiseur_loop.png)
 
-Elle est composé de 3 modules.
+Cette boucle est composé de 3 modules [O] [V] et [G] décrit dans les sections suivantes.
+
+Module V : calcul de la NLL
+-------------------------------------------------------------------------------
 
 Le premier calcule la valeur de la negative log likelihood $v$ à partir de valeur des paramètres $\mu$ et $\alpha$.
 Dans ce cas de pipeline idéale on applique simplement les formules données par le modèle génératif.
@@ -125,7 +141,11 @@ Dans ce cas de pipeline idéale on applique simplement les formules données par
   Negative log likelihood full computation module
 ](./modules/nll_value.png)
 
-Le second calcule le gradient de la negative log likelihood $g$ à partir de valeur des paramètres $\mu$ et $\alpha$.
+
+Module G : calcul du gradient de la NLL
+-------------------------------------------------------------------------------
+
+Le second module calcule le gradient de la negative log likelihood $g$ à partir de valeur des paramètres $\mu$ et $\alpha$.
 
 ![Figure [fig:gradient]:
   Gradient computation module
@@ -137,11 +157,27 @@ Qui peut être une simple estimation par différence finie.
   Example of gradient estimation using finite differences
 ](./modules/finite_difference.png)
 
+Module O : mise à jour des paramètres mu et alpha
+-------------------------------------------------------------------------------
+
 Et le dernier module est l'optimiseur qui met à jour les valeurs de $\mu$ et $\alpha$ en fonction des valeurs de la NLL $v$ et de son gradient $g$.
+
+L'optimiseur choisi pour réaliser cette minimisation numérique est BFGS.
+En effet la pratique montre que souvent la forme de la NLL est convexe proche du minimum.
+Il suffit donc de commencer non loin du minimum ce qui est en général possible en science expérimentale car souvent les connaissances du domaine donnent un intervalle assez serré des valeurs probables du paramètre d'intérêt.
 
 ![Figure [fig:optimiseur]:
   Optimiseur module
 ](./modules/optimiseur.png)
+
+
+
+
+
+
+
+
+
 
 
 
@@ -225,6 +261,10 @@ L(\mu, \alpha) =  Poisson(X | \mu, \alpha) \times Calib(Other measure | \mu, \al
 
 
 
+
+
+
+
 Les alternatives
 ===============================================================================
 
@@ -264,6 +304,11 @@ La différence est l'intégration d'une nouvelle mesure sur les données expéri
 ![Figure [fig:regressor]:
   Regressor
 ](./modules/regressor.png)
+
+
+
+
+
 
 
 
@@ -326,11 +371,21 @@ Identiquement à l'estimation des paramètres du modèle statistique les différ
 
 
 
+Illustration des résultats
+-------------------------------------------------------------------------------
+
+!!! WARNING
+    TODO : Quelles tableaux/graphiques pour illustrer mes claims et comment ils sont obtenus
+
+
+
 
 Claims
 ===============================================================================
 
 
+!!! WARNING
+    TODO : quels sont mes claims + les illustrations
 
 ![Figure [fig:S3D2-Prior]:
   Confidence interval length using classic and ideal pipeline on the 3D toy
