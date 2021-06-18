@@ -56,6 +56,12 @@ The objective is to measure the frequency, or probability, of this event to occu
 Leading to a counting experiment of the number of signals $s$ and the number of backgrounds $b$ to estimate the quantity of interest $f = \frac{s}{s + b}$.
 From this frequency and the setup of the experiment (luminosity, etc) it is possible to compute the *cross-section* (or branch factor ?) of the $H \to \tau \tau$ process which is the final goal of the study.
 
+For numerical stability the frequency is not directly measured.
+Instead a deviation $\mu$ from the "standard" value $f_0$ (computed using domain knwoledge) is the goal :
+\begin{equation}
+  f = \mu f_0
+\end{equation}
+
 In many interesting cases, including ours, the nature of the event (signal / background) are not among the possible measurements that can be made.
 Counting signals and backgrounds requires extra work which is described in this document.
 
@@ -69,7 +75,7 @@ In other words we are fitting the SM parameters to the data of the experiment.
 
 Let $x$ be the observables ie the data collected by the apparatus for a single event and $p(x)$ its probability density.
 The LHC produces a large quantity of events while ensuring that the conditions are the same for all events.
-Hence we can assume that the full dataset $D$ contains $N$ independant and identically distributed (iid) events $D = \{x_i\}_{i=1}^N$.
+Hence we can assume that the full dataset $X$ contains $N$ independant and identically distributed (iid) events $X = \{x_i\}_{i=1}^N$.
 
 Going from the fundamental parameters to the observables is very complex and not in the direct interest of this study.
 The full process can be summaried into four major steps :

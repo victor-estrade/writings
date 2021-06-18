@@ -19,7 +19,7 @@ Vue d'ensemble
 -------------------------------------------------------------------------------
 
 L'appareil de mesure échantillonne des évènements **iid** dans la nature.
-Ces events sont décris par des observables et rassemblé dans un jeu données $X$.
+Ces events sont décris par des observables et rassemblés dans un jeu données $X$.
 
 L'objectif est d'en extraire les estimateurs des paramètres $\hat \mu$, $\hat \alpha$ et l'intervalle de confiance de $\mu$ noté $\hat ci$.
 
@@ -42,6 +42,8 @@ On représente ici la boucle d'optimisation qui met à jour les valeurs de $\mu$
 
 Cette boucle est composé de 3 modules [O] [V] et [G] décrit dans les sections suivantes.
 
+!!! Tip
+    Les données expérimentales sont inclues dans le module [V] mais ne sont pas représenté car c'est une donnée fixe du problème.
 
 Module V : calcul de la NLL
 -------------------------------------------------------------------------------
@@ -75,7 +77,7 @@ Ce module peut être une simple estimation par différence finie.
 Mais en pratique une heuristique (toujours inconnue) est employée afin de trouver la meilleure valeur pour $\epsilon$.
 
 !!! INFO
-    réference dans le code : fonction ingerne à Minuit
+    réference dans le code : fonction interne à Minuit
 
 
 Module O : mise à jour des paramètres mu et alpha
