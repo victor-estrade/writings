@@ -57,7 +57,7 @@ Confidence interval are computed by inverting a hypothesis test.
 
 $H_0(\mu = \hat \mu)$ and $H_1(\mu \neq \hat \mu)$.
 
-A likelihood ratio test is conduct and the acceptance region is taken as the confidence interval.
+A likelihood ratio test is conducted and the acceptance region is taken as the confidence interval.
 
 A standard likelihood ratio looks like :
 \begin{equation}
@@ -73,7 +73,7 @@ The second is prefered in our case for yet-to-discovered reasons.
 !!! Tip
     I could not find why marginalization is not even considered in the papers I read.
 
-A profiled likelihood test is conduct "and inverted" to compute the confidence interval of $\star \mu$.
+A profiled likelihood test is conduct "and inverted" to compute the confidence interval of $\mu$.
 
 \begin{equation}
 \lambda(\mu, Data) =  \frac{\sup_{\alpha} L(Data | \mu \neq \hat \mu, \alpha)}{\sup_{\mu, \alpha} L(Data | \mu, \alpha)}
@@ -417,7 +417,7 @@ Les divers estimateurs de $\mu$ et $\alpha$ sont caractérisés par 2 éléments
     - classique
     - régression directe
     - hybride
-- La réduction de dimension utilisé
+- La réduction de dimension utilisée
     - classifieur classique : Gradient boosting
     - classifieur classique : Neural network
     - data augmentation
@@ -426,7 +426,7 @@ Les divers estimateurs de $\mu$ et $\alpha$ sont caractérisés par 2 éléments
     - feature filter
     - inferno
 
-Le pipeline idéal ou la régression directe ne requièrent pas de réduction de dimension donc pas de classifieurs ou d'inferno.
+Le pipeline idéal ou la régression directe n'emploient pas de réduction de dimension donc pas de classifieurs ou d'inferno.
 
 
 Estimateurs de l'intervalle de mu
@@ -460,7 +460,7 @@ Claims
     TODO : quels sont mes claims + les illustrations
 
 !!! WARNING
-    TODO : Je ne montre pas MSE ici. Que la taille de l'intervalle de confiance. il manque la moitié de l'info
+    TODO : Je ne commente pas MSE ici. Que la taille de l'intervalle de confiance. il manque la moitié de l'info
 
 
 Claim 1 : Hybrid pipeline improves on 3D Toy
@@ -468,7 +468,7 @@ Claim 1 : Hybrid pipeline improves on 3D Toy
 
 **Le pipeline hybride ne diminue jamais les performances et dans le cas du toy 3D il les améliore et permet d'atteindre les limites théoriques.**
 
-Sur HiggsML (avec 1 paramètre de nuisance [TES]) l'effet sur la taille de l'intervalle de confiance n'est pas très clair.
+Sur HiggsML (avec 1 paramètre de nuisance [TES]) l'effet sur la taille de l'intervalle de confiance est moins prononcé.
 Mais la MSE diminue pour la plupart des modèles (cf plots dans section plus bas).
 
 
@@ -506,12 +506,11 @@ Claim 2 : Ne pas chercher la robustesse aux effet systématique
 L'objectif est de démêler le paramètre d'intérêt des paramètres de nuisance et non pas de rendre introuvable les paramètres de nuisance.
 
 Tangent propagation, Pivot, Data augmentation ne s'en sorte pas mieux que les classifieur standard.
-
-!!! WARNING
-    TODO : Quid d'INFERNO ? Run en cours.
+En particulier Gradient Boosting qui est excellent même en absence de pipeline hybride.
 
 !!! Tip
     Même graphiques que précédemment.
+
 
 
 Claim 3 : Surprise ! HiggsML : simple feature
@@ -570,6 +569,18 @@ Je met les MSE plots ici pour éviter de surcharger les sections précédentes.
 ![Figure [fig:HiggsML-Prior]:
   Confidence interval length using **hybrid** pipeline on the HiggsML data
 ](./modules/HIGGSTES-calib_min_avg_mse_N=-1-boxplot_mse.png)
+
+
+
+
+Lien entre MSE et taille de l'intervalle ?
+-------------------------------------------------------------------------------
+
+
+!!! WARNING
+    TODO : Y-a-t-il un lien entre MSE et taille de l'intervalle de confiance ?
+    L'intuition voudrait que MSE petite implique sigma_mu petit.
+
 
 
 Toy 1D
