@@ -1,0 +1,57 @@
+<meta charset="utf-8" emacsmode="-*- markdown -*-">
+
+
+
+
+Le mail
+===============================================================================
+
+
+(1) Schema général “classique”:
+-------------------------------------------------------------------------------
+
+[+] FIGURE: faire un graphe avec le pipeline général “classique” des physiciens:
+		* numéroter les modules
+		* pour chaque module, indiquer
+			- quelles dont les données d’entrée  (par exemple, l’entrée d’un certain module pourrait être un "dataset d’evènements” ou un batch, ou un seul évènement, ou beta, ou gamma)
+			- quelles sont les données de sortie (par exemple mu, alpha, la barre d’erreur de mu, l’incertitude sur la barre d’erreur de mu)
+
+[+] SUPPORT DE FIGURE (texte):
+	pour chaque module (identifié par son numéro), indiquer
+		* les procédures utilisées avec leur nom
+		* leur rôle
+
+
+(2) Bottlenecks, points sensibles, et méthodes spécifiques:
+-------------------------------------------------------------------------------
+
+En se référent au graphe:
+		* identifier les modules “sensibles" (avec leur numéro)
+		* identifier les méthodes alternatives aux procédures utilisées en (1) que tu as explorées dans ta thèse
+Si besoin est: faire un deuxième graphe avec un pipeline alternatif si les méthodes que tu as explorées ne fittent pas bien dans le pipeline classique
+
+(3) Évaluation empirique:
+-------------------------------------------------------------------------------
+
+		* Métriques de succès: qu'est-ce qu'on mesure pour comparer les résultats et évaluer les progrès?
+		* Estimateurs de mu: faire la liste des méthodes comparées (ou à comparer)
+		* Estimateurs de alpha: faire la liste des méthodes comparées (ou à comparer)
+		* Estimateurs de l’incertitude sur mu: faire la liste des méthodes comparées (ou à comparer)
+		* Comment l'estimer empiriquement la variance des estimateurs de mu, alpha et le barre d’erreur sur mu?
+		* Quels graphes ou figures illustrent bien les progrès dans les résultats (donner un exemple typique de chaque graphe avec un texte expliquant comment les interprêter; pas plus de 2 ou 3 graphes)
+
+(4) Claims:
+-------------------------------------------------------------------------------
+
+- Faire une liste des résultats empiriques (obtenus ou souhaités si les experiences n’ont pas encore été faites ou sont à refaire) conduisant à des conclusions positives ou négatives
+- Faire un graphe (même hypothétique si les résultats ne sont pas encore là) illustrant chaque résultat
+- Faire une description du protocole experimental ayant conduit à ces résultats
+
+
+
+
+
+<!-- <link rel="stylesheet" href="https://casual-effects.com/markdeep/latest/dark.css?"> -->
+<style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style>
+<script>markdeepOptions={tocStyle:'long'};</script>
+<!-- Markdeep: --><script src="markdeep.min.js"></script><script src="https://casual-effects.com/markdeep/latest/markdeep.min.js?"></script><script>window.alreadyProcessedMarkdeep||(document.body.style.visibility="visible")</script>

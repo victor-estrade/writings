@@ -1,0 +1,197 @@
+<meta charset="utf-8" emacsmode="-*- markdown -*-">
+
+
+Généralités
+===============================================================================
+
+Cette section rassemble des éléments pour introduire et contextualiser le problème étudié.
+
+
+Notations / Glossary
+-------------------------------------------------------------------------------
+
+- $\mu$ : the parameter of interest (in general)
+- $\alpha$ : the nuisance parameter (in general)
+- $\mu^\star$ : the true unknown value of the parameter of interest that generated experimental data
+- $\alpha^\star$ : the true unknown value of the nuisance parameter that generated experimental data
+- $\hat \mu$ : the estimator of the parameter of interest
+- $\hat \alpha$ : the estimator of the nuisance parameter
+- $\gamma$ : the expected number of signal events
+- $\beta$ : the expected number of background events
+- $\gamma_i$ : the expected number of signal events in bin number $i$
+- $\beta_i$ : the expected number of background events in bin number $i$
+- X : les observables
+- y : les labels
+- w : les poids
+- Data : (X, y, w)
+- v : negative log-likelihood value
+- d : reduction of X to 1D (classifier decision for example)
+
+!!! WARNING
+    Pour alléger les notations dans les schémas les données ou valeurs calculées peuvent utiliser les mêmes lettres.
+    Les lettres (X, v, d, etc) servent surtout à décrire la nature de la grandeur (dataset, valeur de NLL, décision d'un classifieur, etc).
+    Les données ayant les mêmes lettres ne contiennent pas les mêmes valeurs si elles n'ont pas été obtenue par le même chemin de calcul.
+
+
+The System
+-------------------------------------------------------------------------------
+
+The system producing the data studied in this analysis is the famous Large Hadron Collider (LHC).
+The LHC is an international collaboration, involving thousands of people and housing many HEP experiments.
+Without getting into the details, a particle collider is a machine accelerating small bricks of matter, protons in this case, in opposite direction to smash them against each others.
+The resulting collision produces high energy particles whose properties are captured by the various measurement apparatus which, for simplicity, can be reduced to a giant camera.
+
+The hard collisions, usually named *event* in the High Energy Physics (HEP) community, are way rarer than the soft one.
+The process creating the high energy particles is fundamentally stochastic.
+Meaning that the nature and properties (eg. kinematics) of the process producing particles are not fully predictable but follow
+probability distributions whose shapes and properties are deterministics.
+
+The vast majority of the processes are already well known.
+To produce (very) rare therefore interesting processes the accelerator must produce a collosal number of collisions.
+
+The one that motivates this work is a study of a specific process ($H \to \tau \tau$).
+Basically an event produced a Higgs boson which desintegrated into 2 $\tau$ particles.
+Each event following this process is defined as a *signal* event versus the *background* events that gather all the other processes.
+The objective is to measure the frequency, or probability, of this event to occur.
+Leading to a counting experiment of the number of signals $s$ and the number of backgrounds $b$ to estimate the quantity of interest $f = \frac{s}{s + b}$.
+From this frequency and the setup of the experiment (luminosity, etc) it is possible to compute the *cross-section* (or branch factor ?) of the $H \to \tau \tau$ process which is the final goal of the study.
+
+In many interesting cases, including ours, the nature of the event (signal / background) are not among the possible measurements that can be made.
+Counting signals and backgrounds requires extra work which is described in this document.
+
+
+The model for HiggsML
+-------------------------------------------------------------------------------
+
+The Standard Model (SM) is the theory describing quantum physics including particle collisions and productions.
+The counting experiment final objective is to improve our knowledge of one of the free parameter of the SM.
+In other words we are fitting the SM parameters to the data of the experiment.
+
+Let $x$ be the observables ie the data collected by the apparatus for a single event and $p(x)$ its probability density.
+The LHC produces a large quantity of events while ensuring that the conditions are the same for all events.
+Hence we can assume that the full dataset $D$ contains $N$ independant and identically distributed (iid) events $D = \{x_i\}_{i=1}^N$.
+
+Going from the fundamental parameters to the observables is very complex and not in the direct interest of this study.
+The full process can be summaried into four major steps :
+- The collision between particles
+- The particle production from the collision
+- The journey of the created particles to the apparatus (particle desintegrations into other particles, interactions between produced particles, etc)
+- Reaction of the measurement apparatus to the particles going through it.
+Each of these steps requires special care from the community to be accurately modeled.
+
+The vast majority of the intermediate quantities are latent or hidden variables, noted $z$.
+One of this latent variable was already mentioned previously : the *label* of the event indicating the nature of the process, in our case if it is a *signal* or a *background* event.
+
+In this study the parameter of interest, noted $\mu$, is a fundamental parameter intervening at the particle collision stage (ie step 1).
+
+Finally gathering all the ingredients the generative model can be splited in 3 stages :
+\begin{equation}
+	\label{eq:model_simple}
+	p(x, \mu, z) = p(x|z) p(z | \mu) p(\mu)
+\end{equation}
+In other words the fundamental parameter $\mu$ shapes the distribution of the latent variable $z$.
+And the data distribution depends on the latent variable $z$.
+$p(\mu)$ is the prior knowledge, it contains all the belief of the community.
+Of course the belief of the community is only based on results of previous experiments or non-informative if there is no previous experiments.
+
+Note : we assume here that $\mu$ is the only fundamental parameter for simplicity.
+In a more realistic model, like the standard model, there are more fundamental parameters.
+To these fundamental parameters one should also take into account the parameters intervening in the apparatus response modeling.
+
+All the ramaining parameters are gathered into one vector, noted $\alpha$, and are refered to as *nuisance parameters* as  opposed to the *parameter of interest* $\mu$.
+
+
+\begin{equation}
+	\label{eq:model_nuisance}
+	p(x, \mu, \alpha, z) = p(x|z) p(z | \mu, \alpha) p(\mu) p(\alpha)
+\end{equation}
+
+
+The true value of $\mu$, assuming that the model is perfectly describing Nature's behaviour, is noted $\mu^\star$ as opposed to $\hat \mu$ the estimated value from the data.
+Of course the objective is to build an estimator $\hat \mu$ whose value is as close as possible to the true value $\mu^\star$.
+But also to estimate a confidence interval $ci$ to account for the uncertainty on the value of $\hat \mu$.
+
+
+
+
+Estimateurs des paramètres
+-------------------------------------------------------------------------------
+
+L'objectif des processus décris ici est d'estimer la valeur et l'intervalle de confiance du paramètre d'intérêt.
+Cette sous-section se concentre sur l'estimateur de la valeur du paramètre d'intérêt.
+L'estimateur que l'on utilise est le maximum likelihood.
+
+On va donc chercher les valeurs des paramètres $\mu$ et $\alpha$ qui maximise la probabilité d'avoir généré les données observés $X$.
+
+\begin{equation}
+  \hat \mu, \hat \alpha = argmax_{\mu, \alpha} p(X | \mu, \alpha)
+\end{equation}
+
+On note qu'à cette étape les paramètres de nuisance et le paramètres d'intérêt sont traités exactement de la même manière.
+La distinction entre ces deux catégories n'intervient que pour l'estimation de l'intervalle de confiance.
+
+Dans les cas qui nous intéressent il n'est pas possible de trouver de formule fermée pour calculer ce maximum.
+On utilise à la place un optimiseur numérique.
+Il nous faudra donc seulement être capable de calculer la likelihood.
+
+Puis l'intervalle de confiance est estimé à partir de se maximum par une méthode graphique.
+
+
+Estimateurs de l'intervalle
+-------------------------------------------------------------------------------
+
+L'estimation de l'intervalle de confiance est réalisé par une méthode graphique.
+
+Confidence interval are computed by inverting a hypothesis test.
+
+$H_0(\mu = \hat \mu)$ and $H_1(\mu \neq \hat \mu)$.
+
+A likelihood ratio test is conducted and the acceptance region is taken as the confidence interval.
+
+A standard likelihood ratio looks like :
+\begin{equation}
+\lambda =  \frac{L(Data | \mu \neq \hat \mu)}{L(Data | \mu = \hat \mu)}
+\end{equation}
+
+But to get rid of the nuisance parameter $\alpha$ there is 2 options :
+1. Marginalization
+2. Profiled likelihood
+
+The second is prefered in our case for yet-to-discovered reasons.
+
+!!! Tip
+    I could not find why marginalization is not even considered in the papers I read.
+
+A profiled likelihood test is conduct "and inverted" to compute the confidence interval of $\mu$.
+
+\begin{equation}
+\lambda(\mu, Data) =  \frac{\sup_{\alpha} L(Data | \mu \neq \hat \mu, \alpha)}{\sup_{\mu, \alpha} L(Data | \mu, \alpha)}
+\end{equation}
+\begin{equation}
+\lambda(\mu, Data) =  \frac{\sup_{\alpha} L(Data | \mu \neq \hat \mu, \alpha)}{L(Data | \hat \mu, \hat \alpha)}
+\end{equation}
+
+
+This method works fine when analytical formulas are available.
+But in our case closed form formulas are not available.
+
+According to **Wilks theorem** :
+the distribution of $−2 \log [ \lambda (\mu, Data) ]$ is approximately a $\chi^2_p$ with $p$ degrees of freedom, $p$ being the dimension of $\mu$.
+
+
+!!! WARNING
+    TODO : Explain from here the ln + 1/2 method to estimate the confidence interval
+
+!!! WARNING
+    TODO : find again why this is supposed to cover.
+
+!!! ERROR
+    TODO : Explain that Minos algorithm does not work in our case + the Hessian inverse approximation
+
+
+
+
+<!-- <link rel="stylesheet" href="https://casual-effects.com/markdeep/latest/dark.css?"> -->
+<style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style>
+<script>markdeepOptions={tocStyle:'long'};</script>
+<!-- Markdeep: --><script src="markdeep.min.js"></script><script src="https://casual-effects.com/markdeep/latest/markdeep.min.js?"></script><script>window.alreadyProcessedMarkdeep||(document.body.style.visibility="visible")</script>

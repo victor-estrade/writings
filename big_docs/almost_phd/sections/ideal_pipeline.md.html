@@ -1,0 +1,103 @@
+<meta charset="utf-8" emacsmode="-*- markdown -*-">
+
+
+Le pipeline idéal
+===============================================================================
+
+Le pipeline idéal consiste à utiliser directement la likelihood du modèle génératif.
+Le maximum likelihood est obtenu par une minimisation numérique de la negative log likelihood.
+
+Le principale point sur lequel les pipelines diffèrent est sur le calcul de la likelihood.
+
+Ici est présenté le pipeline idéal donnant les performances optimales.
+Ce pipeline est réalisable sur les toys et permet de comparer les performances des autres pipelines au maximum théorique.
+
+Ce pipeline sert de base pour le pipeline classique et hybride.
+
+
+Vue d'ensemble
+-------------------------------------------------------------------------------
+
+L'appareil de mesure échantillonne des évènements **iid** dans la nature.
+Ces events sont décris par des observables et rassemblé dans un jeu données $X$.
+
+L'objectif est d'en extraire les estimateurs des paramètres $\hat \mu$, $\hat \alpha$ et l'intervalle de confiance de $\mu$ noté $\hat ci$.
+
+![Figure [fig:optimiseur_loop]:
+  Vue d'ensemble
+](./figs/modules/system.png)
+
+Les sections suivantes décrivent les diverses méthodes pour construire et calculer ces estimateurs.
+
+
+Boucle d'optimisation
+-------------------------------------------------------------------------------
+
+L'optimisation numérique employé est une descente de gradient.
+On représente ici la boucle d'optimisation qui met à jour les valeurs de $\mu$ et $\alpha$ à l'aide d'évaluations successive de la NLL afin de se rapprocher du minimum.
+
+![Figure [fig:optimiseur_loop]:
+  Optimiseur loop
+](./figs/modules/optimiseur_loop.png)
+
+Cette boucle est composé de 3 modules [O] [V] et [G] décrit dans les sections suivantes.
+
+
+Module V : calcul de la NLL
+-------------------------------------------------------------------------------
+
+Le premier calcule la valeur de la negative log likelihood $v$ à partir de valeur des paramètres $\mu$ et $\alpha$.
+Dans ce cas de pipeline idéal on applique simplement les formules données par le modèle génératif.
+
+![Figure [fig:nll_value]:
+  Negative log likelihood full computation module
+](./figs/modules/nll_value.png)
+
+!!! INFO
+    réference dans le code : compute_nll()
+
+
+Module G : calcul du gradient de la NLL
+-------------------------------------------------------------------------------
+
+Le second module calcule le gradient de la negative log likelihood $g$ à partir de valeur des paramètres $\mu$ et $\alpha$.
+
+![Figure [fig:gradient]:
+  Gradient computation module
+](./figs/modules/gradient.png)
+
+Ce module peut être une simple estimation par différence finie.
+
+![Figure [fig:finite-diff]:
+  Example of gradient estimation using finite differences
+](./figs/modules/finite_difference.png)
+
+Mais en pratique une heuristique (toujours inconnue) est employée afin de trouver la meilleure valeur pour $\epsilon$.
+
+!!! INFO
+    réference dans le code : fonction ingerne à Minuit
+
+
+Module O : mise à jour des paramètres mu et alpha
+-------------------------------------------------------------------------------
+
+Et le dernier module est l'optimiseur qui met à jour les valeurs de $\mu$ et $\alpha$ en fonction des valeurs de la NLL $v$ et de son gradient $g$.
+
+L'optimiseur choisi pour réaliser cette minimisation numérique est BFGS.
+En effet la pratique montre que souvent la forme de la NLL est convexe proche du minimum.
+Il suffit donc de commencer non loin du minimum ce qui est en général possible en science expérimentale car souvent les connaissances du domaine donnent un intervalle assez serré des valeurs probables du paramètre d'intérêt.
+
+![Figure [fig:optimiseur]:
+  Optimiseur module
+](./figs/modules/optimiseur.png)
+
+La méthode de Nelder–Mead est parfois utilisé alternativement avec BFGS si ce dernier rencontre un problème pour atteindre le minimum.
+
+!!! INFO
+    réference dans le code : Minuit.Migrad() [BFGS] et Minuit.simplex() [Nelder-Mead] sont utilisés alternativement afin d'aider à la convergence.
+
+
+<!-- <link rel="stylesheet" href="https://casual-effects.com/markdeep/latest/dark.css?"> -->
+<style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style>
+<script>markdeepOptions={tocStyle:'long'};</script>
+<!-- Markdeep: --><script src="markdeep.min.js"></script><script src="https://casual-effects.com/markdeep/latest/markdeep.min.js?"></script><script>window.alreadyProcessedMarkdeep||(document.body.style.visibility="visible")</script>

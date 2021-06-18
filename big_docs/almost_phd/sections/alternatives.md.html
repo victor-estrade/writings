@@ -1,0 +1,52 @@
+<meta charset="utf-8" emacsmode="-*- markdown -*-">
+
+
+Les alternatives
+===============================================================================
+
+
+L'estimation directe
+-------------------------------------------------------------------------------
+
+
+!!! WARNING
+    TODO : Pour le moment j'ai exclu ce pipeline de ce document et des résultats expérimentaux.
+
+
+Inferno
+-------------------------------------------------------------------------------
+
+La méthode INFERNO combine à la fois la réduction de dimension et la construction d'un histogramme.
+
+
+
+Le pipeline hybride
+-------------------------------------------------------------------------------
+
+La différence est l'intégration d'une nouvelle mesure sur les données expérimentales s'ajoutant à la formule de la NLL de la même manière que la calibration.
+
+\begin{equation}
+  L(\mu, \alpha) =  Poisson(X | \mu, \alpha) \times Calib(Other measure | \alpha) \times N(\alpha | k )
+\end{equation}
+
+!!! INFO
+    Validité de cette opération statistique ?  X et k ne sont pas indépendant...
+
+![Figure [fig:value_loop_hybrid]:
+  Zoom on the negative log likelihood value module using hybrid pipeline
+](./figs/modules/value_loop_hybrid.png height="700px")
+
+
+![Figure [fig:regressor]:
+  Regressor
+](./figs/modules/regressor.png)
+
+
+
+
+
+
+<!-- <link rel="stylesheet" href="https://casual-effects.com/markdeep/latest/dark.css?"> -->
+<style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style>
+<script>markdeepOptions={tocStyle:'long'};</script>
+<!-- Markdeep: --><script src="markdeep.min.js"></script><script src="https://casual-effects.com/markdeep/latest/markdeep.min.js?"></script><script>window.alreadyProcessedMarkdeep||(document.body.style.visibility="visible")</script>

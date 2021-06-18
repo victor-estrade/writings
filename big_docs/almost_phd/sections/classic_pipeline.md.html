@@ -1,0 +1,119 @@
+<meta charset="utf-8" emacsmode="-*- markdown -*-">
+
+
+
+Le pipeline classique
+===============================================================================
+
+Dans le cas de HiggsML la likelihood du modèle génératif fait intervenir un très grand nombre de variables latentes.
+Calculer la likelihood requiert le calcul irréalisable d'une intégrale de très haute dimension.
+
+On modifie donc le modèle décrivant le processus par un comptage Poissonien.
+
+!!! WARNING
+    TODO : ajouter l'explication pour utiliser Poisson (approx de Binomiale, etc) ?
+
+Ce qui rend le calcul de la negative log likelihood plus complexe.
+Les modifications de la NLL sont le sujet principal de cette section.
+
+
+Calcul de la NLL
+-------------------------------------------------------------------------------
+
+Le calcul de la NLL inclus de nombreuses étapes dont la construction d'un histogramme visant à diminuer la taille de l'intervalle de confiance.
+
+Le calcul d'un histogramme voit sa complexité croître de façon exponentielle avec le nombre de dimension.
+Hors l'intérêt de ces travaux est d'exploiter plus d'observables donc d'augmenter la dimensionnalité des données.
+On réalise donc une réduction de dimension à l'aide d'un classifieur (ou d'une autre méthode).
+
+Le schéma général de calcul de la NLL est donc le suivant :
+
+![Figure [fig:value_loop]:
+  Zoom on the negative log likelihood value module ($\mu^\star$ et $\alpha^\star$ sont en rouge car l'étoile se voit peu sur le schéma)
+](./figs/modules/value_loop.png height="700px")
+
+
+
+Module S : le simulateur
+-------------------------------------------------------------------------------
+
+Le simulateur produit à la demande un dataset $X, y, w$ à partir de la seed $s$ et des paramètres $\mu$ et $\alpha$.
+
+![Figure [fig:simulation]:
+  Simulation module
+](./figs/modules/simulation.png)
+
+
+Module XP : les données expérimentales
+-------------------------------------------------------------------------------
+
+Les données expérimentales sont générées une seule fois à partir d'une seed $s$ et des "vrais" paramètres cachés que les estimateurs doivent retrouver.
+En production les données expérimentales proviendrais des mesure faite avec l'appareil de mesure.
+Ces données étant confidentielles nous utilisons ici le simulateur avec des valeurs cachées.
+Ceci facilite la mesure des performances puisque la vérité terrain est ainsi connue.
+
+
+![Figure [fig:xp]:
+  Experience data
+](./figs/modules/experience.png)
+
+
+Module L : séparation des signaux et background
+-------------------------------------------------------------------------------
+
+Les données simulées sont séparées en 2 parties : signaux et backgrounds
+
+![Figure [fig:label]:
+  Label filter module
+](./figs/modules/label.png)
+
+
+Module C : classifieur
+-------------------------------------------------------------------------------
+
+Les données simulées et expérimentales sont réduites à 1 dimension par un classifieur.
+Le classifieur est entraîné en utilisant des données différentes provenant aussi du simulateurs.
+
+La réduction de dimension peut aussi être une simple sélection d'une observable.
+Cette méthode ne change rien au pipeline.
+
+![Figure [fig:clf]:
+  Classifieur
+](./figs/modules/classifieur.png)
+
+
+Module H : histogramme
+-------------------------------------------------------------------------------
+
+Les données réduites servent à produire les summary statistics par construction d'un histogramme.
+Ces summary statistics correspondent au nombre attendu par le modèle de signaux dans les bins ($\gamma_i$),
+au nombre attendu de backgrounds par le modèle dans les bins ($\beta_i$) et
+au nombre d'événement obtenu par l'expérience dans les bins ($n_i$)
+
+
+![Figure [fig:histogram]:
+  Histogram
+](./figs/modules/histogram.png)
+
+
+Module NLL : negative log likelihood
+-------------------------------------------------------------------------------
+
+Les summary statistics servent alors à calculer la NLL (simple calcul d'une formule).
+La calibration est intégrée dans ce calcul.
+La calibration n'est pas représentée sur le schéma pour l'alléger et parce qu'il s'agit d'un élément commun à toutes la variante du pipeline.
+
+\begin{equation}
+L(\mu, \alpha) =  Poisson(X | \mu, \alpha) \times Calib(Other measure | \mu, \alpha)
+\end{equation}
+
+![Figure [fig:nll]:
+  Negative log likelihood formulas computation
+](./figs/modules/nll.png)
+
+
+
+<!-- <link rel="stylesheet" href="https://casual-effects.com/markdeep/latest/dark.css?"> -->
+<style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style>
+<script>markdeepOptions={tocStyle:'long'};</script>
+<!-- Markdeep: --><script src="markdeep.min.js"></script><script src="https://casual-effects.com/markdeep/latest/markdeep.min.js?"></script><script>window.alreadyProcessedMarkdeep||(document.body.style.visibility="visible")</script>

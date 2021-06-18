@@ -1,0 +1,158 @@
+<meta charset="utf-8" emacsmode="-*- markdown -*-">
+
+
+
+
+Claims
+===============================================================================
+
+
+!!! WARNING
+    TODO : quels sont mes claims + les illustrations
+
+!!! WARNING
+    TODO : Je ne commente pas MSE ici. Que la taille de l'intervalle de confiance. il manque la moitié de l'info
+
+
+Claim 1 : Hybrid pipeline improves on 3D Toy
+-------------------------------------------------------------------------------
+
+**Le pipeline hybride ne diminue jamais les performances et dans le cas du toy 3D il les améliore et permet d'atteindre les limites théoriques.**
+
+Sur HiggsML (avec 1 paramètre de nuisance [TES]) l'effet sur la taille de l'intervalle de confiance est moins prononcé.
+Mais la MSE diminue pour la plupart des modèles (cf plots dans section plus bas).
+
+
+![Figure [fig:S3D2-Prior]:
+  Confidence interval length using **classic** and ideal (label *likelihood*) pipeline on the 3D toy
+](./figs/S3D2-prior_min_avg_mse_N=30000-boxplot_sigma_mean.png)
+
+![Figure [fig:S3D2-Calib]:
+  Confidence interval length using **hybrid** and ideal (label *likelihood*) pipeline on the 3D toy
+](./figs/S3D2-calib_min_avg_mse_N=30000-boxplot_sigma_mean.png)
+
+
+![Figure [fig:HiggsML-Prior]:
+  Confidence interval length using **classic** pipeline on the HiggsML data
+](./figs/HIGGSTES-prior_min_avg_mse_N=-1-boxplot_sigma_mean.png)
+
+![Figure [fig:HiggsML-Prior]:
+  Confidence interval length using **hybrid** pipeline on the HiggsML data
+](./figs/HIGGSTES-calib_min_avg_mse_N=-1-boxplot_sigma_mean.png)
+
+!!! WARNING
+    TODO : Fixer les échelles pour rendre les graphiques + lisible
+
+!!! WARNING
+    TODO : Ajouter les méthodes manquante lorsque les calculs seront finis sur le cluster
+
+
+
+
+Claim 2 : Ne pas chercher la robustesse aux effet systématique
+-------------------------------------------------------------------------------
+
+**Les méthodes visant à être robustes aux effets systématique ne sont pas plus performantes.**
+
+L'objectif est de démêler le paramètre d'intérêt des paramètres de nuisance et non pas de rendre introuvable les paramètres de nuisance.
+
+Tangent propagation, Pivot, Data augmentation ne s'en sorte pas mieux que les classifieur standard.
+En particulier Gradient Boosting qui est excellent même en absence de pipeline hybride.
+
+!!! Tip
+    Même graphiques que précédemment.
+
+
+
+Claim 3 : Surprise ! HiggsML : simple feature
+-------------------------------------------------------------------------------
+
+Sur HiggsML simplement prendre une des features qui n'est pas affecté par l'effet systématique donne d'excellent résultats.
+De plus cette feature présente un pouvoir séparateur entre signaux et backgrounds proche de zéro !
+
+feature numéro 19 (PRI met phi):
+
+![Figure [fig:HiggsML-Prior]:
+  Feature 19 for HiggsML signals and backgrounds distributions
+](./figs/c_19_PRI_met_phi.png)
+
+La feature numéro 21 (PRI jet num) est aussi particulièrement bonne sur la taille de l'intervalle de confiance.
+
+
+Ceci pourrait indiquer que nos toys sont mals choisis ?
+
+Ceci pourrait indiquer que le pouvoir séparateur (S vs B) de la réduction de dimension n'est pas nécessaire ?
+
+
+Claim 4 : Direct regression est possible
+-------------------------------------------------------------------------------
+
+Preuve de concepte sur les toys.
+Mais ça ne marche pas si l'effet du paramètre d'intérêt sur les distributions est trop faible.
+
+
+
+
+
+MSE plots
+-------------------------------------------------------------------------------
+
+Je met les MSE plots ici pour éviter de surcharger les sections précédentes.
+
+
+![Figure [fig:S3D2-Prior]:
+  Confidence interval length using **classic** and ideal (label *likelihood*) pipeline on the 3D toy
+](./figs/S3D2-prior_min_avg_mse_N=30000-boxplot_mse.png)
+
+!!! WARNING
+    La MSE de TP est très proche de zéro. C'est surprenant !
+    J'ai vérifié et c'est pas un bug. J'ignore pourquoi mais même Minos fonctionne pour ce cas.
+
+![Figure [fig:S3D2-Calib]:
+  Confidence interval length using **hybrid** and ideal (label *likelihood*) pipeline on the 3D toy
+](./figs/S3D2-calib_min_avg_mse_N=30000-boxplot_mse.png)
+
+
+![Figure [fig:HiggsML-Prior]:
+  Confidence interval length using **classic** pipeline on the HiggsML data
+](./figs/HIGGSTES-prior_min_avg_mse_N=-1-boxplot_mse.png)
+
+![Figure [fig:HiggsML-Prior]:
+  Confidence interval length using **hybrid** pipeline on the HiggsML data
+](./figs/HIGGSTES-calib_min_avg_mse_N=-1-boxplot_mse.png)
+
+
+
+
+Lien entre MSE et taille de l'intervalle ?
+-------------------------------------------------------------------------------
+
+
+!!! WARNING
+    TODO : Y-a-t-il un lien entre MSE et taille de l'intervalle de confiance ?
+    L'intuition voudrait que MSE petite implique sigma_mu petit.
+
+
+
+Toy 1D
+-------------------------------------------------------------------------------
+
+Sur le toy 1D presque toutes les méthodes utilisant le pipeline classique ou hybride atteignent les mêmes performances que le pipeline idéal.
+Le problème est *trop simple*.
+Mais cela permet de montrer qu'il est possible d'atteindre des performances parfaite malgrés une modélisation différente (Poisson count process).
+
+Les intervalles de confiances du pipeline idéal sont un peu plus grand.
+Est-ce que c'est de l'over-confidence ou de l'under-coverage ?
+
+![Figure [fig:GG-Prior-500]:
+  Confidence interval length using **classic** pipeline on the 1D toy (500 samples)
+](./figs/GG-prior_min_avg_mse_N=500-boxplot_sigma_mean.png)
+
+
+
+
+
+<!-- <link rel="stylesheet" href="https://casual-effects.com/markdeep/latest/dark.css?"> -->
+<style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style>
+<script>markdeepOptions={tocStyle:'long'};</script>
+<!-- Markdeep: --><script src="markdeep.min.js"></script><script src="https://casual-effects.com/markdeep/latest/markdeep.min.js?"></script><script>window.alreadyProcessedMarkdeep||(document.body.style.visibility="visible")</script>
