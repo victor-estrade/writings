@@ -5,8 +5,19 @@
 Le pipeline classique
 ===============================================================================
 
+Cette section motive et décrit la modification du modèle statistique pour une version plus complexe à mettre en oeuvre.
+
+
+Intractable likelihood to tracktable likelihood
+-------------------------------------------------------------------------------
+
 Dans le cas de HiggsML la likelihood du modèle génératif fait intervenir un très grand nombre de variables latentes.
 Calculer la likelihood requiert le calcul irréalisable d'une intégrale de très haute dimension.
+
+\begin{equation}
+	\label{eq:intractable_integral}
+	p( x  | \mu, \alpha) = \int_{z_1} \int_{z_2} ... \int_{z_n} p(x|\mu, \alpha, z_1, z_2, ..., z_n) p(z_1) p(z_2) ... p(z_n)
+\end{equation}
 
 On modifie donc le modèle décrivant le processus par un comptage Poissonien.
 
