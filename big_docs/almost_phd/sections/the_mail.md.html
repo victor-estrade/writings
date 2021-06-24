@@ -48,6 +48,73 @@ Si besoin est: faire un deuxième graphe avec un pipeline alternatif si les mét
 - Faire une description du protocole experimental ayant conduit à ces résultats
 
 
+Le mail 02
+===============================================================================
+
+Les points à éclaircir :
+
+1. Quid idée de réseau de neurones qui mange des batches ?
+  - ça rejoindrais les théories sur l'erreur des prédictions qu'il faudrait réintroduire
+  - l'interprétation dans le ML d'une statistique c'est un critère de perf alors que dans mon cas c'est la sortie !
+  -  L'ajouter dans le document + les méthodes analogue (Neural stat, etc)
+2. La figure du regresseur n'est pas développé : c'est quoi ?
+  - la contrainte supplémentaire $k$ sur $\alpha$ c'est quoi ?
+  - Contribution d'avoir compris que c'est un nouveau cas de ML que les entrée sont des datasets ?
+    - Oui mais modeste. (contribution conceptuelle)
+    - Bcp mieux s'il y a des résultats !
+3. Tenter de changer le gradient par différence finie
+4. MSE et moyenne de ci length sont des moyennes. quid de la distribution de hat mu ou des ci ? C'est gaussien ? C'est assez serré ?
+5. Manque : figure qui compare l'hybrid et le classique ?
+6. Bien commenter les plots pour dire où on doit regarder pour voir les Claims
+  - Du coup refaire les plots des claims + lisible pour comparaison !
+  - Mélanger classic et hybrid dans le même plot c'est mieux !
+  - Faire que chaque figure supporte un claim
+  - On peut répéter les info dans 2 figures c'est OK si c'est 2 claims différents
+
+Plus :
+
+- La figure 16 est problématique : toutes mes méthodes font mieux (en moyenne et en moustaches) que l'optimal - sauf TP, qui est très correct, voire excellent, dans toutes les autres configurations, mais très mauvais dans ce cas.
+
+- La présentation par agrégation de toutes les valeurs de mu et alpha donne une vision globale très utile, mais devra être complétée par des présentations de cas intéressants plus détaillées, où on voit l'influence de alpha et mu.
+
+Plus :
+
+Question 1 (diapo 1):
+
+Selon mon schema, x est affecté par le facteur de nuisance, pas beta ou gamma, ou même mu. En effet, j'interprête le facteur de nuisance comme une erreur de mesure qui s’introduit dans les détecteurs. beta, gamma et mu sont des constantes physiques. Voulez-vous bien clarifier le mécanisme et le cas échéant rectifier mon schéma.
+
+
+
+Question 1.bis:
+Quelle formule(s) mathématique(s) sont-elles utilisées pour engendrer les données des exemples toy.
+
+Question 2 (diapo 2):
+
+Le but est d’obtenir:
+- un estimator de mu (appelé mu_hat)
+- éventuellement estimateur de alpha (mais c’est facultatif)
+- un estimateur de la “barre d’erreur sur mu”
+
+Le dernière quantité “barre d’erreur sur mu” est-elle:
+- un estimateur de CI mu
+- un estimateur de CI mu_hat
+
+La “barre d’erreur sur mu” doit elle capturer:
+- la variabilité de mu
+- la variabilité de alpha
+- la variabilité de x
+- autre
+
+Question 3:
+
+Quelles sont les métriques de succès qui nous permettent empiriquement d’évaluer la qualité des quantités obtenues à la question 2?
+Quelle est leur formule mathématique?
+
+Question subsidiaire:
+
+La notation “alpha” pour le facteur de nuisance est-elle standard. Glen utilise “nu”, pivot utilise “z”, inferno utilise “r” et “lambda”.
+Je trouve le choix de “alpha” assez mauvais car c'est une lettre utilisée habituellement pour designer le “significance level” des tests ou les paramètres de mixture des densités, dont nous allons avoir besoin.
+
 
 
 
