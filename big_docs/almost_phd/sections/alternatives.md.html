@@ -27,7 +27,7 @@ This is invisible at the sample scale.
 With only one sample $x$ it is not possible to get knowledge on the parameter $\mu$.
 Measuring properties of the distribution is only moving the problem from a sample scale to a dataset scale.
 
-The learning problem is to get from an empirical distribution $D = \{x_i\}_{i=0}^N \in \mathbb R^{d\times N}$ to a real number $\mu \in \mathbb R$.
+The learning problem is to get from an empirical distribution $D = \{x_i\}_{i=0}^N \in R^{d\times N}$ to a real number $\mu \in R$.
 This is a regression problem.
 
 
@@ -45,8 +45,8 @@ Density networks
 
 A way of approximating the posterior $p(\mu | x)$ is to define a tractable but flexible enough family of distribution $q_\phi(\mu | x)$ parametrized by $\phi$.
 
-Initially introduced in \cite{Bishop94mixturedensity} as a generalization of least square methods to train neural network, mixture density networks (MDN) can be made as powerful as required while staying tractable.
-Used as a regressor MDN allows to estimate both the expected value and its uncertainty as detailed is \autoref{sub:extract_parameters}.
+Initially introduced in [Bishop94mixturedensity] as a generalization of least square methods to train neural network, mixture density networks (MDN) can be made as powerful as required while staying tractable.
+Used as a regressor MDN allows to estimate both the expected value and its uncertainty as detailed is the next section.
 
 The target density is approximated by a linear combination of kernels $k$ :
 
@@ -69,6 +69,119 @@ The motivation for this approximation is twofold.
 First, given enough well chosen parameters a Gaussian mixture model can approximate any density.
 Second, a neural network with enough hidden unit is able to approximate any continuous function with arbitrarily precision.
 Combining these two properties leads to an arbitrarily powerful approximation of any conditional density $p(\mu|x)$ given enough resources.
+
+
+Training density networks
+-------------------------------------------------------------------------------
+
+
+\begin{equation}
+    \phi^\star = argmax_\phi \mathcal L (\phi)
+\end{equation}
+\begin{equation}
+    \mathcal L (\phi) = \sum_{i=0}^K m_i(x ; \phi) k_i(\mu | x ; \phi)
+\end{equation}
+
+
+For convenience the optimization is usually turned into a minimization of the negative log likelihood (NLL) :
+\begin{equation}
+    \phi^\star = argmin_\phi - \log \mathcal L (\phi)
+\end{equation}
+
+In the simple case of one Gaussian component ($K=1$) the NLL is :
+\begin{equation}
+    \phi^\star = argmin_\phi \left\{ \log(\sigma(x;\phi)) + \frac{1}{2}\log(2\pi) + \frac{(\mu^\star - y(x;\phi))^2}{2\sigma(x;\phi)^2} \right\}
+\end{equation}
+
+Similarly to training a regular neural network regressor with least square, MDN's training is supervised.
+Therefore requires data for which the ground truth is available which is verified in our case since we need both observed data $x$ and the associated value for  $\mu^\star$.
+
+Finally the likelihood, with Gaussian kernels, is fully differentiable making possible the use of stochastic gradient descent methods to obtain the neural network parameters $\phi$.
+
+
+Datasetwise input
+-------------------------------------------------------------------------------
+
+In order to accurately capture the complex mapping between the data and the parameters the architecture of the neural network should embody the constraints of the chosen family distribution.
+
+If the studied process is stochastic the observations are usually composed of repeated independent measurements of an event.
+Then the observable is not a real valued vector $x \in R^d$ but a set of data points $D = \{x_i \in R^d \}_{i=0}^N$.
+The output is still a real valued vector meaning that the neural network architecture should include some reduction function to map the set of vector $D$ to a single vector $y$.
+Usual candidates are averages, minima, maxima, products, sums, geometric means or others that reduce the dimension and remain invariant to the input order of the input vectors.
+In practice the average is the favorite one [needcite].
+
+Section 7 of [lucas:hal-01791126] gives a proof that the given *"permutation invariant neural networks"* architecture is a universal approximator of permutation invariant functions.
+
+The next figure summaries **one layer** of such neural network.
+
+![Figure [fig:average_layer]:
+  Single layer of the datasetwise neural network. $U$ and $V$ are 2 matrices of the same shape. $r(X)$ is the result of the reduction of the input data $X$. In practice the + operator is relying on broadcasting to sum $V.r(X)$ or $b$ to each sample in $U.X$.
+](./figs/average_layer.png)
+
+
+Weighted input
+-------------------------------------------------------------------------------
+
+
+When the studied process includes some very rare events the simulation uses importance sampling \needcite.
+The simulation output includes importance weights to allow many rare events to be produced while keeping the distribution of events similar to reality.
+The neural network must take into account the importance weights to accurately regress the parameters.
+Which leads to use weighted average instead of simple average for example and makes maximum and other unweighted reduction ill-suited to this setting.
+
+More precisely, for 2 samplesets $D$ and $D^\prime$ if the associated empirical distribution are equal then the neural network output should also be equal.
+
+\begin{equation}
+    \forall x, p_D(x) = p_{D^\prime}(x) \implies f(D; \phi) = f(D^\prime; \phi)
+\end{equation}
+
+with,
+\begin{equation}
+    p_D(x) = \sum_{v \in D} w_i \delta (x - v)
+\end{equation}
+and $\delta$ is the Dirac distribution function.
+
+
+![Figure [fig:average_layer]:
+  Single layer of the weighted datasetwise neural network. The reduction function takes into account the sample weights.
+](./figs/weighted_average_layer.png)
+
+
+Ignore nuisance parameters
+-------------------------------------------------------------------------------
+
+The first way is to simply ignore them and directly approximate the marginal posterior $p(\mu|D)$.
+This method is refered to as **Blind Regressor**.
+The training dataset should include a representative set of samplesets for the problem.
+Meaning that instead of simply sampling a new value $\mu_i$ for each sampleset $D_i$ also sample the nuisance parameters from theirs prior distribution to feed them to the simulator $D_i = G(\mu_i, \alpha_i)$.
+
+
+
+Marginalizing nuisance parameters
+-------------------------------------------------------------------------------
+
+The other way is to learn the posterior $p(\mu | D, \alpha)$ then to marginalize the nuisance parameters.
+\begin{equation}
+    p(\mu | D) = \int d\alpha ~ p(\alpha | D) ~ p(\mu | D, \alpha)
+\end{equation}
+
+This is inspired by [Baldi_2016].
+This method is refered to as **Parametrized Regressor**.
+
+!!! Tip
+    Expliquer que $\alpha$ est en entré du NN
+
+This integral can be approximated with Monte Carlo.
+
+\begin{equation}
+  \int \int d\alpha ~ p(\alpha | D) ~ p(\mu | D, \alpha)
+  \approx \sum_i w_i ~ p(\mu | D, \alpha_i)
+\end{equation}
+
+Where $p(\mu | D, \alpha)$ is approximated using a trained MDN as seen in the previous sections.
+In the case of a MDN $f$ with gaussian kernels, $f$ produces the mixture parameters $m_i, y_i, \sigma_i$ from the experimental data $D^\star$ and sampled $\alpha$.
+
+
+
 
 
 
