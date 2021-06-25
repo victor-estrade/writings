@@ -1,16 +1,9 @@
 <meta charset="utf-8" emacsmode="-*- markdown -*-">
 
 
-Les alternatives
+
+Alternatives
 ===============================================================================
-
-
-L'estimation directe
--------------------------------------------------------------------------------
-
-
-!!! WARNING
-    TODO : Pour le moment j'ai exclu ce pipeline de ce document et des résultats expérimentaux.
 
 
 Inferno
@@ -20,7 +13,84 @@ La méthode INFERNO combine à la fois la réduction de dimension et la construc
 
 
 
+L'estimation directe
+===============================================================================
+
+!!! WARNING
+    TODO : Pour le moment j'ai exclu ce pipeline de ce document et des résultats expérimentaux.
+
+Core idea
+-------------------------------------------------------------------------------
+
+The parameter of interest impact is not on the observables $x$ but on the distribution of the observables $p(x|\mu)$.
+This is invisible at the sample scale.
+With only one sample $x$ it is not possible to get knowledge on the parameter $\mu$.
+Measuring properties of the distribution is only moving the problem from a sample scale to a dataset scale.
+
+The learning problem is to get from an empirical distribution $D = \{x_i\}_{i=0}^N \in \mathbb R^{d\times N}$ to a real number $\mu \in \mathbb R$.
+This is a regression problem.
+
+
+The training and testing datasets can be obtained by sampling the parameter from a prior distribution then using the simulator to transform this parameter to its corresponding dataset.
+
+The last detail to take care of is the size of the training datasets.
+The ideal size is the expected size of the experimental data or a range of possible data size.
+But it may be too large to train a neural network with available computation power in a reasonable time.
+The size of the training datasets is then a tradeoff between the size of the experimental dataset and available computation power.
+
+
+Density networks
+-------------------------------------------------------------------------------
+
+
+A way of approximating the posterior $p(\mu | x)$ is to define a tractable but flexible enough family of distribution $q_\phi(\mu | x)$ parametrized by $\phi$.
+
+Initially introduced in \cite{Bishop94mixturedensity} as a generalization of least square methods to train neural network, mixture density networks (MDN) can be made as powerful as required while staying tractable.
+Used as a regressor MDN allows to estimate both the expected value and its uncertainty as detailed is \autoref{sub:extract_parameters}.
+
+The target density is approximated by a linear combination of kernels $k$ :
+
+\begin{equation}
+    q_\phi(\mu | x) = \sum_{i=0}^K m_i(x ; \phi) k_i(\mu | x ; \phi)
+\end{equation}
+where $m_i(x ; \phi)$ are the mixture coefficient
+and the kernels $k_i(\mu | x ; \phi)$ usually chosen as Gaussian :
+\begin{equation}
+    k_i(\mu | x ; \phi) = \frac{1}{\sigma_i(x ; \phi) \sqrt{2 \pi}} e^{- \frac{1}{2} \left ( \frac{\mu-y_i(x ; \phi)}{\sigma_i(x ; \phi)} \right )^2}
+\end{equation}
+
+$m_i(x ; \phi)$, $\sigma_i(x ; \phi)$ and $y_i(x ; \phi)$ are the outputs of a neural network, whose parameters are gathered in $\phi$, and taking the data as input.
+Finally, the mixture coefficient have to sum up to 1.
+\begin{equation}
+    \sum_{i=0}^K m_i(x ; \phi) =  1
+\end{equation}
+
+The motivation for this approximation is twofold.
+First, given enough well chosen parameters a Gaussian mixture model can approximate any density.
+Second, a neural network with enough hidden unit is able to approximate any continuous function with arbitrarily precision.
+Combining these two properties leads to an arbitrarily powerful approximation of any conditional density $p(\mu|x)$ given enough resources.
+
+
+
+
 Le pipeline hybride
+===============================================================================
+
+Idée générale
+-------------------------------------------------------------------------------
+
+Le pipeline classique utilise un classifieur comme réduction de dimension.
+Ce choix est motivé par la capacité du classifieur à garder au maximum l'information sur le paramètre d'intérêt.
+Sauf que l'étape de maximisation de likelihood traite $\mu$ et $\alpha$ de la même manière.
+La perte d'information sur $\alpha$ peut dégrader la qualité du maximum likelihood.
+
+On va donc chercher à extraire une nouvelle information sur $\alpha$ depuis les données expérimentales.
+
+Pour ce faire on utilise un regresseur sur les données expérimentales.
+
+
+
+Mise à jour du modèle statistique
 -------------------------------------------------------------------------------
 
 La différence est l'intégration d'une nouvelle mesure sur les données expérimentales s'ajoutant à la formule de la NLL de la même manière que la calibration.

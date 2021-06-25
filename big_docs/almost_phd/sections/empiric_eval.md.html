@@ -8,9 +8,19 @@
 Critères de performance
 -------------------------------------------------------------------------------
 
-Les diverses alternatives seront évaluées selon 2 critères :
+On doit mesurer les performances d'un estimateur ponctuel $\hat \mu$ et d'un estimateur d'intervalle de confiance $ci$.
+
+Les diverses alternatives sont évaluées selon 2 critères :
 1. La Mean Squared Error (MSE) de l'estimateur de $\mu$
 2. La taille de l'intervalle de confiance
+
+Pour l'estimateur ponctuel la mean squared error (MSE) est une métrique classique.
+
+\begin{equation}
+  MSE(\hat \mu) = \frac{1}{N} \sum_{i=1}^N ( \hat \mu_i - \mu^\star )^2
+\end{equation}
+
+où $\hat \mu_i$ est une ième réalisation de $\hat \mu$ et $\mu^\star$ est la vrai valeur de $\mu$ ayant servie à générer les données sur desquelles on tire $\hat \mu_i$.
 
 La MSE combine à la fois le biais et la variance de l'estimateur qui sont primordiaux pour une mesure de qualité.
 Un estimateur biaisé est un estimateur quasiment inutilisable en Physique (source ?).
